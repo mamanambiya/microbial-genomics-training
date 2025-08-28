@@ -6,6 +6,7 @@ This hands-on training course introduces participants to the core principles and
 - _V. cholerae_, 
 - _E. coli_, and
 - _S. sonnei_.
+
 The  course explores the role of MGE in resistance spread and equips learners with tools to investigate microbial communities in complex clinical or environmental samples. In addition, participants are given a chance to analyze their data and present preliminary findings to trainers.
 
 ## 📂 Repository Structure
