@@ -11,13 +11,14 @@ The  course explores the role of MGE in resistance spread and equips learners wi
 
 ## 📂 Repository Structure
 ```bash
-├── data/                   # Sample datasets or links to data sources
-├── notebooks/              # Jupyter or RMarkdown notebooks for analysis
-├── workflows/              # SNextflow pipelines
-├── scripts/                # Utility scripts for preprocessing and analysis
-├── docs/                   # Course slides, handouts, and reference materials
-├── environment/            # Information on how the environment was created
-└── README.md               # This file
+├── data/                                   # Sample datasets or links to data sources
+├── notebooks/                              # Jupyter or RMarkdown notebooks for analysis
+├── workflows/                              # SNextflow pipelines
+├── scripts/                                # Utility scripts for preprocessing and analysis
+├── docs├──slides/                          # Course slides
+        ├──handouts_reference_material/      # Course handouts and reference materials
+├── environment/                            # Information on how the environment was created
+└── README.md                               # This file
 ```
 
 ## 🛠 Requirements
