@@ -10,7 +10,6 @@ copyright: Copyright &copy; 2024 CIDRI-Africa
 
 theme:
   name: material
-  custom_dir: overrides
   features:
     - announce.dismiss
     - content.action.edit
