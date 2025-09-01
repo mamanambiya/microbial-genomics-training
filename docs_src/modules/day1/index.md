@@ -5,7 +5,9 @@
 
 ## Overview
 
-Welcome to the Microbial Genomics & Metagenomics Training Course! Day 1 introduces you to the course structure, sets up your computing environment, and ensures everyone has the foundational skills needed for the intensive training ahead.
+Welcome to the Microbial Genomics & Metagenomics Training Course! Day 1 is your foundation day where we introduce the course structure, set up your computing environment, and ensure everyone has the essential skills needed for the intensive training ahead.
+
+This day is crucial for success in the remaining 9 days of training.
 
 ## Learning Objectives
 
