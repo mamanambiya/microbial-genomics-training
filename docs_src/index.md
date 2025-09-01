@@ -94,6 +94,8 @@ Ready to begin your journey in microbial genomics? Start with our setup guide:
 
 Need help? Check our [troubleshooting guide](troubleshooting.md) or reach out to the course instructors.
 
+<!-- Trigger workflow -->
+
 <div class="grid cards" markdown>
 
 -   :material-github: **Repository**
