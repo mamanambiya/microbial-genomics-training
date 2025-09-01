@@ -75,20 +75,13 @@ Presentations will be assessed on:
 Based on participant data types, presentations may cover:
 
 #### Genomic Analysis Examples
-- "Antimicrobial resistance profiling in clinical *E. coli* isolates"
+- "Antimicrobial resistance profiling in *Mycobacterium tuberculosis* isolates"
 - "Phylogenetic analysis of *Mycobacterium tuberculosis* outbreak strains"
 - "Comparative genomics of *Vibrio cholerae* from environmental samples"
-- "MLST typing and serotype prediction in *Salmonella* species"
-
-#### Metagenomic Analysis Examples  
-- "Microbiome diversity analysis in clinical specimens"
-- "Pathogen detection in complex metagenomic samples"
-- "Functional profiling of antibiotic-resistant gut microbiomes"
-- "Temporal dynamics of microbial communities during treatment"
+- "Transmission analysis of *Vibrio cholerae* epidemic strains"
 
 #### Methodological Examples
 - "Optimizing assembly parameters for low-coverage genomes"
-- "Comparing taxonomic classifiers for clinical metagenomics"
 - "Developing Nextflow pipeline for routine surveillance"
 - "Quality control strategies for degraded DNA samples"
 
@@ -97,8 +90,7 @@ Based on participant data types, presentations may cover:
 Presentations will be grouped by analysis type to facilitate discussion:
 
 1. **Genomic Surveillance** (9:00-9:45)
-2. **Metagenomics & Microbiome** (9:45-10:30)
-3. **Methodological & Pipeline Development** (10:30-11:15)
+2. **Methodological & Pipeline Development** (9:45-11:15)
 
 ## Special Presentations (11:15-11:40)
 
@@ -144,7 +136,6 @@ By course completion, participants will have demonstrated:
 - **Genome assembly**: De novo assembly and quality assessment
 - **Annotation**: Functional and structural genome annotation
 - **Phylogenetics**: Tree construction and interpretation
-- **Metagenomics**: Community profiling and diversity analysis
 - **Workflow development**: Nextflow pipeline creation and optimization
 
 #### Analytical Skills  

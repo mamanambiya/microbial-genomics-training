@@ -284,11 +284,11 @@ Before the course starts, verify:
 
 ## Day 1 Preview
 
-On the first day, we'll:
-1. **Verify everyone's setup** works correctly
-2. **Provide additional software** through containers
-3. **Distribute datasets** and access credentials  
-4. **Test HPC connections** together
-5. **Troubleshoot any remaining issues**
+On the first day (September 1, 2025), we'll:
+1. **Course introductions** and welcome session
+2. **Overview of clinical pathogens** and genomic surveillance
+3. **Sequencing technologies** and data types overview
+4. **Hands-on PubMLST** database exploration
+5. **Command line interface** basics and R environment setup
 
-Come prepared, but don't worry if you encounter problems – we'll sort everything out together!
+Come prepared with your laptop and the software installed above. Don't worry if you encounter setup problems – we'll troubleshoot together during the session!

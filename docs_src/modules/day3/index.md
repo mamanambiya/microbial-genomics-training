@@ -129,7 +129,7 @@ Annotate assembled genomes and explore gene content.
 
 ```bash
 # Automated annotation with Prokka
-prokka assembly_output/scaffolds.fasta --outdir annotation/ --genus Escherichia --species coli
+prokka assembly_output/scaffolds.fasta --outdir annotation/ --genus Mycobacterium --species tuberculosis
 
 # Extract protein sequences
 grep -c "^>" annotation/*.faa  # Count proteins
