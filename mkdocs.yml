@@ -125,41 +125,13 @@ nav:
     - Prerequisites: course/prerequisites.md
     - Schedule: course/schedule.md
     - Setup: course/setup.md
-  - Modules:
-    - Day 1 - Introduction & Setup:
-      - modules/day1/index.md
-      - Command Line Basics: modules/day1/command-line.md
-      - Version Control with Git: modules/day1/git-basics.md
-      - Environment Setup: modules/day1/environment.md
-    - Day 2 - Data Analysis Fundamentals:
-      - modules/day2/index.md
-      - Quality Control: modules/day2/quality-control.md
-      - Read Processing: modules/day2/read-processing.md
-      - Assembly Basics: modules/day2/assembly.md
-    - Day 3 - Pathogen Genomics:
-      - modules/day3/index.md
-      - M. tuberculosis Analysis: modules/day3/mtb-analysis.md
-      - V. cholerae Analysis: modules/day3/vibrio-analysis.md
-      - Antimicrobial Resistance: modules/day3/amr-detection.md
-    - Day 4 - Metagenomics & Workflows:
-      - modules/day4/index.md
-      - Metagenomics Analysis: modules/day4/metagenomics.md
-      - Workflow Management: modules/day4/workflows.md
-      - Data Interpretation: modules/day4/interpretation.md
-    - Day 5 - Advanced Topics:
-      - modules/day5/index.md
-      - Phylogenetic Analysis: modules/day5/phylogenetics.md
-      - Outbreak Investigation: modules/day5/outbreak-analysis.md
-      - Project Presentations: modules/day5/presentations.md
+  - Daily Modules:
+    - Day 1 - Introduction & Setup: modules/day1/index.md
+    - Day 2 - Data Analysis: modules/day2/index.md
+    - Day 3 - Pathogen Genomics: modules/day3/index.md
   - Resources:
-    - datasets.md
-    - software.md
-    - references.md
-    - troubleshooting.md
-  - Appendices:
-    - appendices/command-reference.md
-    - appendices/glossary.md
-    - appendices/further-reading.md
+    - Datasets: datasets.md
+    - Troubleshooting: troubleshooting.md
 
 extra_css:
   - stylesheets/extra.css
