@@ -24,11 +24,11 @@ The 10-day intensive training course covers fundamental to advanced topics in mi
 | Time (CAT) | Topic | Trainer |
 |------------|-------|---------|
 | **09:00** | *Introductions* | All |
-| **09:10** | *Overview of clinical pathogens and genomic surveillance* | Ephifania Geza |
+| **09:10** | *Overview of clinical pathogens and genomic surveillance* [https://docs.google.com/presentation/d/1N-bmzwmIdZUDJTtogQxGkTQ4XicyuPiv/edit?usp=drive_link&ouid=113561825586036302170&rtpof=true&sd=true] | Ephifania Geza |
 | **09:40** | *Overview of sequencing technologies and data types* | Sindiswa Lukhele |
 | **10:00** | *Setting up and exploring PubMLST* | Sindiswa Lukhele |
 | **11:00** | **Break** | |
-| **11:30** | *Introduction to command line interface (Git Bash) and R* [https://github.com/Arash-Iranzadeh/Microbial-Genomics/blob/main/scripts/practice_unix_commands.sh] | Arash Iranzadeh |
+| **11:30** | *Introduction to command line interface* [https://github.com/Arash-Iranzadeh/Microbial-Genomics/blob/main/scripts/practice_unix_commands.sh] | Arash Iranzadeh |
 
 **Key Learning Outcomes**: Introduction to genomic surveillance, sequencing technologies, command line basics
 
@@ -40,13 +40,12 @@ The 10-day intensive training course covers fundamental to advanced topics in mi
 
 | Time (CAT) | Topic | Trainer |
 |------------|-------|---------|
-| **09:00** | *Introduction High Performance Computing (HPC) – Ilifu* | Mamana Mbiyavanga |
-| **09:30** | *Recap: Introduction to command line interface* | Arash Iranzadeh |
-| **10:30** | *Quality checking and control, as well as species identification* | Arash Iranzadeh |
+| **09:00** | *Introduction to command line interface* | Arash Iranzadeh |
+| **11:00** | *Introduction High Performance Computing (HPC) – Ilifu* | Mamana Mbiyavanga |
 | **11:30** | **Break** | |
 | **12:00** | *Guest talk: MtB and co-infection* | Bethlehem Adnew |
 
-**Key Learning Outcomes**: HPC fundamentals, command line proficiency, quality control methods
+**Key Learning Outcomes**: Command line proficiency, HPC fundamentals
 
 ---
 
@@ -56,34 +55,60 @@ The 10-day intensive training course covers fundamental to advanced topics in mi
 
 | Time (CAT) | Topic | Trainer |
 |------------|-------|---------|
-| **09:00** | *Genome assembly, quality assessment and annotation* | Ephifania Geza/Arash Iranzadeh |
-| **10:00** | *Multi-locus sequence typing, and serotyping* | Arash Iranzadeh |
-| **11:00** | *Antimicrobial Resistance gene detection and resistance prediction* | Ephifania Geza |
+| **09:00** | *Quality checking and control, as well as species identification* |Arash Iranzadeh |
+| **10:00** | *Genome assembly, quality assessment* | Ephifania Geza/Arash Iranzadeh |
 | **11:30** | **Break** | |
-| **12:00** | *Role of plasmids, integrons, and transposons in AMR spread* | Ephifania Geza |
+| **12:00** | *Genome Annotation* | Arash Iranzadeh |
 
-**Key Learning Outcomes**: Genome assembly, MLST, serotyping, AMR detection, mobile genetic elements
+**Key Learning Outcomes**: Quality control fundamentals, Genome assembly, assessment and annotation
 
 ---
 
-## Day 4: Comparative Genomics
+## Day 4: Genomic Characterization Continuation
 
 **Date**: September 4, 2025
 
-| Time (CAT) | Topic | Trainer |
-|------------|-------|---------|
-| **09:00** | *Pangenomics* | Arash Iranzadeh |
-| **10:30** | *Phylogenomics: Inferring evolutionary relationships from core SNPs* | Arash Iranzadeh |
+| **09:00** | *Antimicrobial Resistance gene detection and resistance prediction* | Ephifania Geza |
+| **10:30** | *Role of plasmids, integrons, and transposons in AMR spread* | Ephifania Geza |
 | **11:30** | **Break** | |
-| **12:00** | *Phylogenomics: Tree construction and visualisation* | Arash Iranzadeh |
+| **12:00** | *Multi-locus sequence typing, and serotyping* | Arash Iranzadeh |
 
-**Key Learning Outcomes**: Pan-genome analysis, phylogenetic inference, tree construction and visualization
+**Key Learning Outcomes**: AMR detection, mobile genetic elements, MLST
 
 ---
 
-## Day 5: Metagenomic Profiling
+## Day 5: Nextflow
 
 **Date**: September 5, 2025
+
+| Time (CAT) | Topic | Trainer |
+|------------|-------|---------|
+| **09:00** | *Reproducible workflows with Nextflow and nf-core* | Mamana Mbiyavanga |
+| **10:30** | *Developing a Nextflow pipeline for QC, de novo assembly, quality assessment and annotation* | Mamana Mbiyavanga |
+| **11:30** | **Break** | |
+| **12:00** | *Developing a Nextflow pipeline for QC, de novo assembly, quality assessment and annotation* | Mamana Mbiyavanga |
+
+**Key Learning Outcomes**: Workflow reproducibility, Nextflow basics, pipeline development
+
+---
+
+## Day 6: Nextflow Pipeline Development
+
+**Date**: September 8, 2025
+
+| Time (CAT) | Topic | Trainer |
+|------------|-------|---------|
+| **09:00** | *Pipeline development continued and running* | Mamana Mbiyavanga |
+| **11:30** | **Break** | |
+| **12:00** | *Pipeline development continued and running* | Mamana Mbiyavanga |
+
+**Key Learning Outcomes**: Advanced pipeline development, pipeline execution and optimization
+
+---
+
+## Day 7: Metagenomic Profiling
+
+**Date**: September 9, 2025
 
 | Time (CAT) | Topic | Trainer |
 |------------|-------|---------|
@@ -97,47 +122,18 @@ The 10-day intensive training course covers fundamental to advanced topics in mi
 
 ---
 
-## Day 6: Co-infection and Mutations
-
-**Date**: September 8, 2025
-
-| Time (CAT) | Topic | Trainer |
-|------------|-------|---------|
-| **09:00** | *Detecting rare pathogens, co-infections, and community shifts* | Ephifania Geza |
-| **10:30** | *Mutation calling and phenotype-genotype correlation* | Ephifania Geza |
-| **11:30** | **Break** | |
-| **12:00** | *Mutation calling and phenotype-genotype correlation* | Ephifania Geza |
-
-**Key Learning Outcomes**: Co-infection detection, variant calling, genotype-phenotype associations
-
----
-
-## Day 7: Nextflow
-
-**Date**: September 9, 2025
-
-| Time (CAT) | Topic | Trainer |
-|------------|-------|---------|
-| **09:00** | *Reproducible workflows with Nextflow and nf-core* | Mamana Mbiyavanga |
-| **10:30** | *Developing a Nextflow pipeline for QC, de novo assembly, quality assessment and annotation* | Mamana Mbiyavanga |
-| **11:30** | **Break** | |
-| **12:00** | *Developing a Nextflow pipeline for QC, de novo assembly, quality assessment and annotation* | Mamana Mbiyavanga |
-
-**Key Learning Outcomes**: Workflow reproducibility, Nextflow basics, pipeline development
-
----
-
-## Day 8: Nextflow Pipeline Development
+## Day 8: Comparative Genomics
 
 **Date**: September 10, 2025
 
 | Time (CAT) | Topic | Trainer |
 |------------|-------|---------|
-| **09:00** | *Pipeline development continued and running* | Mamana Mbiyavanga |
+| **09:00** | *Pangenomics* | Arash Iranzadeh |
+| **10:30** | *Phylogenomics: Inferring evolutionary relationships from core SNPs* | Arash Iranzadeh |
 | **11:30** | **Break** | |
-| **12:00** | *Pipeline development continued and running* | Mamana Mbiyavanga |
+| **12:00** | *Phylogenomics: Tree construction and visualisation* | Arash Iranzadeh |
 
-**Key Learning Outcomes**: Advanced pipeline development, pipeline execution and optimization
+**Key Learning Outcomes**: Pan-genome analysis, phylogenetic inference, tree construction and visualization
 
 ---
 
