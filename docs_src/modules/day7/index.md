@@ -21,12 +21,12 @@ By the end of Day 7, you will be able to:
 
 ## Schedule
 
-| Time (CAT) | Topic | Trainer |
-|------------|-------|---------|
-| **09:00** | *Reproducible workflows with Nextflow and nf-core* | Mamana Mbiyavanga |
-| **10:30** | *Developing a Nextflow pipeline for QC, de novo assembly, quality assessment and annotation* | Mamana Mbiyavanga |
-| **11:30** | **Break** | |
-| **12:00** | *Developing a Nextflow pipeline for QC, de novo assembly, quality assessment and annotation* | Mamana Mbiyavanga |
+| Time (CAT) | Topic | Links | Trainer |
+|------------|-------|-------|---------|
+| **09:00** | *Reproducible workflows with Nextflow and nf-core* | [Slides](#) • [Nextflow Guide](#) | Mamana Mbiyavanga |
+| **10:30** | *Developing a Nextflow pipeline for QC, de novo assembly, quality assessment and annotation* | [Tutorial](#) • [Template](#) | Mamana Mbiyavanga |
+| **11:30** | **Break** | | |
+| **12:00** | *Developing a Nextflow pipeline for QC, de novo assembly, quality assessment and annotation* | [Practical](#) • [Scripts](#) | Mamana Mbiyavanga |
 
 ## Key Topics
 

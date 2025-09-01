@@ -20,12 +20,12 @@ By the end of Day 4, you will be able to:
 
 ## Schedule
 
-| Time (CAT) | Topic | Trainer |
-|------------|-------|---------|
-| **09:00** | *Pangenomics* | Arash Iranzadeh |
-| **10:30** | *Phylogenomics: Inferring evolutionary relationships from core SNPs* | Arash Iranzadeh |
-| **11:30** | **Break** | |
-| **12:00** | *Phylogenomics: Tree construction and visualisation* | Arash Iranzadeh |
+| Time (CAT) | Topic | Links | Trainer |
+|------------|-------|-------|---------|
+| **09:00** | *Pangenomics* | [Slides](#) • [Tutorial](#) | Arash Iranzadeh |
+| **10:30** | *Phylogenomics: Inferring evolutionary relationships from core SNPs* | [Slides](#) • [Practical](#) | Arash Iranzadeh |
+| **11:30** | **Break** | | |
+| **12:00** | *Phylogenomics: Tree construction and visualisation* | [Slides](#) • [Tutorial](#) | Arash Iranzadeh |
 
 ## Key Topics
 

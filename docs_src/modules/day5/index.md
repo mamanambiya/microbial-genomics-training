@@ -21,13 +21,13 @@ By the end of Day 5, you will be able to:
 
 ## Schedule
 
-| Time (CAT) | Topic | Trainer |
-|------------|-------|---------|
-| **09:00** | *Metagenomic sequencing* | Ephifania Geza |
-| **09:30** | *Quality control in metagenomic data* | Ephifania Geza |
-| **10:30** | *Microbiome profiling and diversity metrics (R or QIIME2)* | Ephifania Geza |
-| **11:30** | **Break** | |
-| **12:00** | *Microbiome profiling and diversity metrics (R or QIIME2)* | Ephifania Geza |
+| Time (CAT) | Topic | Links | Trainer |
+|------------|-------|-------|---------|
+| **09:00** | *Metagenomic sequencing* | [Slides](#) • [Tutorial](#) | Ephifania Geza |
+| **09:30** | *Quality control in metagenomic data* | [Slides](#) • [Practical](#) | Ephifania Geza |
+| **10:30** | *Microbiome profiling and diversity metrics (R or QIIME2)* | [R Tutorial](#) • [QIIME2 Guide](#) | Ephifania Geza |
+| **11:30** | **Break** | | |
+| **12:00** | *Microbiome profiling and diversity metrics (R or QIIME2)* | [Practical](#) • [Scripts](#) | Ephifania Geza |
 
 ## Key Topics
 

@@ -21,11 +21,11 @@ By the end of Day 9, you will be able to:
 
 ## Schedule
 
-| Time (CAT) | Topic | Trainer |
-|------------|-------|------------|
-| **09:00** | *Participants to analyse their own data* | All trainers |
-| **11:30** | **Break** | |
-| **12:00** | *Participants to analyse their own data* | All trainers |
+| Time (CAT) | Topic | Links | Trainer |
+|------------|-------|-------|------------|
+| **09:00** | *Participants to analyse their own data* | [Resources](#) • [Templates](#) | All trainers |
+| **11:30** | **Break** | | |
+| **12:00** | *Participants to analyse their own data* | [Help Desk](#) • [Examples](#) | All trainers |
 
 ## Session Structure
 

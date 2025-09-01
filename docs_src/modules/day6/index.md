@@ -21,12 +21,12 @@ By the end of Day 6, you will be able to:
 
 ## Schedule
 
-| Time (CAT) | Topic | Trainer |
-|------------|-------|---------|
-| **09:00** | *Detecting rare pathogens, co-infections, and community shifts* | Ephifania Geza |
-| **10:30** | *Mutation calling and phenotype-genotype correlation* | Ephifania Geza |
-| **11:30** | **Break** | |
-| **12:00** | *Mutation calling and phenotype-genotype correlation* | Ephifania Geza |
+| Time (CAT) | Topic | Links | Trainer |
+|------------|-------|-------|---------|
+| **09:00** | *Detecting rare pathogens, co-infections, and community shifts* | [Slides](#) • [Tutorial](#) | Ephifania Geza |
+| **10:30** | *Mutation calling and phenotype-genotype correlation* | [Slides](#) • [Practical](#) | Ephifania Geza |
+| **11:30** | **Break** | | |
+| **12:00** | *Mutation calling and phenotype-genotype correlation* | [Tutorial](#) • [Scripts](#) | Ephifania Geza |
 
 ## Key Topics
 

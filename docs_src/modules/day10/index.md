@@ -21,11 +21,11 @@ By the end of Day 10, you will be able to:
 
 ## Schedule
 
-| Time (CAT) | Topic | Trainer |
-|------------|-------|---------|
-| **09:00** | *Participant presentations* | |
-| **11:15** | **Short talks** *NGS-Academy/AfriGen-D/eLwazi ODSP* | |
-| **11:40** | **End of the course** | |
+| Time (CAT) | Topic | Links | Trainer |
+|------------|-------|-------|---------|
+| **09:00** | *Participant presentations* | [Templates](#) • [Guidelines](#) | |
+| **11:15** | **Short talks** *NGS-Academy/AfriGen-D/eLwazi ODSP* | [Slides](#) | |
+| **11:40** | **End of the course** | [Resources](#) | |
 
 ## Presentation Session (09:00-11:15)
 
