@@ -26,10 +26,8 @@ The training covers 10 days of intensive hands-on learning:
 
 Using real-world datasets, participants will analyze:
 
-- **_Mycobacterium tuberculosis_** - TB genomics and drug resistance
-- **_Vibrio cholerae_** - Outbreak investigation and epidemiology  
-- **_Escherichia coli_** - Pathogenicity and antimicrobial resistance
-- **_Shigella sonnei_** - Genomic surveillance and typing
+- **_Mycobacterium tuberculosis_** - TB genomics and drug resistance analysis
+- **_Vibrio cholerae_** - Outbreak investigation and epidemiological analysis
 
 ## Key Focus Areas
 

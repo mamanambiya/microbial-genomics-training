@@ -24,7 +24,7 @@ Welcome to the comprehensive training course on **Microbial Genomics & Metagenom
 
     ---
 
-    Work with actual clinical datasets including _M. tuberculosis_, _V. cholerae_, _E. coli_, and _S. sonnei_.
+    Work with actual clinical datasets including _M. tuberculosis_ and _V. cholerae_.
 
     [:octicons-arrow-right-24: Explore datasets](datasets.md)
 

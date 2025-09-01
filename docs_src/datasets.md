@@ -2,7 +2,7 @@
 
 ## Overview
 
-This course uses carefully curated datasets representing real-world scenarios in microbial genomics and metagenomics. All data has been quality-controlled and prepared for educational use.
+This course uses carefully curated datasets representing real-world scenarios in microbial genomics. All data has been quality-controlled and prepared for educational use, focusing on *Mycobacterium tuberculosis* and *Vibrio cholerae* collections.
 
 ## Dataset Categories
 
@@ -30,7 +30,7 @@ This course uses carefully curated datasets representing real-world scenarios in
 ### 2. Reference Materials
 
 #### Reference Genomes
-- High-quality reference assemblies for all target pathogens
+- High-quality reference assemblies for *M. tuberculosis* and *V. cholerae*
 - Annotation files (GFF, GenBank formats)
 - Resistance gene databases
 - **Size**: ~500 MB

@@ -379,7 +379,7 @@ rm -rf old_directory/
 ```
 Subject: SPAdes assembly fails with error code 1
 
-I'm running SPAdes on paired-end E. coli data:
+I'm running SPAdes on paired-end M. tuberculosis data:
 Command: spades.py -1 sample_R1.fastq.gz -2 sample_R2.fastq.gz -o spades_out/
 
 Error message:

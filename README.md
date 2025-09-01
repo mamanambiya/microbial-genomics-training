@@ -12,9 +12,7 @@ This comprehensive 10-day intensive training course introduces participants to t
 ## 🎯 Target Pathogens
 
 - **_Mycobacterium tuberculosis_** - Drug resistance and transmission dynamics
-- **_Vibrio cholerae_** - Outbreak investigation and epidemic analysis  
-- **_Escherichia coli_** - Pathogenic strains and foodborne illness
-- **_Shigella sonnei_** - Dysentery outbreaks and AMR mechanisms
+- **_Vibrio cholerae_** - Outbreak investigation and epidemic analysis
 
 ## 📅 Course Information
 
@@ -137,9 +135,6 @@ The course utilizes real-world clinical datasets including:
 
 - **M. tuberculosis**: Drug-resistant clinical isolates
 - **V. cholerae**: Outbreak investigation data
-- **E. coli**: Pathogenic strain collection  
-- **S. sonnei**: Dysentery outbreak isolates
-- **Metagenomic**: Clinical microbiome samples
 
 Participants can also bring their own data for analysis during the final days.
 
