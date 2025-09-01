@@ -26,44 +26,8 @@ This course uses carefully curated datasets representing real-world scenarios in
 - **Size**: ~1.8 GB
 - **Use Cases**: Outbreak tracking, source attribution, transmission analysis
 
-#### *Escherichia coli* Surveillance Collection
-- **Sample Size**: 25 clinical isolates
-- **Source**: Hospital surveillance program
-- **Pathotypes**: UPEC, STEC, commensal strains
-- **Resistance Focus**: ESBL, carbapenemase producers
-- **Sequencing**: Illumina paired-end (2×150bp, 50-80x coverage)
-- **Size**: ~2.2 GB
-- **Use Cases**: AMR gene detection, virulence profiling, population structure
 
-#### *Shigella sonnei* Travel-associated Outbreak
-- **Sample Size**: 12 travel-associated cases
-- **Source**: International travel outbreak
-- **Geographic**: Multi-country collection
-- **Resistance**: Azithromycin and fluoroquinolone resistance
-- **Sequencing**: Illumina paired-end (2×150bp, 70-90x coverage)
-- **Size**: ~1.1 GB
-- **Use Cases**: Travel epidemiology, resistance evolution, contact tracing
-
-### 2. Metagenomics Datasets
-
-#### Clinical Microbiome Samples
-- **Sample Types**: Stool, respiratory, wound samples
-- **Sample Size**: 15 clinical specimens
-- **Patient Context**: ICU patients with suspected infections
-- **Sequencing**: Illumina paired-end (2×150bp, 10-50M reads/sample)
-- **Size**: ~8 GB
-- **Use Cases**: Pathogen detection, microbiome analysis, co-infection studies
-
-#### Environmental Surveillance
-- **Sample Types**: Water, soil, food samples
-- **Sample Size**: 10 environmental specimens
-- **Source**: Public health surveillance program
-- **Target Pathogens**: *Salmonella*, *Listeria*, *Campylobacter*
-- **Sequencing**: Illumina paired-end (2×150bp, 5-25M reads/sample)
-- **Size**: ~4 GB
-- **Use Cases**: Environmental monitoring, source tracking, One Health applications
-
-### 3. Reference Materials
+### 2. Reference Materials
 
 #### Reference Genomes
 - High-quality reference assemblies for all target pathogens
@@ -84,12 +48,7 @@ This course uses carefully curated datasets representing real-world scenarios in
 datasets/
 ├── genomics/
 │   ├── mtb/                    # M. tuberculosis isolates
-│   ├── vibrio/                 # V. cholerae outbreak
-│   ├── ecoli/                  # E. coli surveillance
-│   └── shigella/               # S. sonnei travel outbreak
-├── metagenomics/
-│   ├── clinical/               # Clinical microbiome samples
-│   └── environmental/          # Environmental surveillance
+│   └── vibrio/                 # V. cholerae outbreak
 ├── references/
 │   ├── genomes/                # Reference assemblies
 │   ├── databases/              # Resistance/virulence databases
@@ -152,16 +111,6 @@ wget https://datasets.microbial-genomics.org/mtb_collection.tar.gz
 | sequencing_platform | Technology | Illumina MiSeq |
 | coverage_depth | Average coverage | 85x |
 
-### Metagenomic Samples
-| Field | Description | Example |
-|-------|-------------|---------|
-| sample_id | Unique identifier | META_001 |
-| sample_type | Specimen type | stool |
-| host_species | Host organism | Homo sapiens |
-| collection_site | Anatomical site | gut |
-| patient_id | De-identified ID | P001 |
-| clinical_context | Medical context | ICU_sepsis |
-| sequencing_depth | Read count | 25M reads |
 
 ## Quality Control
 
@@ -209,11 +158,6 @@ wget https://datasets.microbial-genomics.org/mtb_collection.tar.gz
 - Metadata includes case demographics and exposure history
 - Excellent dataset for outbreak investigation training
 
-### Metagenomics Collections
-- Negative controls included for contamination assessment
-- Mock communities available for method validation
-- Clinical metadata limited to protect patient privacy
-- Environmental samples include habitat characteristics
 
 ## Troubleshooting
 
