@@ -21,11 +21,11 @@ By the end of Day 8, you will be able to:
 
 ## Schedule
 
-| Time (CAT) | Topic | Trainer |
-|------------|-------|---------|
-| **09:00** | *Pipeline development continued and running* | Mamana Mbiyavanga |
-| **11:30** | **Break** | |
-| **12:00** | *Pipeline development continued and running* | Mamana Mbiyavanga |
+| Time (CAT) | Topic | Links | Trainer |
+|------------|-------|-------|---------|
+| **09:00** | *Pipeline development continued and running* | [Tutorial](#) • [Examples](#) | Mamana Mbiyavanga |
+| **11:30** | **Break** | | |
+| **12:00** | *Pipeline development continued and running* | [Practical](#) • [Testing](#) | Mamana Mbiyavanga |
 
 ## Key Topics
 
