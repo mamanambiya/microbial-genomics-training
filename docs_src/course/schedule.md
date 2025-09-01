@@ -56,7 +56,7 @@ The 10-day intensive training course covers fundamental to advanced topics in mi
 | Time (CAT) | Topic | Trainer |
 |------------|-------|---------|
 | **09:00** | *Quality checking and control, as well as species identification* |Arash Iranzadeh |
-| **10:00** | *Genome assembly, quality assessment* | Ephifania Geza/Arash Iranzadeh |
+| **10:00** | *Genome assembly, quality assessment* | Ephifania Geza |
 | **11:30** | **Break** | |
 | **12:00** | *Genome Annotation* | Arash Iranzadeh |
 
