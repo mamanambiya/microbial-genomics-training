@@ -1,212 +1,257 @@
-# Day 2: Data Analysis Fundamentals
+# Day 2: Introduction to Command Line, HPC, & Quality Control
 
-**Duration**: Full day (09:00-13:00)  
-**Focus**: Quality control, read processing, and assembly introduction
+**Date**: September 2, 2025  
+**Duration**: 09:00-13:00 CAT  
+**Focus**: High Performance Computing, command line proficiency, quality control
 
 ## Overview
 
-Day 2 introduces the fundamental concepts of genomic data analysis. We'll work with real sequencing data to understand quality metrics, perform essential preprocessing steps, and begin exploring genome assembly approaches.
+Day 2 expands on the command line basics from Day 1, introduces high-performance computing resources, and covers essential quality control methods for genomic data. The day includes a special guest lecture on tuberculosis and co-infection.
 
 ## Learning Objectives
 
 By the end of Day 2, you will be able to:
 
-- Assess the quality of raw sequencing data
-- Perform quality control and read processing
-- Understand different sequencing technologies and their characteristics
-- Apply basic filtering and trimming operations
-- Recognize common data quality issues and their solutions
+- Connect to and navigate high-performance computing systems
+- Execute complex command line operations for bioinformatics
+- Perform quality control on sequencing data
+- Identify species from genomic data
+- Understand M. tuberculosis genomics and co-infection patterns
 
 ## Schedule
 
-| Time | Topic | Instructor |
-|------|-------|------------|
-| 09:00-09:30 | Data Quality Overview | Sindiswa Lukhele |
-| 09:30-10:30 | [Quality Control Analysis](quality-control.md) | Sindiswa Lukhele |
-| 10:30-10:45 | *Coffee Break* | |
-| 10:45-11:30 | [Read Processing & Filtering](read-processing.md) | Arash Iranzadeh |
-| 11:30-12:15 | [Assembly Basics](assembly.md) | Ephifania Geza |
-| 12:15-13:00 | Hands-on Practice | All Instructors |
+| Time (CAT) | Topic | Trainer |
+|------------|-------|---------|
+| **09:00** | *Introduction High Performance Computing (HPC) – Ilifu* | Mamana Mbiyavanga |
+| **09:30** | *Recap: Introduction to command line interface* | Arash Iranzadeh |
+| **10:30** | *Quality checking and control, as well as species identification* | Arash Iranzadeh |
+| **11:30** | **Break** | |
+| **12:00** | *Guest talk: MtB and co-infection* | Bethlehem Adnew |
 
 ## Key Topics
 
-### 1. Understanding Sequencing Data
-- FASTQ format and quality scores
-- Illumina, Oxford Nanopore, and PacBio technologies
-- Common artifacts and error patterns
-- Quality metrics interpretation
+### 1. High Performance Computing (HPC) Introduction
+- Ilifu cluster overview and capabilities
+- SSH connections and authentication
+- Job submission and queue systems
+- Resource allocation and management
+- File systems and storage
+- Module loading and software access
 
-### 2. Quality Control Analysis
-- FastQC reports and interpretation
-- MultiQC for batch analysis
-- Identifying problematic samples
-- Quality threshold decisions
+### 2. Advanced Command Line Operations
+- File manipulation and text processing
+- Pipes and command chaining
+- Shell scripting basics
+- Environment variables and PATH
+- Process management and monitoring
+- Batch job submission
 
-### 3. Read Processing
-- Adapter trimming strategies
-- Quality filtering approaches
-- Length filtering considerations
-- Paired-end read handling
+### 3. Quality Control in Genomics
+- FastQC analysis and interpretation
+- Quality score distributions
+- Adapter contamination detection
+- Per-base and per-sequence quality metrics
+- Identifying low-quality data
+- Decision making for data processing
 
-### 4. Assembly Introduction
-- Assembly concepts and challenges
-- Short-read vs long-read approaches
-- Assembly quality metrics
-- Choosing appropriate assemblers
+### 4. Species Identification Methods
+- Kraken2 taxonomic classification
+- Database selection and limitations
+- Contamination detection
+- Result interpretation and validation
+- Confidence assessment
+- Troubleshooting classification issues
 
-## Datasets Used
+### 5. M. tuberculosis and Co-infection
+- TB genomics and strain typing
+- Co-infection patterns and detection
+- Clinical implications
+- Molecular epidemiology approaches
+- Drug resistance mechanisms
+- Public health applications
 
-### Primary Dataset: *E. coli* Outbreak Strains
-- **Source**: Simulated outbreak investigation
-- **Technology**: Illumina paired-end (2×150bp)
-- **Coverage**: 50-100x
-- **Samples**: 12 outbreak isolates + 3 controls
+## Tools and Software
 
-### Secondary Dataset: *M. tuberculosis* Clinical Isolates
-- **Source**: Clinical surveillance study
-- **Technology**: Illumina paired-end (2×150bp)
-- **Coverage**: 80-120x
-- **Samples**: 6 diverse strains
+### HPC Environment
+- **Ilifu cluster** - High-performance computing infrastructure
+- **SLURM** - Job scheduling system
+- **Module system** - Software environment management
+- **SSH clients** - Remote connection tools
 
-## Tools Introduced
+### Command Line Tools
+- **Advanced bash** - Shell scripting and automation
+- **GNU utilities** - Text processing and file manipulation
+- **tmux/screen** - Terminal multiplexing
+- **rsync** - File synchronization
 
-### Quality Control
-- **FastQC** - Individual sample QC
-- **MultiQC** - Aggregate QC reporting
-- **Qualimap** - Mapping quality assessment
-
-### Read Processing  
-- **Trimmomatic** - Adapter trimming and filtering
-- **Cutadapt** - Flexible adapter removal
-- **Fastp** - All-in-one preprocessing
-
-### Assembly Tools
-- **SPAdes** - De novo genome assembly
-- **Unicycler** - Hybrid assembly approach
-- **QUAST** - Assembly quality assessment
+### Quality Control Tools
+- **FastQC** - Sequencing data quality assessment
+- **MultiQC** - Aggregate quality reporting
+- **Trimmomatic** - Read trimming and filtering
+- **Kraken2** - Taxonomic sequence classification
 
 ## Hands-on Exercises
 
-### Exercise 1: Quality Assessment (45 minutes)
-Analyze raw sequencing data quality and identify potential issues.
+### Exercise 1: HPC Connection and Navigation (45 minutes)
+Connect to Ilifu cluster and explore the computing environment.
 
 ```bash
-# Basic FastQC analysis
+# Connect to Ilifu via SSH
+ssh username@slurm.ilifu.ac.za
+
+# Load required modules
+module load fastqc/0.11.9
+module load kraken2/2.1.2
+
+# Check available resources
+sinfo
+squeue
+```
+
+### Exercise 2: Command Line Practice (60 minutes)
+Practice advanced command line operations for bioinformatics.
+
+```bash
+# File processing with pipes
+cat sample.fastq | grep -c "^@"  # Count reads
+zcat sample.fastq.gz | head -20   # View compressed file
+
+# Batch processing with loops
+for file in *.fastq.gz; do
+    echo "Processing $file"
+    fastqc "$file" -o qc_output/
+done
+
+# Text processing and filtering
+awk 'NR%4==2{print length($0)}' sample.fastq | sort -n | uniq -c
+```
+
+### Exercise 3: Quality Control Analysis (45 minutes)
+Analyze sequencing data quality and identify issues.
+
+```bash
+# Run FastQC on multiple samples
 fastqc *.fastq.gz -o qc_reports/
 
-# Generate MultiQC report
-multiqc qc_reports/ -o multiqc_output/
-```
+# Species identification with Kraken2
+kraken2 --db minikraken2_v2 --paired sample_R1.fastq sample_R2.fastq \
+    --output sample.kraken --report sample_report.txt
 
-### Exercise 2: Read Processing (60 minutes)
-Apply appropriate trimming and filtering to improve data quality.
-
-```bash
-# Trimmomatic processing
-trimmomatic PE sample_R1.fastq.gz sample_R2.fastq.gz \
-    output_R1_paired.fastq.gz output_R1_unpaired.fastq.gz \
-    output_R2_paired.fastq.gz output_R2_unpaired.fastq.gz \
-    ILLUMINACLIP:adapters.fa:2:30:10 \
-    LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:36
-```
-
-### Exercise 3: Assembly Comparison (45 minutes)
-Compare assembly results from different approaches and parameters.
-
-```bash
-# SPAdes assembly
-spades.py -1 processed_R1.fastq.gz -2 processed_R2.fastq.gz \
-    -o spades_output/ --careful
-
-# Assembly quality assessment
-quast.py spades_output/scaffolds.fasta -o quast_results/
+# Interpret results
+less sample_report.txt
 ```
 
 ## Key Concepts
 
-### Quality Scores (Phred Scale)
-- Q20 = 1% error rate (99% accuracy)
-- Q30 = 0.1% error rate (99.9% accuracy)  
-- Q40 = 0.01% error rate (99.99% accuracy)
+### HPC Computing Principles
+- **Parallel processing**: Utilizing multiple CPU cores
+- **Job scheduling**: SLURM queue management
+- **Resource sharing**: Fair allocation among users
+- **Module system**: Dynamic software environment
 
-### Assembly Metrics
-- **N50**: Scaffold length where 50% of assembly is in longer scaffolds
-- **Coverage**: Average depth of sequencing reads
-- **Contiguity**: Number and size distribution of contigs
+### Quality Metrics Understanding
+| Metric | Good | Moderate | Poor | Action |
+|--------|------|----------|------|---------|
+| Per-base quality | >Q30 | Q20-Q30 | <Q20 | Trim/filter |
+| Per-sequence quality | >Q25 | Q15-Q25 | <Q15 | Remove reads |
+| Adapter content | <5% | 5-10% | >10% | Trim adapters |
+| Duplication level | <20% | 20-50% | >50% | Consider PCR bias |
 
-### Common Issues
-- **Adapter contamination**: Affects assembly quality
-- **Low quality regions**: Lead to assembly errors
-- **Coverage bias**: Uneven representation of genome regions
+### Species Identification Workflow
+1. **Database selection**: Choose appropriate reference
+2. **Classification**: Run taxonomic classifier
+3. **Result filtering**: Apply confidence thresholds
+4. **Validation**: Cross-check with expected species
+5. **Contamination check**: Identify unexpected organisms
 
 ## Assessment Activities
 
-### Practical Assessment
-- Quality control report interpretation
-- Successful read processing workflow
-- Assembly quality evaluation
-- Troubleshooting common problems
+### Individual Tasks
+- Successfully connect to HPC system
+- Execute quality control pipeline
+- Interpret FastQC reports correctly
+- Perform species identification
+- Document analysis workflow
 
-### Discussion Topics
-- When to reject samples based on quality
-- Optimal trimming parameters for different applications
-- Assembly strategy selection criteria
+### Group Discussion
+- Compare quality control results
+- Discuss HPC resource management strategies
+- Share troubleshooting experiences
+- Evaluate species identification confidence
 
-## Common Problems & Solutions
+## Common Challenges
 
-### Low Quality Data
+### HPC Connection Issues
 ```bash
-# More aggressive trimming
-trimmomatic PE input_R1.fastq.gz input_R2.fastq.gz \
-    output_R1.fastq.gz output_R1_unpaired.fastq.gz \
-    output_R2.fastq.gz output_R2_unpaired.fastq.gz \
-    LEADING:10 TRAILING:10 SLIDINGWINDOW:4:20 MINLEN:50
+# SSH key problems
+ssh-keygen -t ed25519 -C "your_email@example.com"
+ssh-copy-id username@slurm.ilifu.ac.za
+
+# Module loading issues
+module avail    # List available modules
+module list     # Show loaded modules
+module purge    # Clear all modules
 ```
 
-### Adapter Contamination
-```bash
-# Custom adapter removal
-cutadapt -a AGATCGGAAGAGC -A AGATCGGAAGAGC \
-    -o trimmed_R1.fastq.gz -p trimmed_R2.fastq.gz \
-    input_R1.fastq.gz input_R2.fastq.gz
-```
+### Quality Control Interpretation
+- **Low quality at read ends**: Normal for Illumina, trim accordingly
+- **Adapter contamination**: Choose appropriate trimming parameters
+- **High duplication**: May be biological or technical
+- **Unusual GC content**: Could indicate contamination
 
-### Assembly Fragmentation
+### Species Identification Problems
 ```bash
-# Try different k-mer sizes
-spades.py -1 R1.fastq.gz -2 R2.fastq.gz \
-    -o assembly_k55,77,99/ -k 55,77,99
+# Database issues
+kraken2-build --download-taxonomy --db custom_db
+kraken2-build --download-library bacteria --db custom_db
+
+# Low classification rates
+# Try different databases or confidence thresholds
+kraken2 --confidence 0.1 --db database sample.fastq
 ```
 
 ## Resources
 
-### Documentation
+### HPC Documentation
+- [Ilifu User Guide](https://docs.ilifu.ac.za/)
+- [SLURM Quick Start](https://slurm.schedmd.com/quickstart.html)
+- [SSH Key Management](https://docs.github.com/en/authentication/connecting-to-github-with-ssh)
+
+### Quality Control Resources
 - [FastQC Manual](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
-- [SPAdes Manual](https://github.com/ablab/spades)
-- [Trimmomatic Documentation](http://www.usadellab.org/cms/?page=trimmomatic)
+- [Kraken2 Documentation](https://ccb.jhu.edu/software/kraken2/)
+- [Quality Control Best Practices](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4766705/)
 
-### Reference Papers
-- Bolger et al. (2014). Trimmomatic: a flexible trimmer for Illumina sequence data
-- Bankevich et al. (2012). SPAdes: a new genome assembly algorithm
-- Ewels et al. (2016). MultiQC: summarize analysis results for multiple tools
+### M. tuberculosis Resources
+- [TB-Profiler](https://github.com/jodyphelan/TBProfiler)
+- [ReSeqTB](https://platform.reseqtb.org/)
+- [TBDB](http://genome.tbdb.org/)
 
-### Online Resources
-- [Galaxy Training Materials](https://training.galaxyproject.org/)
-- [Bioinformatics Workbook](https://bioinformaticsworkbook.org/)
+## Guest Lecture: MtB and Co-infection
+
+### Speaker: Bethlehem Adnew
+
+#### Key Topics Covered
+- **M. tuberculosis genomics**: Strain diversity and typing methods
+- **Co-infection dynamics**: TB-HIV and other respiratory pathogens
+- **Diagnostic challenges**: Molecular detection in complex samples
+- **Treatment implications**: Drug resistance in co-infected patients
+- **Epidemiological insights**: Transmission patterns and control strategies
+
+#### Interactive Discussion Points
+- Current challenges in TB diagnosis
+- Role of genomics in outbreak investigation
+- Future directions in TB research
+- Integration of genomic and clinical data
 
 ## Looking Ahead
 
-**Day 3 Preview**: Pathogen-specific genomic analysis including:
-- *M. tuberculosis* strain characterization
-- *V. cholerae* outbreak investigation
-- Antimicrobial resistance detection
-
-## Homework (Optional)
-
-1. Process additional datasets provided on course shared folder
-2. Explore different assembly parameters and compare results
-3. Read assigned papers on assembly methods
+**Day 3 Preview**: Genomic Characterization including:
+- Genome assembly, quality assessment and annotation
+- Multi-locus sequence typing and serotyping
+- Antimicrobial resistance gene detection
+- Role of mobile genetic elements in AMR spread
 
 ---
 
-**Key Takeaway**: Quality control is the foundation of all downstream analyses. Invest time in understanding your data quality before proceeding to interpretation!
+**Key Learning Outcome**: HPC fundamentals, command line proficiency, and quality control methods provide the essential computational foundation for all subsequent genomic analyses in the course.
