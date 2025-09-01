@@ -1,6 +1,7 @@
 # Microbial Genomics & Metagenomics Training Course
 
 [![Course Website](https://img.shields.io/badge/Website-Live-brightgreen)](https://cidri-africa.github.io/microbial-genomics-training/)
+[![Build Status](https://img.shields.io/badge/Build-Testing-yellow)]
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Course Dates](https://img.shields.io/badge/Course%20Dates-September%201--12,%202025-orange)]()
 
