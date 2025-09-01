@@ -22,7 +22,7 @@ The 10-day intensive training course covers fundamental to advanced topics in mi
 **Date**: September 1, 2025
 
 | Time (CAT) | Topic | link | Trainer |
-|------------|-------|---------|
+|------------|-------| -------|---------|
 | **09:00** | *Introductions* | All |
 | **09:10** | *Overview of clinical pathogens and genomic surveillance* |[https://docs.google.com/presentation/d/1N-bmzwmIdZUDJTtogQxGkTQ4XicyuPiv/edit?usp=drive_link&ouid=113561825586036302170&rtpof=true&sd=true] | Ephifania Geza |
 | **09:40** | *Overview of sequencing technologies and data types* | | Sindiswa Lukhele |
