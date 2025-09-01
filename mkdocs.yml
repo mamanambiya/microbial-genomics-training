@@ -6,6 +6,8 @@ site_url: https://cidri-africa.github.io/microbial-genomics-training/
 repo_name: CIDRI-Africa/microbial-genomics-training
 repo_url: https://github.com/CIDRI-Africa/microbial-genomics-training
 
+docs_dir: docs_src
+
 copyright: Copyright &copy; 2024 CIDRI-Africa
 
 theme:
