@@ -52,7 +52,7 @@ This course provides hands-on experience with:
 - Apply advanced sequencing analysis techniques
 - Interpret complex metagenomic datasets
 
-### :material-workflow: **Reproducible Workflows**
+### :material-source-branch: **Reproducible Workflows**
 - Use version control with Git
 - Work with containerized environments
 - Implement Nextflow pipelines for scalable analysis
