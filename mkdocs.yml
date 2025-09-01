@@ -1,5 +1,6 @@
 site_name: Microbial Genomics & Metagenomics Training
 site_description: Hands-on training course for microbial genomics and metagenomics in clinical and public health applications
+# Force rebuild 2025-09-01
 site_author: CIDRI-Africa
 site_url: https://cidri-africa.github.io/microbial-genomics-training/
 
@@ -130,6 +131,13 @@ nav:
     - Day 1 - Introduction & Setup: modules/day1/index.md
     - Day 2 - Data Analysis: modules/day2/index.md
     - Day 3 - Pathogen Genomics: modules/day3/index.md
+    - Day 4 - Comparative Genomics: modules/day4/index.md
+    - Day 5 - Metagenomic Profiling: modules/day5/index.md
+    - Day 6 - Co-infection & Mutations: modules/day6/index.md
+    - Day 7 - Nextflow: modules/day7/index.md
+    - Day 8 - Pipeline Development: modules/day8/index.md
+    - Day 9 - Bring Your Own Data: modules/day9/index.md
+    - Day 10 - Wrap-up Session: modules/day10/index.md
   - Resources:
     - Datasets: datasets.md
     - Troubleshooting: troubleshooting.md

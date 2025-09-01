@@ -1,220 +1,315 @@
-# Day 3: Pathogen Genomics
+# Day 3: Genomic Characterization
 
-**Duration**: Full day (09:00-13:00)  
-**Focus**: Pathogen-specific analysis, AMR detection, and comparative genomics
+**Date**: September 3, 2025  
+**Duration**: 09:00-13:00 CAT  
+**Focus**: Genome assembly, MLST, serotyping, AMR detection, mobile genetic elements
 
 ## Overview
 
-Day 3 dives deep into pathogen-specific genomic analysis using real clinical isolates. We'll explore the unique characteristics of major pathogens and learn to detect antimicrobial resistance genes and mobile genetic elements.
+Day 3 focuses on comprehensive genomic characterization of microbial pathogens. We'll cover genome assembly and quality assessment, molecular typing methods, antimicrobial resistance gene detection, and the role of mobile genetic elements in resistance dissemination.
 
 ## Learning Objectives
 
 By the end of Day 3, you will be able to:
 
-- Perform pathogen-specific genomic characterization
-- Detect and interpret antimicrobial resistance profiles
-- Identify mobile genetic elements and their role in resistance spread
-- Apply comparative genomics approaches to outbreak investigation
-- Understand pathogen typing methods (MLST, cgMLST, SNP typing)
+- Perform de novo genome assembly and assess assembly quality
+- Apply multi-locus sequence typing (MLST) for strain characterization
+- Conduct serotyping for pathogen classification
+- Detect and interpret antimicrobial resistance genes
+- Understand the role of plasmids, integrons, and transposons in AMR spread
+- Predict resistance phenotypes from genotypic data
 
 ## Schedule
 
-| Time | Topic | Instructor |
-|------|-------|------------|
-| 09:00-09:45 | [*M. tuberculosis* Analysis](mtb-analysis.md) | Ephifania Geza |
-| 09:45-10:30 | [*V. cholerae* Analysis](vibrio-analysis.md) | Arash Iranzadeh |
-| 10:30-10:45 | *Coffee Break* | |
-| 10:45-11:30 | [Antimicrobial Resistance Detection](amr-detection.md) | Sindiswa Lukhele |
-| 11:30-12:15 | Mobile Genetic Elements | Ephifania Geza |
-| 12:15-13:00 | Comparative Analysis Workshop | All Instructors |
+| Time (CAT) | Topic | Trainer |
+|------------|-------|---------|
+| **09:00** | *Genome assembly, quality assessment and annotation* | Ephifania Geza/Arash Iranzadeh |
+| **10:00** | *Multi-locus sequence typing, and serotyping* | Arash Iranzadeh |
+| **11:00** | *Antimicrobial Resistance gene detection and resistance prediction* | Ephifania Geza |
+| **11:30** | **Break** | |
+| **12:00** | *Role of plasmids, integrons, and transposons in AMR spread* | Ephifania Geza |
 
-## Key Pathogens
+## Key Topics
 
-### *Mycobacterium tuberculosis*
-- **Genome Size**: ~4.4 Mb
-- **Key Features**: Slow growth, drug resistance, lineage diversity
-- **Analysis Focus**: Drug resistance mutations, lineage typing, transmission clusters
+### 1. Genome Assembly and Quality Assessment
+- De novo assembly algorithms and approaches
+- Short-read vs long-read assembly strategies
+- Assembly quality metrics and interpretation
+- Contamination detection and removal
+- Assembly polishing and gap filling
 
-### *Vibrio cholerae*
-- **Genome Size**: ~4.0 Mb (2 chromosomes)
-- **Key Features**: Pandemic potential, toxin genes, environmental survival
-- **Analysis Focus**: Pathogenicity islands, outbreak tracking, environmental adaptation
+### 2. Genome Annotation
+- Gene prediction and functional annotation
+- Prokka automated annotation pipeline
+- Manual curation and quality control
+- Annotation databases and resources
+- Comparative annotation approaches
 
-### *Escherichia coli* & *Shigella sonnei*
-- **Genome Size**: ~5.0 Mb
-- **Key Features**: Diverse pathotypes, plasmid-mediated resistance
-- **Analysis Focus**: Virulence factors, resistance plasmids, outbreak investigation
+### 3. Multi-locus Sequence Typing (MLST)
+- MLST principles and methodology
+- Housekeeping gene selection and analysis
+- Allelic profiling and sequence type assignment
+- Population structure analysis
+- Database resources and submission
 
-## Tools and Databases
+### 4. Serotyping
+- Serological classification principles
+- In silico serotyping methods
+- Species-specific typing schemes
+- Clinical relevance of serotypes
+- Concordance with traditional methods
 
-### Resistance Detection
-- **ABRicate** - Screening for resistance genes
-- **ResFinder** - Comprehensive resistance gene database
-- **CARD** - Comprehensive Antibiotic Resistance Database
-- **PointFinder** - Point mutations in resistance genes
+### 5. Antimicrobial Resistance Detection
+- Resistance gene databases and resources
+- Sequence-based resistance prediction
+- Point mutations and resistance mechanisms
+- Phenotype-genotype correlation
+- Clinical interpretation guidelines
 
-### Typing Methods
+### 6. Mobile Genetic Elements
+- Plasmid detection and characterization
+- Integron structure and analysis
+- Transposon identification
+- Horizontal gene transfer mechanisms
+- Evolution of resistance dissemination
+
+## Tools and Software
+
+### Assembly Tools
+- **SPAdes** - De novo genome assembler
+- **Unicycler** - Hybrid assembly pipeline
+- **Flye** - Long-read assembly
+- **QUAST** - Assembly quality assessment
+
+### Annotation Tools
+- **Prokka** - Automated prokaryotic annotation
+- **RAST** - Rapid Annotation using Subsystem Technology
+- **NCBI PGAP** - Prokaryotic Genome Annotation Pipeline
+- **Bakta** - Rapid bacterial genome annotation
+
+### Typing Tools
 - **mlst** - Multi-locus sequence typing
-- **chewBBACA** - cgMLST analysis
-- **SNP-sites** - Core SNP extraction
-- **ParSNP** - Rapid core genome SNP typing
+- **SeqSero2** - Salmonella serotype prediction
+- **SeroFinder** - Serotype identification
+- **cgMLSTFinder** - Core genome MLST
 
-### Specialized Tools
-- **TB-Profiler** - *M. tuberculosis* drug resistance prediction
-- **Mykrobe** - Species identification and resistance prediction
-- **SISTR** - *Salmonella* in silico typing resource
+### Resistance Analysis Tools
+- **ABRicate** - Mass screening of contigs for antimicrobial resistance
+- **ResFinder** - Identification of acquired antimicrobial resistance genes
+- **PointFinder** - Detection of chromosomal point mutations
+- **RGI** - Resistance Gene Identifier
+
+### Mobile Element Tools
+- **PlasmidFinder** - Plasmid identification
+- **IntFinder** - Integron detection
+- **ISfinder** - Insertion sequence identification
+- **MOB-suite** - Plasmid reconstruction and typing
 
 ## Hands-on Exercises
 
-### Exercise 1: TB Drug Resistance Analysis (60 minutes)
-Analyze *M. tuberculosis* genomes for drug resistance mutations.
+### Exercise 1: Genome Assembly and Quality Assessment (60 minutes)
+Assemble bacterial genomes and evaluate assembly quality.
 
 ```bash
-# TB-Profiler analysis
-tb-profiler profile -1 TB_sample_R1.fastq.gz -2 TB_sample_R2.fastq.gz \
-    -p TB_sample --txt --csv
+# De novo assembly with SPAdes
+spades.py --careful -1 sample_R1.fastq.gz -2 sample_R2.fastq.gz -o assembly_output/
 
-# Generate summary report
-tb-profiler collate -d results/ -p batch_analysis
+# Assembly quality assessment
+quast.py assembly_output/scaffolds.fasta -o quast_results/
+
+# Check assembly statistics
+assembly-stats assembly_output/scaffolds.fasta
+
+# Contamination screening
+kraken2 --db minikraken2_v2 assembly_output/scaffolds.fasta --report contamination_check.txt
 ```
 
-### Exercise 2: *V. cholerae* Outbreak Investigation (45 minutes)
-Investigate a cholera outbreak using comparative genomics.
+### Exercise 2: Genome Annotation (45 minutes)
+Annotate assembled genomes and explore gene content.
 
 ```bash
-# Core genome alignment
-parsnp -g reference.gbk -d genomes/ -p 4 -o parsnp_output/
+# Automated annotation with Prokka
+prokka assembly_output/scaffolds.fasta --outdir annotation/ --genus Escherichia --species coli
 
-# Generate phylogenetic tree
-FastTree -nt -gtr parsnp_output/parsnp.xmfa > outbreak_tree.newick
+# Extract protein sequences
+grep -c "^>" annotation/*.faa  # Count proteins
+
+# Functional classification
+python3 scripts/analyze_annotations.py annotation/*.gff
 ```
 
-### Exercise 3: AMR Gene Detection (45 minutes)
-Screen multiple pathogens for antimicrobial resistance genes.
+### Exercise 3: MLST and Serotyping (45 minutes)
+Perform molecular typing and serological classification.
 
 ```bash
-# Screen for resistance genes
-abricate --db resfinder genome_assembly.fasta > resistance_profile.txt
+# MLST typing
+mlst assembly_output/scaffolds.fasta > mlst_results.txt
 
-# Screen multiple databases
-for db in resfinder card argannot; do
-    abricate --db $db assembly.fasta > ${db}_results.txt
-done
+# Serotyping (example for E. coli)
+python3 serotypefinder/serotypefinder.py -i assembly_output/scaffolds.fasta -o serotype_results/
+
+# Visualize results
+cat mlst_results.txt
+cat serotype_results/results_tab.txt
 ```
 
-## Dataset Details
+### Exercise 4: AMR Gene Detection (60 minutes)
+Identify antimicrobial resistance genes and predict phenotypes.
 
-### TB Clinical Isolates
-- **n=20** diverse clinical strains
-- **Drug resistance**: Mixed MDR/XDR and susceptible strains
-- **Lineages**: Representatives from major global lineages
-- **Metadata**: Treatment history, geographic origin
+```bash
+# Screen for resistance genes with ABRicate
+abricate --db resfinder assembly_output/scaffolds.fasta > resistance_genes.txt
+abricate --db card assembly_output/scaffolds.fasta > card_results.txt
 
-### Cholera Outbreak Collection
-- **n=15** outbreak isolates + environmental samples
-- **Source**: Recent epidemic investigation
-- **Timespan**: 6-month outbreak period
-- **Geography**: Urban coastal setting
+# Point mutation analysis
+abricate --db pointfinder assembly_output/scaffolds.fasta > point_mutations.txt
 
-### *E. coli* Surveillance Data
-- **n=25** clinical isolates
-- **Source**: Hospital surveillance program  
-- **Resistance**: ESBL and carbapenem resistance focus
-- **Pathotypes**: Mixed UPEC, STEC, and commensal strains
+# Summarize resistance profile
+python3 scripts/summarize_resistance.py resistance_genes.txt card_results.txt
+```
+
+### Exercise 5: Mobile Genetic Element Analysis (45 minutes)
+Identify and characterize mobile genetic elements.
+
+```bash
+# Plasmid detection
+abricate --db plasmidfinder assembly_output/scaffolds.fasta > plasmids.txt
+
+# Integron analysis
+python3 integron_finder/integron_finder.py assembly_output/scaffolds.fasta
+
+# Comprehensive mobile element screen
+mob_recon --infile assembly_output/scaffolds.fasta --outdir mob_results/
+```
 
 ## Key Concepts
 
-### Drug Resistance Mechanisms
-- **Target modification**: Mutations in drug targets
-- **Drug inactivation**: Enzymatic resistance
-- **Efflux pumps**: Active drug removal
-- **Reduced permeability**: Altered uptake
+### Assembly Quality Metrics
+| Metric | Good Assembly | Poor Assembly | Action |
+|--------|---------------|---------------|--------|
+| N50 | >50 kb | <10 kb | Optimize parameters |
+| Contigs | <100 | >500 | Check contamination |
+| Genome size | Expected ±10% | >20% difference | Review input data |
+| Coverage | >50x | <20x | Sequence more |
 
-### Mobile Genetic Elements
-- **Plasmids**: Circular DNA elements
-- **Transposons**: Mobile DNA sequences
-- **Integrons**: Gene capture systems
-- **Prophages**: Integrated viral sequences
+### MLST Interpretation
+- **Sequence Types (STs)**: Unique allelic combinations
+- **Clonal Complexes**: Related STs sharing alleles
+- **Population structure**: Understanding strain relationships
+- **Epidemiological significance**: Linking to clinical outcomes
 
-### Typing Methods Comparison
-| Method | Resolution | Speed | Coverage | Best For |
-|--------|------------|-------|----------|----------|
-| MLST | Low | Fast | Universal | Species identification |
-| cgMLST | High | Medium | Species-specific | Outbreak investigation |
-| SNP typing | Very High | Slow | Universal | Fine-scale epidemiology |
+### Resistance Mechanisms
+| Mechanism | Examples | Detection Method |
+|-----------|----------|------------------|
+| Enzymatic | β-lactamases | Gene presence |
+| Efflux pumps | AcrAB-TolC | Gene/regulation |
+| Target modification | rRNA methylation | Point mutations |
+| Membrane impermeability | Porin loss | Sequence analysis |
+
+### Mobile Element Types
+- **Plasmids**: Autonomous replicating elements
+- **Integrons**: Gene capture and expression platforms
+- **Transposons**: Mobile sequences within genomes
+- **Insertion sequences**: Simple transposable elements
 
 ## Assessment Activities
 
 ### Individual Analysis
-- Complete resistance profiling for assigned isolates
-- Generate phylogenetic analysis of outbreak data
-- Interpret AMR gene presence/absence patterns
+- Complete genome assembly workflow
+- Perform quality assessment and interpretation
+- Execute MLST typing and serotype prediction
+- Identify resistance genes and mobile elements
+- Generate comprehensive characterization report
 
 ### Group Discussion
-- Compare resistance mechanisms across pathogens
-- Evaluate outbreak investigation strategies
-- Discuss public health implications of findings
+- Compare assembly strategies and results
+- Evaluate MLST typing reliability
+- Discuss resistance gene interpretation
+- Analyze mobile element distribution patterns
 
 ## Common Challenges
 
-### False Positive Resistance Calls
+### Assembly Issues
 ```bash
-# Verify with multiple tools
-abricate --db resfinder assembly.fasta
-rgi main -i assembly.fasta -o rgi_output -t contig -a BLAST
+# Low coverage assemblies
+spades.py --careful --cov-cutoff 5 -1 R1.fastq -2 R2.fastq -o low_cov_assembly/
+
+# Contamination removal
+# Remove contaminant contigs based on taxonomy
+seqtk subseq scaffolds.fasta clean_contigs.txt > clean_assembly.fasta
 ```
 
-### Incomplete Assemblies
+### MLST Problems
 ```bash
-# Check assembly quality first
-quast.py assembly.fasta -o quality_check/
-# Consider using long-read data or hybrid assembly
+# Novel alleles
+mlst --novel alleles.fasta assembly.fasta
+
+# Missing loci
+# Check for fragmented assemblies or contamination
+mlst --debug assembly.fasta
 ```
 
-### Phylogenetic Artifacts  
+### Resistance Prediction Issues
+- **Low identity matches**: Consider distant homologs
+- **Truncated genes**: Check assembly quality
+- **Novel variants**: Manual curation needed
+- **False positives**: Validate with phenotypic data
+
+### Mobile Element Challenges
 ```bash
-# Mask recombinogenic regions
-gubbins aligned_sequences.aln
-# Use recombination-free SNPs for tree building
+# Complex rearrangements
+# Use long-read sequencing when available
+flye --nano-raw long_reads.fastq --out-dir flye_assembly/
+
+# Plasmid circularization
+# Check for overlapping ends
+python3 scripts/check_circular.py plasmid_contigs.fasta
 ```
 
-## Advanced Topics
+## Clinical Applications
 
-### Machine Learning in AMR Prediction
-- Feature selection for resistance prediction
-- Training datasets and validation
-- Integration with genomic epidemiology
+### Routine Surveillance
+- Rapid species identification and typing
+- Resistance profile determination
+- Outbreak detection and investigation
+- Infection control decision support
 
-### Pan-genome Analysis
-- Core vs accessory genome concepts
-- Virulence factor distribution
-- Population structure analysis
+### Public Health Applications
+- Antimicrobial resistance monitoring
+- Vaccine development support
+- Epidemiological investigations
+- Policy development and guidelines
 
 ## Resources
 
-### Databases
+### Assembly Resources
+- [SPAdes Manual](http://cab.spbu.ru/software/spades/)
+- [QUAST Documentation](http://quast.sourceforge.net/)
+- [Assembly Best Practices](https://github.com/rrwick/Perfect-bacterial-genome-tutorial)
+
+### Typing Resources
+- [PubMLST Database](https://pubmlst.org/)
+- [MLST.net](https://www.mlst.net/)
+- [SerotypeFinder](https://cge.cbs.dtu.dk/services/SerotypeFinder/)
+
+### AMR Resources
 - [CARD Database](https://card.mcmaster.ca/)
-- [ResFinder Database](https://cge.cbs.dtu.dk/services/ResFinder/)
-- [PubMLST](https://pubmlst.org/)
-- [TB-Profiler Database](https://github.com/jodyphelan/tbdb)
+- [ResFinder](https://cge.cbs.dtu.dk/services/ResFinder/)
+- [NCBI AMRFinderPlus](https://github.com/ncbi/amr)
 
-### Key Publications
-- Zankari et al. (2012). Identification of acquired antimicrobial resistance genes
-- Hunt et al. (2019). ARIBA: rapid antimicrobial resistance genotyping
-- Phelan et al. (2019). Integrating informatics tools and portable sequencing
-
-### Online Tools
-- [CGE Server](https://cge.cbs.dtu.dk/) - Multiple typing tools
-- [Galaxy Project](https://usegalaxy.org/) - Web-based analysis platform
-- [BacWGSTdb](https://bacdb.org/) - Bacterial genomics database
+### Mobile Element Resources
+- [PlasmidFinder](https://cge.cbs.dtu.dk/services/PlasmidFinder/)
+- [ISfinder Database](https://isfinder.biotoul.fr/)
+- [IntFinder Documentation](https://integronfinder.readthedocs.io/)
 
 ## Looking Ahead
 
-**Day 4 Preview**: Advanced workflows and metagenomics including:
-- Metagenomics analysis principles
-- Workflow management with Nextflow
-- Data interpretation and visualization
+**Day 4 Preview**: Comparative Genomics including:
+- Pangenome analysis methods
+- Phylogenomic reconstruction from core genome SNPs
+- Tree construction and visualization
+- Evolutionary relationship inference
 
 ---
 
-**Remember**: Resistance gene presence doesn't always equal phenotypic resistance. Consider gene expression, mutations, and clinical context in your interpretations!
+**Key Learning Outcome**: Genome assembly, MLST, serotyping, AMR detection, and mobile genetic element analysis provide comprehensive characterization capabilities essential for clinical genomics and public health surveillance.
