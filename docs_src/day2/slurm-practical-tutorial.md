@@ -96,6 +96,7 @@ sed 's/old/new/g' file.txt
 ### Tutorial Overview
 
 In this hands-on tutorial, you'll learn to:
+
 1. Write and submit your first SLURM job
 2. Monitor job status and view outputs
 3. Run Python scripts on HPC
@@ -235,13 +236,14 @@ cat slurm-[JOBID].out
 ```
 
 **Expected output:**
+
 ```text
 Hello from Python on HPC!
 Running on: compute-1-sep2025
 Sum of 0-999 = 499500
 ```
 
-#### Common Issues and Solutions:
+#### Common Issues and Solutions
 
 | Problem | Solution |
 |---------|----------|
@@ -254,6 +256,7 @@ Sum of 0-999 = 499500
 ### Tutorial 3: Real Genomics Analysis
 
 #### Objective
+
 Process FASTQ files using SLURM, simulating a real bioinformatics pipeline.
 
 #### Step 1: Create the Analysis Script
@@ -369,6 +372,7 @@ sbatch fastq_analysis.sh
 Open multiple terminal windows to watch different aspects:
 
 **Terminal 1: Submit and monitor queue**
+
 ```bash
 # Submit the job
 sbatch fastq_analysis.sh
@@ -381,6 +385,7 @@ squeue -u $USER
 ```
 
 **Terminal 2: Watch live output**
+
 ```bash
 # Once job starts running (status = R), watch the output
 tail -f slurm-15.out
@@ -388,6 +393,7 @@ tail -f slurm-15.out
 ```
 
 **Terminal 3: Check job details**
+
 ```bash
 # Get detailed job information
 scontrol show job 15
@@ -404,6 +410,7 @@ During the 4-minute runtime, you'll observe these states:
 | 4:00+ | - (Completed) | Job finished, no longer in queue |
 
 **Timeline of analysis steps:**
+
 - **0:00-0:45** - File validation
 - **0:45-1:35** - Sequence counting (sample1.fastq)
 - **1:35-2:25** - Sequence counting (sample2.fastq)  
@@ -412,6 +419,7 @@ During the 4-minute runtime, you'll observe these states:
 - **4:10-4:30** - Final report generation
 
 **Learning opportunity:** This 4-minute window allows everyone to:
+
 - Practice using `squeue` to monitor jobs multiple times
 - See job state transitions and timing in real-time  
 - Understand queue system behavior with sufficient time for discussion
@@ -419,6 +427,7 @@ During the 4-minute runtime, you'll observe these states:
 - Check intermediate results and final efficiency reports
 
 > **💡 Training Tip:** Have participants submit this job, then use the 4-minute window to demonstrate:
+>
 > - Refreshing `squeue -u $USER` every 30 seconds to track progress
 > - Using `scontrol show job JOBID` for detailed job information
 > - Explaining what PENDING vs RUNNING states mean
@@ -427,11 +436,13 @@ During the 4-minute runtime, you'll observe these states:
 > - Explaining the difference between walltime and CPU time
 
 **Expected final output files:**
+
 - `slurm-JOBID.out` - Complete log of all analysis steps
 - `analysis_summary.txt` - Final summary report
 - `sample1.fastq` & `sample2.fastq` - Generated test data files
 
 **Sample log output:**
+
 ```text
 === FASTQ Analysis Pipeline Starting ===
 Job ID: 15
