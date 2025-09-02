@@ -58,12 +58,12 @@ The 10-day intensive training course covers fundamental to advanced topics in mi
 
 | Time (CAT) | Topic | Links | Trainer |
 |------------|-------|-------|---------|
-| **09:00** | *Quality checking and control, as well as species identification* | | Arash Iranzadeh |
-| **10:00** | *Genome assembly, quality assessment* | | Ephifania Geza |
+| **09:00** | *Introduction High Performance Computing (HPC) – Ilifu* | [Notes](../day2/hpc-ilifu-training.md) • [Practical 1](../day2/slurm-practical-tutorial.md) • [Practical 2](../day2/unix-commands-pathogen-examples.md) | Mamana Mbiyavanga |
+| **10:00** | *Quality checking and control, as well as species identification* | | Arash Iranzadeh |
 | **11:30** | **Break** | | |
-| **12:00** | *Genome Annotation* | | Arash Iranzadeh |
+| **10:00** | *Genome assembly, quality assessment* | | Ephifania Geza |
 
-**Key Learning Outcomes**: Quality control fundamentals, Genome assembly, assessment and annotation
+**Key Learning Outcomes**: Quality control fundamentals, Genome assembly and assessment
 
 ---
 
@@ -74,12 +74,12 @@ The 10-day intensive training course covers fundamental to advanced topics in mi
 
 | Time (CAT) | Topic | Links | Trainer |
 |------------|-------|-------|---------|
-| **09:00** | *Antimicrobial Resistance gene detection and resistance prediction* | | Ephifania Geza |
-| **10:30** | *Role of plasmids, integrons, and transposons in AMR spread* | | Ephifania Geza |
+| **09:00** | *Genome Annotation* | | Arash Iranzadeh |
+| **10:00** | *Antimicrobial Resistance gene detection and resistance prediction* | | Ephifania Geza |
 | **11:30** | **Break** | | |
 | **12:00** | *Multi-locus sequence typing, and serotyping* | | Arash Iranzadeh |
 
-**Key Learning Outcomes**: AMR detection, mobile genetic elements, MLST
+**Key Learning Outcomes**: AMR and virulence factors detection, MLST
 
 ---
 
@@ -154,11 +154,12 @@ The 10-day intensive training course covers fundamental to advanced topics in mi
 
 | Time (CAT) | Topic | Links | Trainer |
 |------------|-------|-------|---------|
-| **09:00** | *Participants to analyse their own data* | | All trainers |
+| **09:00** | *Role of plasmids, integrons, and transposons in AMR spread* | | Ephifania Geza |
+| **10:30** | *Participants to analyse their own data* | | All trainers |
 | **11:30** | **Break** | | |
 | **12:00** | *Participants to analyse their own data* | | All trainers |
 
-**Key Learning Outcomes**: Independent analysis, applying learned skills to real data
+**Key Learning Outcomes**: Mobile genetic elements, independent analysis, applying learned skills to real data
 
 ---
 
