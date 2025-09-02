@@ -2,22 +2,22 @@
 
 **Date**: September 3, 2025  
 **Duration**: 09:00-13:00 CAT  
-**Focus**: Genome assembly, MLST, serotyping, AMR detection, mobile genetic elements
+**Focus**: Quality control, genome assembly, assessment and annotation
 
 ## Overview
 
-Day 3 focuses on comprehensive genomic characterization of microbial pathogens. We'll cover genome assembly and quality assessment, molecular typing methods, antimicrobial resistance gene detection, and the role of mobile genetic elements in resistance dissemination.
+Day 3 introduces essential genomic characterization techniques starting with quality control and species identification, followed by genome assembly and quality assessment, and concluding with genome annotation. These foundational skills are critical for all downstream genomic analyses.
 
 ## Learning Objectives
 
 By the end of Day 3, you will be able to:
 
-- Perform de novo genome assembly and assess assembly quality
-- Apply multi-locus sequence typing (MLST) for strain characterization
-- Conduct serotyping for pathogen classification
-- Detect and interpret antimicrobial resistance genes
-- Understand the role of plasmids, integrons, and transposons in AMR spread
-- Predict resistance phenotypes from genotypic data
+- Perform quality checking and control on sequencing data using FastQC
+- Identify species from genomic data using Kraken2 and other tools
+- Execute de novo genome assembly using SPAdes or other assemblers
+- Assess assembly quality using QUAST and other metrics
+- Annotate bacterial genomes using Prokka
+- Interpret and utilize genome annotation outputs
 
 ## Schedule
 

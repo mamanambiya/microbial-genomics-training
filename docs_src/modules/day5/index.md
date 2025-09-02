@@ -1,23 +1,23 @@
-# Day 5: Metagenomic Profiling
+# Day 5: Nextflow
 
 **Date**: September 5, 2025  
 **Duration**: 09:00-13:00 CAT  
-**Focus**: Metagenomic sequencing and microbiome analysis
+**Focus**: Workflow reproducibility, Nextflow basics, pipeline development
 
 ## Overview
 
-Day 5 introduces metagenomic analysis for studying complex microbial communities. We'll explore metagenomic sequencing principles, quality control methods specific to metagenomic data, and microbiome profiling techniques using R and QIIME2.
+Day 5 introduces Nextflow, a powerful workflow management system for creating reproducible and scalable bioinformatics pipelines. We'll explore the fundamentals of Nextflow, the nf-core community standards, and begin developing a pipeline for genomic analysis including QC, assembly, quality assessment, and annotation.
 
 ## Learning Objectives
 
 By the end of Day 5, you will be able to:
 
-- Understand principles of metagenomic sequencing and its applications
-- Apply quality control methods specific to metagenomic data
-- Perform microbiome profiling using computational tools
-- Calculate and interpret microbial diversity metrics
-- Analyze community composition and structure
-- Compare microbiome profiles between samples
+- Understand the principles of reproducible computational workflows
+- Write basic Nextflow scripts with processes and channels
+- Utilize nf-core tools and community pipelines
+- Design workflow architecture for genomic analysis
+- Implement data flow using Nextflow channels
+- Begin developing a pipeline for QC, assembly, and annotation
 
 ## Schedule
 
@@ -30,209 +30,266 @@ By the end of Day 5, you will be able to:
 
 ## Key Topics
 
-### 1. Metagenomic Sequencing Principles
-- Shotgun vs amplicon (16S rRNA) sequencing approaches
-- Sample preparation and DNA extraction considerations
-- Sequencing depth requirements for different analyses
-- Bias sources in metagenomic studies
+### 1. Introduction to Workflow Management
+- Challenges in bioinformatics reproducibility
+- Benefits of workflow management systems
+- Nextflow vs other workflow systems (Snakemake, CWL, WDL)
+- Container technologies (Docker, Singularity)
 
-### 2. Quality Control in Metagenomics
-- Host DNA contamination removal
-- Adapter and quality trimming for metagenomic reads
-- Contamination detection and removal
-- Quality assessment metrics specific to metagenomics
+### 2. Nextflow Fundamentals
+- Nextflow architecture and concepts
+- Processes, channels, and operators
+- Configuration files and profiles
+- Resource management and executors
+- Error handling and resume capabilities
 
-### 3. Microbiome Profiling
-- Taxonomic classification methods (Kraken2, MetaPhlAn)
-- Abundance estimation and normalization
-- Reference database selection and limitations
-- Functional profiling approaches
+### 3. nf-core Community and Standards
+- nf-core pipeline structure
+- Community guidelines and best practices
+- Using nf-core tools
+- Available nf-core pipelines for genomics
+- Contributing to nf-core
 
-### 4. Diversity Analysis
-- Alpha diversity: richness, evenness, Shannon, Simpson indices
-- Beta diversity: Bray-Curtis, Jaccard, UniFrac distances
-- Ordination methods: PCoA, NMDS, correspondence analysis
-- Statistical testing for community differences
+### 4. Building a Genomic Analysis Pipeline
+- Pipeline design and planning
+- Implementing QC processes (FastQC, MultiQC)
+- Assembly process integration (SPAdes)
+- Quality assessment steps (QUAST)
+- Annotation process (Prokka)
+
+### 5. Nextflow Scripting
+- Writing process definitions
+- Channel operations and data flow
+- Parameter handling
+- Conditional execution
+- Module organization
 
 ## Tools and Software
 
-### Metagenomic Analysis Tools
-- **Kraken2** - Taxonomic classification
-- **MetaPhlAn4** - Marker gene-based profiling  
-- **HUMAnN** - Functional profiling
-- **QIIME2** - Comprehensive microbiome analysis platform
+### Workflow Management
+- **Nextflow** - Workflow orchestration system
+- **nf-core tools** - Pipeline development framework
+- **Tower** - Workflow monitoring platform
 
-### R Packages for Microbiome Analysis
-- **phyloseq** - Analysis of microbiome data
-- **vegan** - Community ecology analysis
-- **DESeq2** - Differential abundance testing
-- **ggplot2** - Data visualization
+### Containerization
+- **Docker** - Container platform
+- **Singularity** - HPC-friendly containers
+- **Conda** - Package management
+
+### Pipeline Components
+- **FastQC** - Read quality control
+- **MultiQC** - Aggregate reporting
+- **SPAdes** - Genome assembly
+- **QUAST** - Assembly assessment
+- **Prokka** - Genome annotation
 
 ## Hands-on Exercises
 
-### Exercise 1: Metagenomic QC (45 minutes)
-Process raw metagenomic reads through quality control pipeline.
+### Exercise 1: First Nextflow Script (30 minutes)
+Create and run a simple Nextflow pipeline.
 
-```bash
-# Remove host DNA contamination
-kneaddata --input sample_R1.fastq.gz --input sample_R2.fastq.gz \
-    --reference-db human_genome --output kneaddata_output/
+```groovy
+#!/usr/bin/env nextflow
 
-# Quality assessment of cleaned reads
-fastqc kneaddata_output/*_paired_*.fastq
+// Define parameters
+params.input = "data/*.fastq"
+params.outdir = "results"
+
+// Create a channel from input files
+Channel
+    .fromPath(params.input)
+    .set { fastq_ch }
+
+// Define a process
+process countReads {
+    input:
+    path fastq from fastq_ch
+    
+    output:
+    path "*.count" into counts_ch
+    
+    script:
+    """
+    echo "Processing ${fastq}"
+    wc -l ${fastq} > ${fastq.baseName}.count
+    """
+}
+
+// View the results
+counts_ch.view()
 ```
 
-### Exercise 2: Taxonomic Profiling (60 minutes)
-Classify metagenomic reads and generate abundance profiles.
+### Exercise 2: Building a QC Pipeline (60 minutes)
+Implement quality control with FastQC and MultiQC.
 
-```bash
-# Run Kraken2 taxonomic classification
-kraken2 --db kraken2_db --paired \
-    sample_R1_paired.fastq sample_R2_paired.fastq \
-    --output sample.kraken --report sample_kraken_report.txt
+```groovy
+process fastqc {
+    container 'biocontainers/fastqc:v0.11.9'
+    
+    input:
+    tuple val(sample_id), path(reads)
+    
+    output:
+    path "*_fastqc.{zip,html}" into fastqc_results
+    
+    script:
+    """
+    fastqc -t ${task.cpus} ${reads}
+    """
+}
 
-# Generate abundance table
-bracken -d kraken2_db -i sample_kraken_report.txt \
-    -o sample_bracken.txt -r 150 -l S
+process multiqc {
+    publishDir params.outdir, mode: 'copy'
+    container 'ewels/multiqc:latest'
+    
+    input:
+    path '*' from fastqc_results.collect()
+    
+    output:
+    path 'multiqc_report.html'
+    
+    script:
+    """
+    multiqc .
+    """
+}
 ```
 
-### Exercise 3: Diversity Analysis in R (75 minutes)
-Calculate diversity metrics and visualize community structure.
+### Exercise 3: Integrating Assembly (90 minutes)
+Add genome assembly to the pipeline.
 
-```r
-# Load required packages
-library(phyloseq)
-library(vegan)
-library(ggplot2)
-
-# Import abundance data
-otu_table <- read.csv("abundance_table.csv", row.names = 1)
-metadata <- read.csv("sample_metadata.csv", row.names = 1)
-
-# Create phyloseq object
-ps <- phyloseq(otu_table(otu_table, taxa_are_rows = TRUE),
-               sample_data(metadata))
-
-# Calculate alpha diversity
-alpha_div <- estimate_richness(ps, measures = c("Shannon", "Simpson"))
-
-# Perform PCoA ordination
-ord <- ordinate(ps, method = "PCoA", distance = "bray")
-plot_ordination(ps, ord, color = "sample_type")
+```groovy
+process spades_assembly {
+    container 'staphb/spades:latest'
+    cpus 4
+    memory '8 GB'
+    
+    input:
+    tuple val(sample_id), path(reads1), path(reads2)
+    
+    output:
+    tuple val(sample_id), path("${sample_id}_contigs.fasta")
+    
+    script:
+    """
+    spades.py \
+        -1 ${reads1} \
+        -2 ${reads2} \
+        -o spades_output \
+        -t ${task.cpus} \
+        --careful
+    
+    cp spades_output/contigs.fasta ${sample_id}_contigs.fasta
+    """
+}
 ```
 
 ## Key Concepts
 
-### Metagenomic Study Design
-- **Sample collection**: Standardized protocols critical
-- **Storage conditions**: -80°C storage, avoid freeze-thaw
-- **Controls**: Negative controls, mock communities
-- **Replication**: Biological vs technical replicates
+### Workflow Principles
+- **Reproducibility**: Same input → same output
+- **Portability**: Run anywhere (laptop, HPC, cloud)
+- **Scalability**: Handle any data volume
+- **Resumability**: Restart from failure points
 
-### Taxonomic Databases
-- **NCBI RefSeq**: Curated reference sequences
-- **GTDB**: Genome Taxonomy Database with standardized taxonomy
-- **Silva**: rRNA gene database for amplicon studies
-- **Database selection**: Impacts classification accuracy
+### Nextflow Components
+| Component | Description | Example |
+|-----------|-------------|---------|
+| Process | Computational step | `process fastqc { ... }` |
+| Channel | Data flow connection | `Channel.fromPath()` |
+| Operator | Channel transformation | `.map()`, `.filter()` |
+| Directive | Process configuration | `cpus 4` |
 
-### Diversity Metrics Interpretation
-| Metric | Measures | Interpretation |
-|--------|----------|----------------|
-| Richness | Number of species | Higher = more diverse |
-| Shannon | Species diversity | Accounts for evenness |
-| Simpson | Dominance | Lower = more diverse |
-| Bray-Curtis | Community similarity | 0 = identical, 1 = completely different |
-
-## Clinical Applications
-
-### Diagnostic Metagenomics
-- Pathogen identification in clinical samples
-- Antimicrobial resistance gene detection
-- Outbreak investigation and source tracking
-- Culture-independent diagnosis
-
-### Microbiome-Health Associations
-- Disease biomarker discovery
-- Treatment response prediction
-- Personalized medicine approaches
-- Host-microbiome interactions
+### Best Practices
+1. **Use containers**: Ensure environment reproducibility
+2. **Parameterize everything**: Make pipelines flexible
+3. **Version control**: Track pipeline changes
+4. **Document thoroughly**: Help users and future self
+5. **Test incrementally**: Build and test step by step
 
 ## Assessment Activities
 
-### Individual Analysis
-- Complete quality control of metagenomic dataset
-- Generate taxonomic abundance profiles
-- Calculate diversity metrics for sample comparison
-- Create publication-ready visualizations
+### Individual Tasks
+- Create a basic Nextflow script with at least 2 processes
+- Successfully run a pipeline with test data
+- Modify pipeline parameters and observe changes
+- Debug a pipeline with intentional errors
+- Document pipeline usage
 
 ### Group Discussion
-- Compare results from different taxonomic classifiers
-- Interpret diversity patterns in clinical context
-- Discuss limitations of metagenomic approaches
-- Evaluate study design considerations
+- Compare Nextflow with traditional shell scripting
+- Discuss reproducibility challenges and solutions
+- Share pipeline design strategies
+- Explore nf-core pipeline catalog
 
 ## Common Challenges
 
-### Low Biomass Samples
-```r
-# Detection of contamination
-contamination_check <- is_contaminant(ps_neg_controls, method="prevalence")
+### Installation Issues
+```bash
+# Install Nextflow
+curl -s https://get.nextflow.io | bash
+./nextflow run hello
 
-# Remove contaminants
-ps_clean <- prune_taxa(!contamination_check$contaminant, ps)
+# Set up environment
+export PATH=$PATH:$PWD
+export NXF_VER=23.10.0
 ```
 
-### Batch Effects
-```r
-# Visualize batch effects
-plot_ordination(ps, ord, color = "batch", shape = "sample_type")
+### Channel Operations
+```groovy
+// Common channel patterns
+Channel
+    .fromFilePairs(params.reads)
+    .ifEmpty { error "No read files found!" }
+    .set { read_pairs_ch }
 
-# Batch correction (if appropriate)
-library(limma)
-abundance_corrected <- removeBatchEffect(abundance_matrix, batch = metadata$batch)
+// Combining channels
+fastqc_ch
+    .join(assembly_ch)
+    .map { sample, qc, assembly -> 
+        [sample, qc, assembly]
+    }
 ```
 
-### Statistical Testing
-```r
-# Test for differential abundance
-library(DESeq2)
-dds <- phyloseq_to_deseq2(ps, ~ condition)
-dds <- DESeq(dds)
-results <- results(dds, alpha = 0.05)
+### Resource Management
+```groovy
+process memory_intensive {
+    memory { 2.GB * task.attempt }
+    maxRetries 3
+    errorStrategy 'retry'
+    
+    script:
+    """
+    # Your command here
+    """
+}
 ```
 
 ## Resources
 
-### Essential Reading
-- Knight et al. (2018). Best practices for analyzing microbiomes
-- Pollock et al. (2018). The madness of microbiome: Attempting to find consensus
-- Schloss (2020). Reintroducing mothur for 16S rRNA microbiome analysis
+### Documentation
+- [Nextflow Documentation](https://www.nextflow.io/docs/latest/)
+- [nf-core Website](https://nf-co.re/)
+- [Nextflow Training](https://training.nextflow.io/)
 
-### Software Documentation
-- [QIIME2 Tutorials](https://docs.qiime2.org/)
-- [phyloseq Tutorial](https://joey711.github.io/phyloseq/)
-- [Kraken2 Manual](https://ccb.jhu.edu/software/kraken2/)
+### Tutorials
+- [Nextflow Tutorial](https://www.nextflow.io/docs/latest/getstarted.html)
+- [nf-core Tutorials](https://nf-co.re/usage/tutorials)
+- [Seqera Labs Training](https://training.seqera.io/)
 
-### Databases
-- [GTDB](https://gtdb.ecogenomic.org/) - Genome Taxonomy Database
-- [Silva](https://www.arb-silva.de/) - rRNA gene database
-- [NCBI RefSeq](https://www.ncbi.nlm.nih.gov/refseq/)
+### Community
+- [Nextflow Slack](https://www.nextflow.io/slack-invite.html)
+- [nf-core Slack](https://nf-co.re/join)
+- [GitHub Discussions](https://github.com/nextflow-io/nextflow/discussions)
 
 ## Looking Ahead
 
-**Day 6 Preview**: Co-infection and mutations including:
-- Detecting rare pathogens in metagenomic data
-- Co-infection analysis methods
-- Community shifts and dynamic changes
-- Variant calling and phenotype-genotype correlations
-
-## Homework (Optional)
-
-1. Analyze additional metagenomic datasets from different body sites
-2. Compare taxonomic profiles from different classification methods
-3. Practice diversity analysis with public microbiome datasets
-4. Read case studies of clinical metagenomics applications
+**Day 6 Preview**: Nextflow Pipeline Development
+- Continue building the genomic analysis pipeline
+- Advanced Nextflow features and optimization
+- Pipeline testing and validation
+- Deployment strategies
 
 ---
 
-**Key Learning Outcome**: Metagenomic sequencing provides powerful insights into microbial community structure and function, but requires careful attention to experimental design, quality control, and statistical analysis for meaningful biological interpretation.
+**Key Learning Outcome**: Understanding workflow management principles and gaining hands-on experience with Nextflow enables creation of reproducible, scalable bioinformatics pipelines essential for modern genomic analysis.
