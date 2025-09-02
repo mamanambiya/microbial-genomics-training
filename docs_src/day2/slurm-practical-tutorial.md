@@ -1,4 +1,4 @@
-# SLURM Job Examples and Templates
+# High Performance Computing with SLURM: Practical Tutorial
 
 ## Getting Started - Setup Instructions
 

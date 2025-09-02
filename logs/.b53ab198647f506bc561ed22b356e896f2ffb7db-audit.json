@@ -1,0 +1,15 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "/Users/mamana/projects-uct/training/microbial-genomics-training/logs/.b53ab198647f506bc561ed22b356e896f2ffb7db-audit.json",
+    "files": [
+        {
+            "date": 1756796487968,
+            "name": "/Users/mamana/projects-uct/training/microbial-genomics-training/logs/mcp-puppeteer-2025-09-02.log",
+            "hash": "acc4f04459eeb0f8db5aca1081e93486d56d6d589521a75e47ac5060d528db81"
+        }
+    ],
+    "hashType": "sha256"
+}
