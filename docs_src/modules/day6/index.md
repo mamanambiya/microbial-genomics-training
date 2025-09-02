@@ -1,81 +1,82 @@
-# Day 6: Nextflow Pipeline Development
+# Day 6: Nextflow Pipeline Development & GitHub
 
 **Date**: September 8, 2025  
 **Duration**: 09:00-13:00 CAT  
-**Focus**: Continued pipeline development, testing, and execution
+**Focus**: Pipeline completion, version control with GitHub, and collaborative development
 
 ## Overview
 
-Day 6 continues from Day 5 with hands-on Nextflow pipeline development. Participants will complete their genomic analysis pipelines, learn advanced Nextflow features, implement testing strategies, and execute their pipelines on real data. This practical session reinforces workflow development skills through implementation.
+Day 6 continues Nextflow pipeline development with a focus on completing the genomic analysis pipeline, implementing version control using GitHub, and establishing collaborative development practices. Participants will learn to manage their pipelines using Git, create repositories, handle pull requests, and implement continuous integration for their bioinformatics workflows.
 
 ## Learning Objectives
 
 By the end of Day 6, you will be able to:
 
 - Complete a functional Nextflow pipeline for genomic analysis
-- Implement advanced Nextflow features (error handling, checkpoints, caching)
-- Test and debug Nextflow pipelines effectively
-- Optimize pipeline performance and resource usage
-- Execute pipelines on HPC systems using different executors
-- Monitor and troubleshoot pipeline runs
+- Use Git for version control of bioinformatics pipelines
+- Create and manage GitHub repositories for pipeline projects
+- Implement collaborative development workflows using branches and pull requests
+- Set up continuous integration for pipeline testing
+- Document pipelines effectively using README files and wikis
+- Share and publish pipelines for community use
 
 ## Schedule
 
 | Time (CAT) | Topic | Links | Trainer |
 |------------|-------|-------|---------|
-| **09:00** | *Pipeline development continued and running* | | Mamana Mbiyavanga |
+| **09:00** | *Pipeline development continued and GitHub integration* | | Mamana Mbiyavanga |
 | **11:30** | **Break** | | |
-| **12:00** | *Pipeline development continued and running* | | Mamana Mbiyavanga |
+| **12:00** | *Version control, collaboration, and pipeline sharing* | | Mamana Mbiyavanga |
 
 ## Key Topics
 
-### 1. Rare Pathogen Detection
-- Sensitivity thresholds for pathogen detection
-- Database selection for comprehensive pathogen identification
-- Distinguishing true positives from contamination
-- Novel pathogen discovery approaches
+### 1. Completing the Nextflow Pipeline
+- Finalizing QC, assembly, and annotation processes
+- Adding error handling and recovery mechanisms
+- Implementing pipeline configuration profiles
+- Testing with real genomic data
 
-### 2. Co-infection Analysis
-- Multi-pathogen detection in single samples
-- Strain-level resolution in mixed infections
-- Quantitative analysis of pathogen loads
-- Clinical significance of co-infections
+### 2. Version Control with Git
+- Git fundamentals for bioinformatics projects
+- Tracking pipeline changes and versions
+- Managing configuration files and parameters
+- Best practices for commit messages
 
-### 3. Community Dynamics
-- Temporal changes in microbiome composition
-- Treatment-induced community shifts
-- Ecological succession patterns
-- Stability and resilience metrics
+### 3. GitHub for Pipeline Development
+- Creating and organizing GitHub repositories
+- Writing effective README documentation
+- Using GitHub Issues for project management
+- Releases and semantic versioning
 
-### 4. Variant Calling
-- SNP and indel detection from genomic data
-- Quality filtering and validation of variants
-- Structural variant identification
-- Population genetics analysis
+### 4. Collaborative Development
+- Branching strategies for pipeline development
+- Creating and reviewing pull requests
+- Resolving merge conflicts
+- Team workflows and code review
 
-### 5. Genotype-Phenotype Correlation
-- Resistance gene identification and validation
-- Phenotypic testing correlation with genomic predictions
-- Machine learning approaches for phenotype prediction
-- Clinical decision support applications
+### 5. Continuous Integration
+- Setting up GitHub Actions for pipeline testing
+- Automated testing strategies
+- Container building and registry management
+- Documentation generation and deployment
 
-## Tools and Methods
+## Tools and Software
 
-### Pathogen Detection
-- **PathSeq** - Pathogen detection in clinical samples
-- **Kraken2** with comprehensive databases
-- **MetaPhlAn4** for species-level identification
-- **BLAST** for targeted sequence search
+### Pipeline Development
+- **Nextflow** - Workflow orchestration
+- **nf-core tools** - Pipeline templates and tools
+- **Docker/Singularity** - Container platforms
 
-### Variant Calling Tools
-- **GATK** - Genome Analysis Toolkit
-- **FreeBayes** - Bayesian variant caller
-- **VarScan** - Somatic and germline variant calling
-- **SnpEff** - Variant annotation and effect prediction
+### Version Control
+- **Git** - Version control system
+- **GitHub** - Code hosting and collaboration
+- **GitHub CLI** - Command-line interface for GitHub
+- **GitHub Desktop** - GUI for Git operations
 
-### Co-infection Analysis
-- **StrainEst** - Strain-level analysis
-- **ConStrains** - Strain reconstruction
+### Continuous Integration
+- **GitHub Actions** - CI/CD platform
+- **nf-test** - Nextflow testing framework
+- **pytest-workflow** - Pipeline testing tool
 - **DESMAN** - De novo extraction of strains from metagenomes
 
 ## Hands-on Exercises

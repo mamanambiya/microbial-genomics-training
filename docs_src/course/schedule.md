@@ -99,18 +99,18 @@ The 10-day intensive training course covers fundamental to advanced topics in mi
 
 ---
 
-## Day 6: Nextflow Pipeline Development
+## Day 6: Nextflow Pipeline Development & GitHub
 
 **Date**: September 8, 2025  
 **[→ View detailed module](../modules/day6/index.md)**
 
 | Time (CAT) | Topic | Links | Trainer |
 |------------|-------|-------|---------|
-| **09:00** | *Pipeline development continued and running* | | Mamana Mbiyavanga |
+| **09:00** | *Pipeline development continued and GitHub integration* | | Mamana Mbiyavanga |
 | **11:30** | **Break** | | |
-| **12:00** | *Pipeline development continued and running* | | Mamana Mbiyavanga |
+| **12:00** | *Version control, collaboration, and pipeline sharing* | | Mamana Mbiyavanga |
 
-**Key Learning Outcomes**: Advanced pipeline development, pipeline execution and optimization
+**Key Learning Outcomes**: Pipeline completion, Git/GitHub for bioinformatics, collaborative development
 
 ---
 
