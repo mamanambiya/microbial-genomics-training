@@ -23,7 +23,7 @@ By the end of Day 2, you will be able to:
 | Time (CAT) | Topic | Links | Trainer |
 |------------|-------|-------|---------|
 | **09:00** | *Introduction to command line interface* | [Practical](https://github.com/Arash-Iranzadeh/Microbial-Genomics/blob/main/scripts/practice_unix_commands.sh) | Arash Iranzadeh |
-| **11:00** | *Introduction High Performance Computing (HPC) – Ilifu* | | Mamana Mbiyavanga |
+| **11:00** | *Introduction High Performance Computing (HPC) – Ilifu* | [Notes](../../day2/hpc-ilifu-training.md) • [Practical 1](../../day2/slurm-practical-tutorial.md) • [Practical 2](../../day2/unix-commands-pathogen-examples.md) | Mamana Mbiyavanga |
 | **11:30** | **Break** | | |
 | **12:00** | *Guest talk: MtB and co-infection* | | Bethlehem Adnew |
 
