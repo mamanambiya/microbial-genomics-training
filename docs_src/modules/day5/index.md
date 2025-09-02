@@ -1,4 +1,4 @@
-# Day 5: Nextflow
+# Day 5: Nextflow Pipeline Development
 
 **Date**: September 5, 2025  
 **Duration**: 09:00-13:00 CAT  

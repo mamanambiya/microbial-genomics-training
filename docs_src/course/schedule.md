@@ -83,7 +83,7 @@ The 10-day intensive training course covers fundamental to advanced topics in mi
 
 ---
 
-## Day 5: Nextflow
+## Day 5: Nextflow Pipeline Development
 
 **Date**: September 5, 2025  
 **[→ View detailed module](../modules/day5/index.md)**
@@ -99,18 +99,18 @@ The 10-day intensive training course covers fundamental to advanced topics in mi
 
 ---
 
-## Day 6: Nextflow Pipeline Development
+## Day 6: Nextflow Pipeline Development & Version Control with GitHub
 
 **Date**: September 8, 2025  
 **[→ View detailed module](../modules/day6/index.md)**
 
 | Time (CAT) | Topic | Links | Trainer |
 |------------|-------|-------|---------|
-| **09:00** | *Pipeline development continued and running* | | Mamana Mbiyavanga |
+| **09:00** | *Pipeline development continued and testing* | | Mamana Mbiyavanga |
 | **11:30** | **Break** | | |
-| **12:00** | *Pipeline development continued and running* | | Mamana Mbiyavanga |
+| **12:00** | *Introduction to Git and GitHub basics* | | Mamana Mbiyavanga |
 
-**Key Learning Outcomes**: Advanced pipeline development, pipeline execution and optimization
+**Key Learning Outcomes**: Pipeline completion, basic Git commands, GitHub repository management
 
 ---
 
