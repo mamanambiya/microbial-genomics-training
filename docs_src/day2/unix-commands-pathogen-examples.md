@@ -188,13 +188,14 @@ ls -la sample_list.txt
 echo "Sample_001" > sample_list.txt
 echo "Sample_002" >> sample_list.txt  # >> appends, > overwrites!
 
-# Method 2: Using cat with heredoc (for multiple lines)
-cat > sample_list.txt << EOF
-MTB_sample_001
-MTB_sample_002
-MTB_sample_003
-MTB_sample_004
-EOF
+# Method 2: Using nano editor (recommended for multiple lines)
+nano sample_list.txt
+# Type or paste the following content:
+# MTB_sample_001
+# MTB_sample_002
+# MTB_sample_003
+# MTB_sample_004
+# Then save with: Ctrl+X, Y, Enter
 
 # View what you created
 cat sample_list.txt
@@ -601,6 +602,15 @@ done > results/variant_summary.txt
 
 ### Preparing Files for HPC Analysis
 
+To create a SLURM job script:
+
+```bash
+# Open nano to create the script
+nano prep_pathogen_data.sh
+```
+
+Copy and paste the following content:
+
 ```bash
 #!/bin/bash
 #SBATCH --job-name=prep_pathogen_data
@@ -629,6 +639,10 @@ done > ${SLURM_JOB_ID}_analysis/data/file_metadata.tsv
 echo "Preparation complete. Ready for analysis."
 ```
 
+Save the file with: `Ctrl+X`, then `Y`, then `Enter`
+
+Submit the job with: `sbatch prep_pathogen_data.sh`
+
 ---
 
 ## Hands-On Exercise: Complete Pathogen Analysis Workflow
@@ -645,13 +659,14 @@ cd pathogen_practice
 pwd  # Verify you're in the right place
 
 # Step 2: Create sample metadata
-cat > data/samples.txt << EOF
-Mtb_patient_001_resistant
-Mtb_patient_002_susceptible  
-Mtb_patient_003_resistant
-Salmonella_outbreak_001
-Salmonella_outbreak_002
-EOF
+nano data/samples.txt
+# Paste the following content:
+# Mtb_patient_001_resistant
+# Mtb_patient_002_susceptible  
+# Mtb_patient_003_resistant
+# Salmonella_outbreak_001
+# Salmonella_outbreak_002
+# Save with: Ctrl+X, Y, Enter
 
 # Verify the file was created
 cat data/samples.txt
@@ -689,17 +704,29 @@ echo "Salmonella samples: $(grep -c 'Salmonella' data/samples.txt)" >> results/p
 
 #### Task 3: Generate Summary Report
 ```bash
-# Create a comprehensive summary
-cat > results/summary_report.txt << EOF
-=== Pathogen Analysis Summary ===
-Date: $(date)
-Total samples: $(wc -l < data/samples.txt)
-Resistant samples: $(grep -c "resistant" data/samples.txt)
-Susceptible samples: $(grep -c "susceptible" data/samples.txt)
-MTB samples: $(grep -c "Mtb" data/samples.txt)
-Salmonella samples: $(grep -c "Salmonella" data/samples.txt)
-=================================
-EOF
+# Create a comprehensive summary using nano
+nano results/summary_report.txt
+
+# Type the following content (replace the values with actual counts):
+# === Pathogen Analysis Summary ===
+# Date: [current date]
+# Total samples: 5
+# Resistant samples: 2
+# Susceptible samples: 1
+# MTB samples: 3
+# Salmonella samples: 2
+# =================================
+# Save with: Ctrl+X, Y, Enter
+
+# Or use echo commands to generate it automatically:
+echo "=== Pathogen Analysis Summary ===" > results/summary_report.txt
+echo "Date: $(date)" >> results/summary_report.txt
+echo "Total samples: $(wc -l < data/samples.txt)" >> results/summary_report.txt
+echo "Resistant samples: $(grep -c "resistant" data/samples.txt)" >> results/summary_report.txt
+echo "Susceptible samples: $(grep -c "susceptible" data/samples.txt)" >> results/summary_report.txt
+echo "MTB samples: $(grep -c "Mtb" data/samples.txt)" >> results/summary_report.txt
+echo "Salmonella samples: $(grep -c "Salmonella" data/samples.txt)" >> results/summary_report.txt
+echo "=================================" >> results/summary_report.txt
 
 # Display the report
 cat results/summary_report.txt

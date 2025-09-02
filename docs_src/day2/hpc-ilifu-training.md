@@ -440,6 +440,15 @@ sacct -u username
 
 ### Job Script Template
 
+To create a job script, use the nano text editor:
+
+```bash
+# Open nano editor to create your script
+nano my_job.sh
+```
+
+Then copy and paste the following template:
+
 ```bash
 #!/bin/bash
 #SBATCH --job-name=my_job
@@ -458,6 +467,11 @@ module load python/3.12.3  # Or use system python3
 # Run your program
 python my_script.py
 ```
+
+To save and exit nano:
+- Press `Ctrl+X` to exit
+- Press `Y` to confirm save
+- Press `Enter` to accept the filename
 
 ### SLURM Directives Explained
 
@@ -562,6 +576,20 @@ with Pool(8) as pool:
 
 ### Example 1: Python Data Analysis
 
+To create this script:
+
+```bash
+# Open nano editor
+nano data_analysis.sh
+
+# Copy and paste the script below, then:
+# Press Ctrl+X to exit
+# Press Y to save
+# Press Enter to confirm filename
+```
+
+Script content:
+
 ```bash
 #!/bin/bash
 #SBATCH --job-name=data_analysis
@@ -577,7 +605,18 @@ module load python/3.12.3  # Or use system python3
 python data_analysis.py input.csv
 ```
 
+Submit with: `sbatch data_analysis.sh`
+
 ### Example 2: R Statistical Analysis
+
+Create the script with nano:
+
+```bash
+nano r_stats.sh
+# Paste the script below, save with Ctrl+X, Y, Enter
+```
+
+Script content:
 
 ```bash
 #!/bin/bash
@@ -592,7 +631,18 @@ module load R/4.4.1  # Check available version
 Rscript statistical_analysis.R
 ```
 
+Submit with: `sbatch r_stats.sh`
+
 ### Example 3: GPU Machine Learning
+
+Create the script:
+
+```bash
+nano ml_training.sh
+# Paste content, save with Ctrl+X, Y, Enter
+```
+
+Script content:
 
 ```bash
 #!/bin/bash
@@ -609,7 +659,18 @@ module load python/3.12.3  # Or use system python3
 python train_model.py
 ```
 
+Submit with: `sbatch ml_training.sh`
+
 ### Example 4: Array Jobs
+
+Create the array job script:
+
+```bash
+nano array_job.sh
+# Paste content, save with Ctrl+X, Y, Enter
+```
+
+Script content:
 
 ```bash
 #!/bin/bash
@@ -626,6 +687,8 @@ output_file="result_${SLURM_ARRAY_TASK_ID}.txt"
 
 python process_data.py $input_file $output_file
 ```
+
+Submit with: `sbatch array_job.sh`
 
 ---
 
