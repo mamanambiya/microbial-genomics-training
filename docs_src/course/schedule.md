@@ -42,7 +42,7 @@ The 10-day intensive training course covers fundamental to advanced topics in mi
 
 | Time (CAT) | Topic | Links | Trainer |
 |------------|-------|-------|---------|
-| **09:00** | *Introduction to command line interface* | | Arash Iranzadeh |
+| **09:00** | *Introduction to command line interface* | [Practical](https://github.com/Arash-Iranzadeh/Microbial-Genomics/blob/main/scripts/practice_unix_commands.sh) | Arash Iranzadeh |
 | **11:00** | *Introduction High Performance Computing (HPC) – Ilifu* | | Mamana Mbiyavanga |
 | **11:30** | **Break** | | |
 | **12:00** | *Guest talk: MtB and co-infection* | | Bethlehem Adnew |
