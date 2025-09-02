@@ -83,7 +83,7 @@ The 10-day intensive training course covers fundamental to advanced topics in mi
 
 ---
 
-## Day 5: Nextflow
+## Day 5: Nextflow Pipeline Development
 
 **Date**: September 5, 2025  
 **[→ View detailed module](../modules/day5/index.md)**

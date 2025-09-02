@@ -132,7 +132,7 @@ nav:
     - Day 2 - Introduction to Commandline, High Performance Computing, & Quality Control: modules/day2/index.md
     - Day 3 - Genomic Characterization: modules/day3/index.md
     - Day 4 - Genomic Characterization: modules/day4/index.md
-    - Day 5 - Nextflow: modules/day5/index.md
+    - Day 5 - Nextflow Pipeline Development: modules/day5/index.md
     - Day 6 - Nextflow Pipeline Development: modules/day6/index.md
     - Day 7 - Metagenomic profiling: modules/day7/index.md
     - Day 8 - Comparative Genomics: modules/day8/index.md
