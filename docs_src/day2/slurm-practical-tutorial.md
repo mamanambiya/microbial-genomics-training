@@ -87,7 +87,7 @@ awk '{print $1, $2}' data.txt
 sed 's/old/new/g' file.txt
 ```
 
-📚 **Full Unix guide:** See `unix-commands-pathogen-examples.md` for comprehensive examples and exercises.
+📚 **Full Unix guide:** See [Unix Commands for Pathogen Genomics - Practical Tutorial](./unix-commands-pathogen-examples.md) for comprehensive examples and exercises.
 
 ---
 

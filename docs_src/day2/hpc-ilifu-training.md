@@ -319,7 +319,7 @@ module avail
 module load python/3.12.3  # Or use system python3
 ```
 
-> 💡 **Next Steps**: After logging in, follow the hands-on exercises in [slurm-practical-tutorial.md](./slurm-practical-tutorial.md)
+> 💡 **Next Steps**: After logging in, follow the hands-on exercises in [High Performance Computing with SLURM: Practical Tutorial](./slurm-practical-tutorial.md)
 
 ### File System Layout
 
@@ -340,7 +340,7 @@ module load python/3.12.3  # Or use system python3
 
 ## SLURM Basics
 
-> 📚 **For detailed SLURM tutorials and exercises, see: [slurm-practical-tutorial.md](./slurm-practical-tutorial.md)**
+> 📚 **For detailed SLURM tutorials and exercises, see: [High Performance Computing with SLURM: Practical Tutorial](./slurm-practical-tutorial.md)**
 
 ### What is SLURM?
 
@@ -558,7 +558,7 @@ with Pool(8) as pool:
 
 ## Practical Examples
 
-> 📝 **Complete Step-by-Step Tutorials**: For detailed, hands-on SLURM exercises with explanations, see [slurm-practical-tutorial.md](./slurm-practical-tutorial.md)
+> 📝 **Complete Step-by-Step Tutorials**: For detailed, hands-on SLURM exercises with explanations, see [High Performance Computing with SLURM: Practical Tutorial](./slurm-practical-tutorial.md)
 
 ### Example 1: Python Data Analysis
 
@@ -688,7 +688,7 @@ module load python/3.12.3  # Or use system python3
 2. **Help Desk**: Submit support tickets
 3. **Community**: Ask on forums or Slack
 4. **Training**: Attend workshops
-5. **Practical Tutorials**: Work through [slurm-practical-tutorial.md](./slurm-practical-tutorial.md)
+5. **Practical Tutorials**: Work through [High Performance Computing with SLURM: Practical Tutorial](./slurm-practical-tutorial.md)
 
 ---
 

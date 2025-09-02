@@ -878,8 +878,8 @@ rm -rf tmp/*
 ## Next Steps
 
 After mastering these Unix commands, you're ready to:
-1. **Submit SLURM jobs** - See [slurm-practical-tutorial.md](./slurm-practical-tutorial.md)
-2. **Learn HPC concepts** - See [hpc-ilifu-training.md](./hpc-ilifu-training.md)
+1. **Submit SLURM jobs** - See [High Performance Computing with SLURM: Practical Tutorial](./slurm-practical-tutorial.md)
+2. **Learn HPC concepts** - See [HPC and ILIFU Training Materials](./hpc-ilifu-training.md)
 3. **Build analysis pipelines** with Nextflow
 4. **Perform quality control** with FastQC
 5. **Align reads** with BWA
