@@ -2,21 +2,22 @@
 
 **Date**: September 4, 2025  
 **Duration**: 09:00-13:00 CAT  
-**Focus**: Pangenomics and phylogenomics analysis
+**Focus**: AMR detection, mobile genetic elements, MLST and serotyping
 
 ## Overview
 
-Day 4 introduces comparative genomics approaches for understanding microbial diversity and evolutionary relationships. We'll explore pangenome analysis to understand core and accessory gene content, and phylogenomic methods to infer evolutionary relationships from genomic data.
+Day 4 continues genomic characterization with a focus on antimicrobial resistance gene detection, understanding the role of mobile genetic elements in AMR spread, and molecular typing methods including MLST and serotyping for pathogen classification and surveillance.
 
 ## Learning Objectives
 
 By the end of Day 4, you will be able to:
 
-- Understand pangenome concepts and perform core/accessory genome analysis
-- Identify conserved and variable genomic regions across strains
-- Construct phylogenetic trees from core genome SNPs
-- Visualize and interpret phylogenomic relationships
-- Apply comparative genomics to understand pathogen evolution
+- Detect antimicrobial resistance genes using tools like AMRFinderPlus and CARD
+- Predict resistance phenotypes from genotypic data
+- Understand the role of plasmids, integrons, and transposons in AMR dissemination
+- Perform multi-locus sequence typing (MLST) for strain characterization
+- Conduct serotyping for pathogen classification
+- Interpret molecular typing results for epidemiological surveillance
 
 ## Schedule
 

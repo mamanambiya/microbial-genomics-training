@@ -2,22 +2,22 @@
 
 **Date**: September 9, 2025  
 **Duration**: 09:00-13:00 CAT  
-**Focus**: Reproducible workflows with Nextflow and pipeline development
+**Focus**: Metagenomic sequencing principles, microbiome analysis, diversity metrics
 
 ## Overview
 
-Day 7 introduces Nextflow as a workflow management system for creating reproducible, scalable bioinformatics pipelines. We'll explore the nf-core community and develop a complete pipeline for quality control, de novo assembly, quality assessment, and annotation.
+Day 7 introduces metagenomic analysis for studying complex microbial communities. We'll explore metagenomic sequencing principles, quality control methods specific to metagenomic data, and microbiome profiling techniques using R and QIIME2. This day provides essential skills for analyzing microbial diversity in clinical and environmental samples.
 
 ## Learning Objectives
 
 By the end of Day 7, you will be able to:
 
-- Understand the principles of reproducible computational workflows
-- Use Nextflow for bioinformatics pipeline development
-- Leverage nf-core community pipelines and resources
-- Develop custom Nextflow processes and workflows
-- Implement best practices for pipeline development
-- Create modular, reusable pipeline components
+- Understand principles of metagenomic sequencing and its applications
+- Apply quality control methods specific to metagenomic data
+- Perform microbiome profiling using computational tools
+- Calculate and interpret alpha and beta diversity metrics
+- Analyze community composition and structure
+- Use R or QIIME2 for microbiome data analysis
 
 ## Schedule
 

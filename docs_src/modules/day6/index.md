@@ -2,22 +2,22 @@
 
 **Date**: September 8, 2025  
 **Duration**: 09:00-13:00 CAT  
-**Focus**: Advanced metagenomic analysis and variant calling
+**Focus**: Continued pipeline development, testing, and execution
 
 ## Overview
 
-Day 6 focuses on advanced applications of metagenomic analysis for detecting rare pathogens and co-infections, as well as mutation calling and establishing phenotype-genotype correlations. These techniques are crucial for understanding complex clinical samples and antimicrobial resistance.
+Day 6 continues from Day 5 with hands-on Nextflow pipeline development. Participants will complete their genomic analysis pipelines, learn advanced Nextflow features, implement testing strategies, and execute their pipelines on real data. This practical session reinforces workflow development skills through implementation.
 
 ## Learning Objectives
 
 By the end of Day 6, you will be able to:
 
-- Detect rare pathogens in complex metagenomic samples
-- Identify and analyze co-infections from sequencing data
-- Recognize and interpret community shifts in microbiomes
-- Perform variant calling from genomic data
-- Establish correlations between genotype and phenotype
-- Apply bioinformatics approaches to predict antimicrobial resistance
+- Complete a functional Nextflow pipeline for genomic analysis
+- Implement advanced Nextflow features (error handling, checkpoints, caching)
+- Test and debug Nextflow pipelines effectively
+- Optimize pipeline performance and resource usage
+- Execute pipelines on HPC systems using different executors
+- Monitor and troubleshoot pipeline runs
 
 ## Schedule
 

@@ -2,22 +2,22 @@
 
 **Date**: September 10, 2025  
 **Duration**: 09:00-13:00 CAT  
-**Focus**: Advanced pipeline development and optimization
+**Focus**: Pan-genome analysis, phylogenetic inference, tree construction and visualization
 
 ## Overview
 
-Day 8 continues the Nextflow journey with advanced pipeline development, optimization techniques, and production-ready deployment strategies. Building on Day 7's foundation, we'll create more complex workflows, implement testing frameworks, and learn performance tuning.
+Day 8 focuses on comparative genomics approaches for understanding microbial diversity and evolutionary relationships. We'll explore pangenome analysis to understand core and accessory gene content, and phylogenomic methods to infer evolutionary relationships from genomic data, including SNP-based phylogeny and tree visualization techniques.
 
 ## Learning Objectives
 
 By the end of Day 8, you will be able to:
 
-- Develop complex, multi-stage Nextflow pipelines
-- Implement comprehensive testing strategies for pipelines
-- Optimize pipeline performance and resource usage
-- Deploy pipelines to different computing environments
-- Monitor and troubleshoot pipeline execution
-- Apply advanced Nextflow patterns and best practices
+- Understand pangenome concepts and perform core/accessory genome analysis
+- Identify conserved and variable genomic regions across strains
+- Construct phylogenetic trees from core genome SNPs
+- Visualize and interpret phylogenomic relationships
+- Apply comparative genomics to understand pathogen evolution
+- Use tools like Roary, Panaroo, and IQ-TREE for comparative analysis
 
 ## Schedule
 
