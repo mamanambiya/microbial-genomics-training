@@ -5,8 +5,9 @@
 This document provides an overview of HPC concepts and ILIFU infrastructure. 
 
 **For hands-on practice:**
-- **SLURM Jobs**: See [slurm-practical-tutorial.md](./slurm-practical-tutorial.md) for step-by-step SLURM exercises
-- **Unix Commands**: See [unix-commands-pathogen-examples.md](./unix-commands-pathogen-examples.md) for genomics command-line basics
+
+- **SLURM Jobs**: See [High Performance Computing with SLURM: Practical Tutorial](./slurm-practical-tutorial.md) for step-by-step SLURM exercises
+- **Unix Commands**: See [Unix Commands for Pathogen Genomics - Practical Tutorial](./unix-commands-pathogen-examples.md) for genomics command-line basics
 
 **Quick Setup** (if needed for examples below):
 ```bash
