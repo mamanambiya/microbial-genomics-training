@@ -1,4 +1,4 @@
-# Day 6: Co-infection and Mutations
+# Day 6: Nextflow Pipeline Development
 
 **Date**: September 8, 2025  
 **Duration**: 09:00-13:00 CAT  
@@ -23,10 +23,9 @@ By the end of Day 6, you will be able to:
 
 | Time (CAT) | Topic | Links | Trainer |
 |------------|-------|-------|---------|
-| **09:00** | *Detecting rare pathogens, co-infections, and community shifts* | [Slides](#) • [Tutorial](#) | Ephifania Geza |
-| **10:30** | *Mutation calling and phenotype-genotype correlation* | [Slides](#) • [Practical](#) | Ephifania Geza |
+| **09:00** | *Pipeline development continued and running* | | Mamana Mbiyavanga |
 | **11:30** | **Break** | | |
-| **12:00** | *Mutation calling and phenotype-genotype correlation* | [Tutorial](#) • [Scripts](#) | Ephifania Geza |
+| **12:00** | *Pipeline development continued and running* | | Mamana Mbiyavanga |
 
 ## Key Topics
 

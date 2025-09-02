@@ -23,11 +23,10 @@ By the end of Day 3, you will be able to:
 
 | Time (CAT) | Topic | Links | Trainer |
 |------------|-------|-------|---------|
-| **09:00** | *Genome assembly, quality assessment and annotation* | [Slides](#) • [Tutorial](#) | Ephifania Geza/Arash Iranzadeh |
-| **10:00** | *Multi-locus sequence typing, and serotyping* | [Slides](#) • [MLST Guide](#) | Arash Iranzadeh |
-| **11:00** | *Antimicrobial Resistance gene detection and resistance prediction* | [Slides](#) • [Practical](#) | Ephifania Geza |
+| **09:00** | *Quality checking and control, as well as species identification* | | Arash Iranzadeh |
+| **10:00** | *Genome assembly, quality assessment* | | Ephifania Geza |
 | **11:30** | **Break** | | |
-| **12:00** | *Role of plasmids, integrons, and transposons in AMR spread* | [Slides](#) • [Tutorial](#) | Ephifania Geza |
+| **12:00** | *Genome Annotation* | | Arash Iranzadeh |
 
 ## Key Topics
 

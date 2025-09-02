@@ -23,11 +23,10 @@ By the end of Day 5, you will be able to:
 
 | Time (CAT) | Topic | Links | Trainer |
 |------------|-------|-------|---------|
-| **09:00** | *Metagenomic sequencing* | [Slides](#) • [Tutorial](#) | Ephifania Geza |
-| **09:30** | *Quality control in metagenomic data* | [Slides](#) • [Practical](#) | Ephifania Geza |
-| **10:30** | *Microbiome profiling and diversity metrics (R or QIIME2)* | [R Tutorial](#) • [QIIME2 Guide](#) | Ephifania Geza |
+| **09:00** | *Reproducible workflows with Nextflow and nf-core* | | Mamana Mbiyavanga |
+| **10:30** | *Developing a Nextflow pipeline for QC, de novo assembly, quality assessment and annotation* | | Mamana Mbiyavanga |
 | **11:30** | **Break** | | |
-| **12:00** | *Microbiome profiling and diversity metrics (R or QIIME2)* | [Practical](#) • [Scripts](#) | Ephifania Geza |
+| **12:00** | *Developing a Nextflow pipeline for QC, de novo assembly, quality assessment and annotation* | | Mamana Mbiyavanga |
 
 ## Key Topics
 
