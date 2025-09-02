@@ -23,9 +23,9 @@ By the end of Day 9, you will be able to:
 
 | Time (CAT) | Topic | Links | Trainer |
 |------------|-------|-------|------------|
-| **09:00** | *Participants to analyse their own data* | [Resources](#) • [Templates](#) | All trainers |
+| **09:00** | *Participants to analyse their own data* |  | All trainers |
 | **11:30** | **Break** | | |
-| **12:00** | *Participants to analyse their own data* | [Help Desk](#) • [Examples](#) | All trainers |
+| **12:00** | *Participants to analyse their own data* |  | All trainers |
 
 ## Session Structure
 

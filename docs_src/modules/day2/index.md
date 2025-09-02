@@ -22,11 +22,10 @@ By the end of Day 2, you will be able to:
 
 | Time (CAT) | Topic | Links | Trainer |
 |------------|-------|-------|---------|
-| **09:00** | *Introduction High Performance Computing (HPC) – Ilifu* | [Slides](#) • [HPC Guide](#) | Mamana Mbiyavanga |
-| **09:30** | *Recap: Introduction to command line interface* | [Tutorial](#) • [Practice](#) | Arash Iranzadeh |
-| **10:30** | *Quality checking and control, as well as species identification* | [Slides](#) • [Practical](#) | Arash Iranzadeh |
+| **09:00** | *Introduction to command line interface* | [Practical](https://github.com/Arash-Iranzadeh/Microbial-Genomics/blob/main/scripts/practice_unix_commands.sh) | Arash Iranzadeh |
+| **11:00** | *Introduction High Performance Computing (HPC) – Ilifu* | | Mamana Mbiyavanga |
 | **11:30** | **Break** | | |
-| **12:00** | *Guest talk: MtB and co-infection* | [Slides](#) | Bethlehem Adnew |
+| **12:00** | *Guest talk: MtB and co-infection* | | Bethlehem Adnew |
 
 ## Key Topics
 

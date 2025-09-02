@@ -22,10 +22,10 @@ By the end of Day 4, you will be able to:
 
 | Time (CAT) | Topic | Links | Trainer |
 |------------|-------|-------|---------|
-| **09:00** | *Pangenomics* | [Slides](#) • [Tutorial](#) | Arash Iranzadeh |
-| **10:30** | *Phylogenomics: Inferring evolutionary relationships from core SNPs* | [Slides](#) • [Practical](#) | Arash Iranzadeh |
+| **09:00** | *Antimicrobial Resistance gene detection and resistance prediction* | | Ephifania Geza |
+| **10:30** | *Role of plasmids, integrons, and transposons in AMR spread* | | Ephifania Geza |
 | **11:30** | **Break** | | |
-| **12:00** | *Phylogenomics: Tree construction and visualisation* | [Slides](#) • [Tutorial](#) | Arash Iranzadeh |
+| **12:00** | *Multi-locus sequence typing, and serotyping* | | Arash Iranzadeh |
 
 ## Key Topics
 

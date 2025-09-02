@@ -23,10 +23,11 @@ By the end of Day 7, you will be able to:
 
 | Time (CAT) | Topic | Links | Trainer |
 |------------|-------|-------|---------|
-| **09:00** | *Reproducible workflows with Nextflow and nf-core* | [Slides](#) • [Nextflow Guide](#) | Mamana Mbiyavanga |
-| **10:30** | *Developing a Nextflow pipeline for QC, de novo assembly, quality assessment and annotation* | [Tutorial](#) • [Template](#) | Mamana Mbiyavanga |
+| **09:00** | *Metagenomic sequencing* | | Ephifania Geza |
+| **09:30** | *Quality control in metagenomic data* | | Ephifania Geza |
+| **10:30** | *Microbiome profiling and diversity metrics (R or QIIME2)* | | Ephifania Geza |
 | **11:30** | **Break** | | |
-| **12:00** | *Developing a Nextflow pipeline for QC, de novo assembly, quality assessment and annotation* | [Practical](#) • [Scripts](#) | Mamana Mbiyavanga |
+| **12:00** | *Microbiome profiling and diversity metrics (R or QIIME2)* | | Ephifania Geza |
 
 ## Key Topics
 

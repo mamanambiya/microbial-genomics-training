@@ -23,11 +23,11 @@ By the end of Day 1, you will be able to:
 | Time (CAT) | Topic | Links | Trainer |
 |------------|-------|-------|---------|
 | **09:00** | *Introductions* | | All |
-| **09:10** | *Overview of clinical pathogens and genomic surveillance* | [Slides](#) • [Notes](#) | Ephifania Geza |
-| **09:40** | *Overview of sequencing technologies and data types* | [Slides](#) • [Practical](#) | Sindiswa Lukhele |
-| **10:00** | *Setting up and exploring PubMLST* | [Tutorial](https://pubmlst.org) • [Guide](#) | Sindiswa Lukhele |
+| **09:10** | *Overview of clinical pathogens and genomic surveillance* | [Slides](https://docs.google.com/presentation/d/1N-bmzwmIdZUDJTtogQxGkTQ4XicyuPiv/edit?usp=drive_link&ouid=113561825586036302170&rtpof=true&sd=true) | Ephifania Geza |
+| **09:40** | *Overview of sequencing technologies and data types* | | Sindiswa Lukhele |
+| **10:00** | *Setting up and exploring PubMLST* | | Sindiswa Lukhele |
 | **11:00** | **Break** | | |
-| **11:30** | *Introduction to command line interface (Git Bash) and R* | [Git Bash](https://github.com/Arash-Iranzadeh/Microbial-Genomics/blob/main/scripts/practice_unix_commands.sh) • [Tutorial](#) | Arash Iranzadeh |
+| **11:30** | *Introduction to command line interface* | [Practical](https://github.com/Arash-Iranzadeh/Microbial-Genomics/blob/main/scripts/practice_unix_commands.sh) | Arash Iranzadeh |
 
 ## Key Topics
 

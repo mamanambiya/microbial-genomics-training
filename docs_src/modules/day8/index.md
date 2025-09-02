@@ -1,4 +1,4 @@
-# Day 8: Nextflow Pipeline Development
+# Day 8: Comparative Genomics
 
 **Date**: September 10, 2025  
 **Duration**: 09:00-13:00 CAT  
@@ -23,9 +23,10 @@ By the end of Day 8, you will be able to:
 
 | Time (CAT) | Topic | Links | Trainer |
 |------------|-------|-------|---------|
-| **09:00** | *Pipeline development continued and running* | [Tutorial](#) • [Examples](#) | Mamana Mbiyavanga |
+| **09:00** | *Pangenomics* | | Arash Iranzadeh |
+| **10:30** | *Phylogenomics: Inferring evolutionary relationships from core SNPs* | | Arash Iranzadeh |
 | **11:30** | **Break** | | |
-| **12:00** | *Pipeline development continued and running* | [Practical](#) • [Testing](#) | Mamana Mbiyavanga |
+| **12:00** | *Phylogenomics: Tree construction and visualisation* | | Arash Iranzadeh |
 
 ## Key Topics
 
