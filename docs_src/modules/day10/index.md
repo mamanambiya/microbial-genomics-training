@@ -1,4 +1,4 @@
-# Day 10: Wrap-up Session
+# Day 10: Wrap-up session
 
 **Date**: September 12, 2025  
 **Duration**: 09:00-11:40 CAT  

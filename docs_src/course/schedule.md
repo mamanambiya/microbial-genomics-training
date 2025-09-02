@@ -35,7 +35,7 @@ The 10-day intensive training course covers fundamental to advanced topics in mi
 
 ---
 
-## Day 2: Introduction to Command Line, HPC, & Quality Control
+## Day 2: Introduction to Commandline, High Performance Computing, & Quality Control
 
 **Date**: September 2, 2025  
 **[→ View detailed module](../modules/day2/index.md)**
@@ -67,7 +67,7 @@ The 10-day intensive training course covers fundamental to advanced topics in mi
 
 ---
 
-## Day 4: Genomic Characterization Continuation
+## Day 4: Genomic Characterization
 
 **Date**: September 4, 2025  
 **[→ View detailed module](../modules/day4/index.md)**
@@ -114,7 +114,7 @@ The 10-day intensive training course covers fundamental to advanced topics in mi
 
 ---
 
-## Day 7: Metagenomic Profiling
+## Day 7: Metagenomic profiling
 
 **Date**: September 9, 2025  
 **[→ View detailed module](../modules/day7/index.md)**
@@ -147,7 +147,7 @@ The 10-day intensive training course covers fundamental to advanced topics in mi
 
 ---
 
-## Day 9: Bring Your Own Data
+## Day 9: Bring your own data
 
 **Date**: September 11, 2025  
 **[→ View detailed module](../modules/day9/index.md)**
@@ -162,7 +162,7 @@ The 10-day intensive training course covers fundamental to advanced topics in mi
 
 ---
 
-## Day 10: Wrap-up Session
+## Day 10: Wrap-up session
 
 **Date**: September 12, 2025  
 **[→ View detailed module](../modules/day10/index.md)**

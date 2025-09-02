@@ -1,4 +1,4 @@
-# Day 4: Comparative Genomics
+# Day 4: Genomic Characterization
 
 **Date**: September 4, 2025  
 **Duration**: 09:00-13:00 CAT  
