@@ -1,4 +1,4 @@
-# Day 7: Nextflow
+# Day 7: Metagenomic profiling
 
 **Date**: September 9, 2025  
 **Duration**: 09:00-13:00 CAT  

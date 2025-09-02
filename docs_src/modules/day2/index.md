@@ -1,4 +1,4 @@
-# Day 2: Introduction to Command Line, HPC, & Quality Control
+# Day 2: Introduction to Commandline, High Performance Computing, & Quality Control
 
 **Date**: September 2, 2025  
 **Duration**: 09:00-13:00 CAT  

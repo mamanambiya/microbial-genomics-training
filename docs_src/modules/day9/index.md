@@ -1,4 +1,4 @@
-# Day 9: Bring Your Own Data
+# Day 9: Bring your own data
 
 **Date**: September 11, 2025  
 **Duration**: 09:00-13:00 CAT  
