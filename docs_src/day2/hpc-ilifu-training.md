@@ -232,8 +232,47 @@ Desktop Computer          HPC Cluster
 
 ### ILIFU Cluster Architecture
 
-![HPC Partitions](diagrams/resource_partitions.svg)
-*HPC cluster partitions showing different resource types and their specific use cases*
+```mermaid
+graph LR
+    subgraph "ILIFU HPC Partitions"
+        subgraph "General Partition"
+            GP[General<br/>32 CPUs, 128GB RAM<br/>Standard workloads]
+        end
+        
+        subgraph "HighMem Partition"
+            HM[HighMem<br/>32 CPUs, 256GB RAM<br/>Memory-intensive jobs]
+        end
+        
+        subgraph "GPU Partition"
+            GPU[GPU<br/>32 CPUs, 128GB RAM<br/>4x V100 GPUs<br/>ML/AI workloads]
+        end
+        
+        subgraph "Large Partition"
+            LP[Large<br/>64 CPUs, 512GB RAM<br/>Large-scale analysis]
+        end
+    end
+    
+    subgraph "Use Cases"
+        UC1[Genome Assembly]
+        UC2[Variant Calling]
+        UC3[Metagenomics]
+        UC4[Machine Learning]
+        UC5[Phylogenetics]
+    end
+    
+    UC1 --> HM
+    UC2 --> GP
+    UC3 --> LP
+    UC4 --> GPU
+    UC5 --> GP
+    
+    style GP fill:#e8f5e9
+    style HM fill:#fff3e0
+    style GPU fill:#f3e5f5
+    style LP fill:#e1f5fe
+```
+
+**Figure: HPC cluster partitions showing different resource types and their specific use cases**
 
 ### Hardware Overview
 
@@ -304,8 +343,65 @@ module load python/3.12.3  # Or use system python3
 
 ### What is SLURM?
 
-![SLURM Architecture](diagrams/hpc_architecture.svg)
-*HPC cluster architecture showing the relationship between users, login nodes, SLURM scheduler, compute nodes, and shared storage*
+```mermaid
+graph TB
+    subgraph "Users"
+        U1[User 1]
+        U2[User 2]
+        U3[User 3]
+    end
+    
+    subgraph "Login Nodes"
+        LN[Login Node<br/>- SSH Access<br/>- Job Submission<br/>- File Editing]
+    end
+    
+    subgraph "SLURM Controller"
+        SC[SLURM Scheduler<br/>- Resource Allocation<br/>- Job Queuing<br/>- Priority Management]
+        DB[(Accounting<br/>Database)]
+    end
+    
+    subgraph "Compute Nodes"
+        CN1[Compute Node 1<br/>CPUs: 32<br/>RAM: 128GB]
+        CN2[Compute Node 2<br/>CPUs: 32<br/>RAM: 128GB]
+        CN3[Compute Node 3<br/>CPUs: 32<br/>RAM: 128GB]
+        CNN[... More Nodes]
+    end
+    
+    subgraph "Storage"
+        FS[Shared Filesystem<br/>/home<br/>/scratch<br/>/data]
+    end
+    
+    U1 --> LN
+    U2 --> LN
+    U3 --> LN
+    
+    LN -->|sbatch/srun| SC
+    SC --> DB
+    SC -->|Allocates| CN1
+    SC -->|Allocates| CN2
+    SC -->|Allocates| CN3
+    SC -->|Allocates| CNN
+    
+    CN1 --> FS
+    CN2 --> FS
+    CN3 --> FS
+    CNN --> FS
+    LN --> FS
+    
+    style U1 fill:#e1f5fe
+    style U2 fill:#e1f5fe
+    style U3 fill:#e1f5fe
+    style LN fill:#fff3e0
+    style SC fill:#f3e5f5
+    style DB fill:#f3e5f5
+    style CN1 fill:#e8f5e9
+    style CN2 fill:#e8f5e9
+    style CN3 fill:#e8f5e9
+    style CNN fill:#e8f5e9
+    style FS fill:#fce4ec
+```
+
+**Figure: HPC cluster architecture showing the relationship between users, login nodes, SLURM scheduler, compute nodes, and shared storage**
 
 **Simple Linux Utility for Resource Management (SLURM)** is a job scheduling and cluster management tool that:
 

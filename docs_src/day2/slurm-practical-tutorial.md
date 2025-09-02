@@ -892,8 +892,43 @@ mpirun ./my_mpi_program input.dat
 
 ### 4. Interactive Job
 
-![Interactive vs Batch Jobs](diagrams/interactive_jobs.svg)
-*Comparison between interactive and batch job workflows in SLURM*
+```mermaid
+graph TB
+    subgraph "Interactive Jobs"
+        I1[User logs in] --> I2[Request interactive session<br/>sinteractive/srun --pty]
+        I2 --> I3[Wait for resources]
+        I3 --> I4[Get shell on compute node]
+        I4 --> I5[Run commands interactively]
+        I5 --> I6[See output in real-time]
+        I6 --> I7[Exit when done]
+        
+        style I4 fill:#e8f5e9
+        style I5 fill:#e8f5e9
+        style I6 fill:#e8f5e9
+    end
+    
+    subgraph "Batch Jobs"
+        B1[User logs in] --> B2[Write job script]
+        B2 --> B3[Submit with sbatch]
+        B3 --> B4[Job queued]
+        B4 --> B5[Job runs automatically]
+        B5 --> B6[Output to files]
+        B6 --> B7[Check results later]
+        
+        style B5 fill:#e1f5fe
+        style B6 fill:#e1f5fe
+    end
+    
+    subgraph "When to Use"
+        UI[Interactive: Development,<br/>Testing, Debugging]
+        UB[Batch: Production runs,<br/>Long jobs, Multiple jobs]
+    end
+    
+    I7 --> UI
+    B7 --> UB
+```
+
+**Figure: Comparison between interactive and batch job workflows in SLURM**
 
 ```bash
 # Request interactive session using sinteractive (ILIFU-specific)
