@@ -26,7 +26,7 @@ By the end of Day 3, you will be able to:
 | **09:00** | *Introduction High Performance Computing (HPC) – Ilifu* | [Notes](../../day2/hpc-ilifu-training.md) • [Practical 1](../../day2/slurm-practical-tutorial.md) • [Practical 2](../../day2/unix-commands-pathogen-examples.md) | Mamana Mbiyavanga |
 | **10:00** | *Quality checking and control, as well as species identification* | | Arash Iranzadeh |
 | **11:30** | **Break** | | |
-| **10:00** | *Genome assembly, quality assessment* | [Notes](../../day3/genome_assembly_notes.md)  • [ | Ephifania Geza |
+| **10:00** | *Genome assembly, quality assessment* | [Notes](../../day3/genome_assembly_notes.md)  • [Practical](../../day3/practical_genome_assmbly.md) | Ephifania Geza |
 
 ## Key Topics
 
