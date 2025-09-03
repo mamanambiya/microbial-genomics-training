@@ -36,7 +36,7 @@ The 10-day intensive training course covers fundamental to advanced topics in mi
 
 ---
 
-## Day 2: Introduction to Commandline, High Performance Computing, & Quality Control
+## Day 2: Introduction to Commandline and Guest Talk
 
 **Date**: September 2, 2025  
 **[→ View detailed module](../modules/day2/index.md)**
@@ -51,7 +51,7 @@ The 10-day intensive training course covers fundamental to advanced topics in mi
 
 ---
 
-## Day 3: Genomic Characterization
+## Day 3: Accelerating Bioinformatics: HPC, QC, and Species Identification Essentials
 
 **Date**: September 3, 2025  
 **[→ View detailed module](../modules/day3/index.md)**
@@ -62,7 +62,8 @@ The 10-day intensive training course covers fundamental to advanced topics in mi
 | **11:00** | **Break** | | |
 | **12:00** | *Quality checking and control, as well as species identification* | [Practical](https://github.com/Arash-Iranzadeh/Microbial-Genomics/blob/main/scripts/qc_cleaning_detection.sh) | Arash Iranzadeh |
 
-**Key Learning Outcomes**: High Performance Computing fundamentals, Quality control fundamentals
+**Key Learning Outcomes**: HPC fundamentals, Quality control fundamentals
+
 ---
 
 ## Day 4: Genome Assembly Essentials: QC, Identification, and Annotation
