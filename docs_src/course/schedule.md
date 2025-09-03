@@ -61,7 +61,7 @@ The 10-day intensive training course covers fundamental to advanced topics in mi
 | **09:00** | *Introduction High Performance Computing (HPC) – Ilifu* | [Notes](../day2/hpc-ilifu-training.md) • [Practical 1](../day2/slurm-practical-tutorial.md) • [Practical 2](../day2/unix-commands-pathogen-examples.md) | Mamana Mbiyavanga |
 | **10:00** | *Quality checking and control, as well as species identification* | [Practical](https://github.com/Arash-Iranzadeh/Microbial-Genomics/blob/main/scripts/qc_cleaning_detection.sh) | Arash Iranzadeh |
 | **11:30** | **Break** | | |
-| **12:00** | *Genome assembly, quality assessment* |[Notes](../../day3/genome_assembly_notes.md). [Practical](../../day3/practical_genome_assmbly.md) | Ephifania Geza |
+| **12:00** | *Genome assembly, quality assessment* |[Notes](docs_src/day3/genome_assembly_notes.md). [Practical](docs_src/day3/practical_genome_assmbly.md) | Ephifania Geza |
 
 **Key Learning Outcomes**: Quality control fundamentals, Genome assembly and assessment
 
