@@ -4,16 +4,17 @@
 
 The 10-day intensive training course covers fundamental to advanced topics in microbial genomics and metagenomics. Each day combines theoretical presentations with hands-on practical exercises.
 
-!!! info "Course Information"
-    - **Duration**: 10 days (September 1-12, 2025)
-    - **Time**: 09:00-13:00 CAT daily
-    - **Venue**: MAC room, level 2, Health Science UCT, Barnard Fuller Building
-    - **Address**: Anzio Rd, Observatory, Cape Town, 7935
-    - **Format**: Hands-on workshops with lectures
-    - **Break**: 11:00/11:30 AM coffee break
+**!!! info "Course Information"**
 
-!!! note "Participant Requirements"
-    Participants are required to bring their own data to perform the analysis. If a participant does not have data, it will be made available to them.
+- **Duration**: 10 days (September 1-12, 2025)
+- **Time**: 09:00-13:00 CAT daily
+- **Venue**: MAC room, level 2, Health Science UCT, Barnard Fuller Building
+- **Address**: Anzio Rd, Observatory, Cape Town, 7935
+- **Format**: Hands-on workshops with lectures
+- **Break**: 11:00/11:30 AM coffee break
+
+**!!! note "Participant Requirements"**
+ - Participants are required to bring their own data to perform the analysis. If a participant does not have data, it will be made available to them.
 
 ---
 
