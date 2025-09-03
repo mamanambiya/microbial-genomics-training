@@ -2,16 +2,17 @@
 
 **Date**: September 3, 2025  
 **Duration**: 09:00-13:00 CAT  
-**Focus**: Quality control, genome assembly, assessment 
+**Focus**: HPC infrastructure, quality control, species identification, genome assembly and assessment
 
 ## Overview
 
-Day 3 introduces participants to the Ilifu high-performance computing infrastructure and the essential data pre-processing steps. These include quality control, species identification, followed by genome assembly and quality assessment. These foundational skills are critical for all downstream genomic analyses.
+Day 3 continues building computational skills with an introduction to the Ilifu HPC infrastructure, then introduces essential genomic characterization techniques including quality control, species identification, and genome assembly with quality assessment. These foundational skills are critical for all downstream genomic analyses.
 
 ## Learning Objectives
 
 By the end of Day 3, you will be able to:
 
+- Connect to and navigate the Ilifu high-performance computing cluster
 - Submit and manage jobs using the SLURM scheduler
 - Understand resource allocation and job queue management on HPC systems
 - Perform quality checking and control on sequencing data using FastQC
@@ -24,9 +25,9 @@ By the end of Day 3, you will be able to:
 | Time (CAT) | Topic | Links | Trainer |
 |------------|-------|-------|---------|
 | **09:00** | *Introduction High Performance Computing (HPC) – Ilifu* | [Notes](../../day2/hpc-ilifu-training.md) • [Practical 1](../../day2/slurm-practical-tutorial.md) • [Practical 2](../../day2/unix-commands-pathogen-examples.md) | Mamana Mbiyavanga |
-| **10:00** | *Quality checking and control, as well as species identification* | | Arash Iranzadeh |
+| **10:00** | *Quality checking and control, as well as species identification* | [Practical](https://github.com/Arash-Iranzadeh/Microbial-Genomics/blob/main/scripts/qc_cleaning_detection.sh) | Arash Iranzadeh |
 | **11:30** | **Break** | | |
-| **10:00** | *Genome assembly, quality assessment* | [Notes](../../day3/genome_assembly_notes.md)  • [Practical](../../day3/practical_genome_assmbly.md) | Ephifania Geza |
+| **12:00** | *Genome assembly, quality assessment* | [Notes](../../day3/genome_assembly_notes.md) • [Practical](../../day3/practical_genome_assmbly.md) | Ephifania Geza |
 
 ## Key Topics
 

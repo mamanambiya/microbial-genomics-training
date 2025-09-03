@@ -17,7 +17,7 @@ The 10-day intensive training course covers fundamental to advanced topics in mi
 
 ---
 
-## Day 1: Welcome to the Course!
+## Day 1: Welcome to the Course
 
 **Date**: September 1, 2025  
 **[→ View detailed module](../modules/day1/index.md)**

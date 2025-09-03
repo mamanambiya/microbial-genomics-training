@@ -2,19 +2,20 @@
 
 **Date**: September 4, 2025  
 **Duration**: 09:00-13:00 CAT  
-**Focus**: AMR detection, mobile genetic elements, MLST and serotyping
+**Focus**: Genome annotation, AMR detection, MLST and serotyping
 
 ## Overview
 
-Day 4 continues genomic characterization with a focus on antimicrobial resistance gene detection, understanding the role of mobile genetic elements in AMR spread, and molecular typing methods including MLST and serotyping for pathogen classification and surveillance.
+Day 4 continues genomic characterization with genome annotation, followed by antimicrobial resistance gene detection, and molecular typing methods including MLST and serotyping for pathogen classification and surveillance.
 
 ## Learning Objectives
 
 By the end of Day 4, you will be able to:
 
+- Annotate bacterial genomes using Prokka
+- Interpret and utilize genome annotation outputs
 - Detect antimicrobial resistance genes using tools like AMRFinderPlus and CARD
 - Predict resistance phenotypes from genotypic data
-- Understand the role of plasmids, integrons, and transposons in AMR dissemination
 - Perform multi-locus sequence typing (MLST) for strain characterization
 - Conduct serotyping for pathogen classification
 - Interpret molecular typing results for epidemiological surveillance
@@ -23,8 +24,8 @@ By the end of Day 4, you will be able to:
 
 | Time (CAT) | Topic | Links | Trainer |
 |------------|-------|-------|---------|
-| **09:00** | *Antimicrobial Resistance gene detection and resistance prediction* | | Ephifania Geza |
-| **10:30** | *Role of plasmids, integrons, and transposons in AMR spread* | | Ephifania Geza |
+| **09:00** | *Genome Annotation* | | Arash Iranzadeh |
+| **10:00** | *Antimicrobial Resistance gene detection and resistance prediction* | | Ephifania Geza |
 | **11:30** | **Break** | | |
 | **12:00** | *Multi-locus sequence typing, and serotyping* | | Arash Iranzadeh |
 

@@ -82,6 +82,186 @@ The following files are now in your directory for practice:
 
 ---
 
+## Quick Command Reference with Detailed Explanations
+
+### Essential Commands for Genomics Analysis
+
+Before diving into detailed modules, here's a quick reference of the most commonly used commands in pathogen genomics, with detailed explanations of what each component does:
+
+#### Navigate and Organize
+
+```bash
+# Create nested directories for a genomics project
+mkdir -p project/{data,results,scripts}
+# Explanation:
+# mkdir = make directory command
+# -p = create parent directories as needed (won't error if they exist)
+# project/ = main project folder
+# {data,results,scripts} = brace expansion creates 3 subdirectories at once
+#   - data/ for raw sequencing files
+#   - results/ for analysis outputs
+#   - scripts/ for your analysis code
+
+# Navigate to your project directory
+cd project
+# cd = change directory
+# project = destination directory (relative path from current location)
+
+# Show current working directory
+pwd
+# pwd = print working directory
+# Returns absolute path like: /home/username/hpc_practice/project
+```
+
+#### Inspect FASTQ Files
+
+```bash
+# View compressed FASTQ file content
+zcat sample.fastq.gz | head -20
+# Explanation:
+# zcat = view compressed file without extracting (z = gzip, cat = concatenate)
+# sample.fastq.gz = compressed FASTQ file (common in genomics to save space)
+# | = pipe operator, sends output to next command
+# head -20 = show first 20 lines (5 complete reads since FASTQ uses 4 lines/read)
+
+# Count number of reads in FASTQ file
+zcat sample.fastq.gz | wc -l | awk '{print $1/4}'
+# Explanation:
+# zcat sample.fastq.gz = decompress and output file content
+# wc -l = word count with -l flag counts lines
+# | = pipe the line count to awk
+# awk '{print $1/4}' = divide line count by 4 (FASTQ has 4 lines per read)
+#   - $1 = first field (the line count)
+#   - /4 = division to get read count
+# Example: 400 lines / 4 = 100 reads
+```
+
+#### Search and Filter
+
+```bash
+# Find all FASTA headers in reference genome
+grep "^>" reference.fasta
+# Explanation:
+# grep = global regular expression print (searches for patterns)
+# "^>" = pattern to search for
+#   - ^ = start of line anchor (line must begin with >)
+#   - > = literal ">" character (FASTA headers start with >)
+# reference.fasta = file to search in
+# Output: Shows all sequence headers like ">chr1", ">gene_ABC123"
+
+# Count high-quality variants
+grep -c "PASS" variants.vcf
+# Explanation:
+# grep = search command
+# -c = count matching lines instead of showing them
+# "PASS" = quality filter status in VCF files
+# variants.vcf = variant call format file
+# Returns: Number like "1234" (count of variants passing quality filters)
+```
+
+#### Process Text Data
+
+```bash
+# Extract specific columns from data
+awk '{print $1, $2}' data.txt
+# Explanation:
+# awk = powerful text processing tool
+# '{print $1, $2}' = awk program
+#   - {} = action block
+#   - print = output command
+#   - $1 = first column/field
+#   - $2 = second column/field
+#   - , = adds space between fields in output
+# data.txt = input file
+# Example input:  "Sample1 100 resistant"
+# Example output: "Sample1 100"
+
+# Replace text in files
+sed 's/old/new/g' file.txt
+# Explanation:
+# sed = stream editor for text transformation
+# 's/old/new/g' = substitution command
+#   - s = substitute command
+#   - /old/ = pattern to find
+#   - /new/ = replacement text
+#   - g = global flag (replace all occurrences, not just first)
+# file.txt = input file
+# Example: Changes "old_sample_name" to "new_sample_name" throughout file
+```
+
+### Combined Pipeline Examples
+
+#### Example 1: Quick FASTQ Quality Check
+```bash
+# Count reads and check quality score distribution
+zcat sample.fastq.gz | \
+  awk 'NR%4==0' | \
+  cut -c1-10 | \
+  sort | \
+  uniq -c | \
+  sort -rn
+
+# Line-by-line explanation:
+# zcat sample.fastq.gz = decompress FASTQ
+# awk 'NR%4==0' = get every 4th line (quality scores)
+#   - NR = line number
+#   - %4==0 = divisible by 4 (4th, 8th, 12th lines...)
+# cut -c1-10 = first 10 characters of quality string
+# sort = alphabetically sort quality patterns
+# uniq -c = count unique patterns
+# sort -rn = sort by count, highest first
+#   - -r = reverse order
+#   - -n = numerical sort
+```
+
+#### Example 2: Extract High-Quality Reads
+```bash
+# Get read IDs with average quality > 30
+zcat sample.fastq.gz | \
+  paste - - - - | \
+  awk '{if(length($4) > 0) print $1, length($4)}' | \
+  grep "^@"
+
+# Explanation:
+# paste - - - - = combine every 4 lines into 1 tab-delimited line
+# awk = process the combined lines
+# $1 = read ID, $4 = quality string
+# grep "^@" = filter for valid read IDs
+```
+
+### Pro Tips for These Commands
+
+1. **Always preview before processing**:
+   ```bash
+   zcat file.gz | head -20  # Check format first
+   ```
+
+2. **Count before and after filtering**:
+   ```bash
+   # Before
+   grep -c "^@" input.fastq
+   # After filtering
+   grep -c "^@" filtered.fastq
+   ```
+
+3. **Use quotes for patterns with special characters**:
+   ```bash
+   grep "^>" file.fasta     # Correct
+   grep ^> file.fasta        # May fail - shell interprets >
+   ```
+
+4. **Combine commands efficiently**:
+   ```bash
+   # Instead of creating intermediate files:
+   zcat file.gz > temp.txt
+   grep "pattern" temp.txt > result.txt
+   
+   # Use pipes:
+   zcat file.gz | grep "pattern" > result.txt
+   ```
+
+---
+
 ## Module 1: Directory Organization for Genomics Projects
 
 ### Learning Objectives

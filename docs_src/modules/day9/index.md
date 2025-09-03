@@ -2,16 +2,17 @@
 
 **Date**: September 11, 2025  
 **Duration**: 09:00-13:00 CAT  
-**Focus**: Independent analysis of participant datasets
+**Focus**: Mobile genetic elements in AMR, independent analysis of participant datasets
 
 ## Overview
 
-Day 9 is dedicated to hands-on application of all techniques learned throughout the course. Participants will analyze their own datasets with guidance from trainers, troubleshoot real-world challenges, and develop customized analysis approaches for their specific research questions.
+Day 9 begins with understanding the role of mobile genetic elements in AMR spread, then transitions to hands-on application of all techniques learned throughout the course. Participants will analyze their own datasets with guidance from trainers, troubleshoot real-world challenges, and develop customized analysis approaches for their specific research questions.
 
 ## Learning Objectives
 
 By the end of Day 9, you will be able to:
 
+- Understand the role of plasmids, integrons, and transposons in AMR dissemination
 - Apply learned bioinformatics techniques to your own research data
 - Troubleshoot common issues encountered in real-world analyses
 - Adapt standard protocols to meet specific research requirements
@@ -23,13 +24,20 @@ By the end of Day 9, you will be able to:
 
 | Time (CAT) | Topic | Links | Trainer |
 |------------|-------|-------|------------|
-| **09:00** | *Participants to analyse their own data* |  | All trainers |
+| **09:00** | *Role of plasmids, integrons, and transposons in AMR spread* | | Ephifania Geza |
+| **10:30** | *Participants to analyse their own data* | | All trainers |
 | **11:30** | **Break** | | |
-| **12:00** | *Participants to analyse their own data* |  | All trainers |
+| **12:00** | *Participants to analyse their own data* | | All trainers |
 
 ## Session Structure
 
-### Opening Session (09:00-09:15)
+### Mobile Genetic Elements Session (09:00-10:30)
+- Understanding plasmids and their role in horizontal gene transfer
+- Integrons and gene cassette systems
+- Transposons and insertion sequences
+- Tools for mobile element detection and analysis
+
+### Opening Data Analysis Session (10:30-10:45)
 - Brief recap of key course concepts
 - Overview of available support and resources
 - Formation of analysis groups based on data types
