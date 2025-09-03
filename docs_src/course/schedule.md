@@ -43,9 +43,8 @@ The 10-day intensive training course covers fundamental to advanced topics in mi
 | Time (CAT) | Topic | Links | Trainer |
 |------------|-------|-------|---------|
 | **09:00** | *Introduction to command line interface* | [Practical](https://github.com/Arash-Iranzadeh/Microbial-Genomics/blob/main/scripts/practice_unix_commands.sh) | Arash Iranzadeh |
-| **11:00** | *Introduction High Performance Computing (HPC) – Ilifu* | [Notes](../day2/hpc-ilifu-training.md) • [Practical 1](../day2/slurm-practical-tutorial.md) • [Practical 2](../day2/unix-commands-pathogen-examples.md) | Mamana Mbiyavanga |
 | **11:30** | **Break** | | |
-| **12:00** | *Guest talk: MtB and co-infection* | | Bethlehem Adnew |
+| **12:00** | *Guest talk: MtB and co-infection* |[Bio](https://docs.google.com/document/d/1ITTQd4jDtgq8gnjYqk-jFHhdCu8JwBjXp_uTDGwBqfY/edit?tab=t.0#heading=h.d9aiuhe8jbzy). [Presentation]() | Bethlehem Adnew |
 
 **Key Learning Outcomes**: Command line proficiency, HPC fundamentals
 
@@ -59,34 +58,44 @@ The 10-day intensive training course covers fundamental to advanced topics in mi
 | Time (CAT) | Topic | Links | Trainer |
 |------------|-------|-------|---------|
 | **09:00** | *Introduction High Performance Computing (HPC) – Ilifu* | [Notes](../day2/hpc-ilifu-training.md) • [Practical 1](../day2/slurm-practical-tutorial.md) • [Practical 2](../day2/unix-commands-pathogen-examples.md) | Mamana Mbiyavanga |
-| **10:00** | *Quality checking and control, as well as species identification* | [Practical](https://github.com/Arash-Iranzadeh/Microbial-Genomics/blob/main/scripts/qc_cleaning_detection.sh) | Arash Iranzadeh |
-| **11:30** | **Break** | | |
-| **12:00** | *Genome assembly, quality assessment* |[Notes](../day3/genome_assembly_notes.md). [Practical](../day3/practical_genome_assmbly.md) | Ephifania Geza |
+| **11:00** | **Break** | | |
+| **12:00** | *Quality checking and control, as well as species identification* | [Practical](https://github.com/Arash-Iranzadeh/Microbial-Genomics/blob/main/scripts/qc_cleaning_detection.sh) | Arash Iranzadeh |
 
-**Key Learning Outcomes**: Quality control fundamentals, Genome assembly and assessment
-
+**Key Learning Outcomes**: High Performance Computing fundamentals, Quality control fundamentals
 ---
 
-## Day 4: Genomic Characterization
+## Day 4: Genome Assembly Essentials: QC, Identification, and Annotation
 
 **Date**: September 4, 2025  
 **[→ View detailed module](../modules/day4/index.md)**
 
 | Time (CAT) | Topic | Links | Trainer |
 |------------|-------|-------|---------|
-| **09:00** | *Genome Annotation* | | Arash Iranzadeh |
-| **10:00** | *Antimicrobial Resistance gene detection and resistance prediction* | | Ephifania Geza |
+| **09:00** | *Recap: Quality checking and control, and species identification* | [Practical](https://github.com/Arash-Iranzadeh/Microbial-Genomics/blob/main/scripts/qc_cleaning_detection.sh) | Arash Iranzadeh |
+| **10:00** | *Genome assembly, quality assessment and annotation* |[Notes](../day3/genome_assembly_notes.md). [Practical](../day3/practical_genome_assmbly.md) | Ephifania Geza |
 | **11:30** | **Break** | | |
 | **12:00** | *Multi-locus sequence typing, and serotyping* | | Arash Iranzadeh |
 
-**Key Learning Outcomes**: AMR and virulence factors detection, MLST
+**Key Learning Outcomes**: Genome assembly, assessment and annotation, MLST
+
 
 ---
 
-## Day 5: Nextflow Pipeline Development
+## Day 5: Tracking Threats: Genomic Detection of AMR, Virulence, and Plasmid Mobility
 
 **Date**: September 5, 2025  
 **[→ View detailed module](../modules/day5/index.md)**
+
+| **09:00** | *Antimicrobial Resistance gene detection and resistance prediction* | | Ephifania Geza |
+| **11:30** | **Break** | | |
+| **12:00** | *Role of plasmids, integrons, and transposons in AMR spread* | | Ephifania Geza |
+
+**Key Learning Outcomes**: AMR and virulence factors and plasmid detection
+
+## Day 6: Nextflow Pipeline Development
+
+**Date**: September 8, 2025  
+**[→ View detailed module](../modules/day6/index.md)**
 
 | Time (CAT) | Topic | Links | Trainer |
 |------------|-------|-------|---------|
@@ -99,10 +108,10 @@ The 10-day intensive training course covers fundamental to advanced topics in mi
 
 ---
 
-## Day 6: Nextflow Pipeline Development & Version Control with GitHub
+## Day 7: Nextflow Pipeline Development & Version Control with GitHub
 
-**Date**: September 8, 2025  
-**[→ View detailed module](../modules/day6/index.md)**
+**Date**: September 9, 2025  
+**[→ View detailed module](../modules/day7/index.md)**
 
 | Time (CAT) | Topic | Links | Trainer |
 |------------|-------|-------|---------|
@@ -114,10 +123,10 @@ The 10-day intensive training course covers fundamental to advanced topics in mi
 
 ---
 
-## Day 7: Metagenomic profiling
+## Day 8: Metagenomic profiling
 
-**Date**: September 9, 2025  
-**[→ View detailed module](../modules/day7/index.md)**
+**Date**: September 10, 2025  
+**[→ View detailed module](../modules/day8/index.md)**
 
 | Time (CAT) | Topic | Links | Trainer |
 |------------|-------|-------|---------|
@@ -131,10 +140,10 @@ The 10-day intensive training course covers fundamental to advanced topics in mi
 
 ---
 
-## Day 8: Comparative Genomics
+## Day 9: Comparative Genomics
 
-**Date**: September 10, 2025  
-**[→ View detailed module](../modules/day8/index.md)**
+**Date**: September 11, 2025  
+**[→ View detailed module](../modules/day9/index.md)**
 
 | Time (CAT) | Topic | Links | Trainer |
 |------------|-------|-------|---------|
@@ -144,22 +153,6 @@ The 10-day intensive training course covers fundamental to advanced topics in mi
 | **12:00** | *Phylogenomics: Tree construction and visualisation* | | Arash Iranzadeh |
 
 **Key Learning Outcomes**: Pan-genome analysis, phylogenetic inference, tree construction and visualization
-
----
-
-## Day 9: Bring your own data
-
-**Date**: September 11, 2025  
-**[→ View detailed module](../modules/day9/index.md)**
-
-| Time (CAT) | Topic | Links | Trainer |
-|------------|-------|-------|---------|
-| **09:00** | *Role of plasmids, integrons, and transposons in AMR spread* | | Ephifania Geza |
-| **10:30** | *Participants to analyse their own data* | | All trainers |
-| **11:30** | **Break** | | |
-| **12:00** | *Participants to analyse their own data* | | All trainers |
-
-**Key Learning Outcomes**: Mobile genetic elements, independent analysis, applying learned skills to real data
 
 ---
 
@@ -174,7 +167,7 @@ The 10-day intensive training course covers fundamental to advanced topics in mi
 | **11:15** | **Short talks** *NGS-Academy/AfriGen-D/eLwazi ODSP* | | |
 | **11:40** | **End of the course** | | |
 
-**Key Learning Outcomes**: Scientific presentation skills, course completion
+**Key Learning Outcomes**: Applying learned skills to real data, Scientific presentation skills, course completion
 
 ---
 
