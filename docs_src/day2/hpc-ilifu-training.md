@@ -233,68 +233,91 @@ Desktop Computer          HPC Cluster
 
 ### ILIFU Cluster Architecture
 
+ILIFU (Inter-University Institute for Data Intensive Astronomy) is a cloud computing infrastructure designed for data-intensive research in astronomy, bioinformatics, and other computational sciences. The facility operates on an OpenStack platform with containerized workloads using Singularity and job scheduling through SLURM.
+
 ```mermaid
-graph LR
-    subgraph "ILIFU HPC Partitions"
-        subgraph "General Partition"
-            GP[General<br/>32 CPUs, 128GB RAM<br/>Standard workloads]
+graph TB
+    subgraph "ILIFU Infrastructure"
+        subgraph "Cloud Platform"
+            OS[OpenStack Cloud<br/>Infrastructure-as-a-Service]
         end
         
-        subgraph "HighMem Partition"
-            HM[HighMem<br/>32 CPUs, 256GB RAM<br/>Memory-intensive jobs]
+        subgraph "Compute Resources"
+            CN[Compute Nodes<br/>Max: 96 CPUs per job<br/>Max: 1500 GB RAM per job]
         end
         
-        subgraph "GPU Partition"
-            GPU[GPU<br/>32 CPUs, 128GB RAM<br/>4x V100 GPUs<br/>ML/AI workloads]
+        subgraph "Container Platform"
+            SP[Singularity Containers<br/>HPC-optimized<br/>Rootless execution]
         end
         
-        subgraph "Large Partition"
-            LP[Large<br/>64 CPUs, 512GB RAM<br/>Large-scale analysis]
+        subgraph "Job Scheduler"
+            SL[SLURM Workload Manager<br/>Max runtime: 336 hours]
         end
     end
     
-    subgraph "Use Cases"
-        UC1[Genome Assembly]
-        UC2[Variant Calling]
-        UC3[Metagenomics]
-        UC4[Machine Learning]
-        UC5[Phylogenetics]
+    subgraph "Research Domains"
+        AST[Astronomy<br/>MeerKAT, SKA]
+        BIO[Bioinformatics<br/>Genomics, Metagenomics]
+        DS[Data Science<br/>ML/AI Research]
     end
     
-    UC1 --> HM
-    UC2 --> GP
-    UC3 --> LP
-    UC4 --> GPU
-    UC5 --> GP
+    OS --> CN
+    CN --> SP
+    SP --> SL
     
-    style GP fill:#e8f5e9
-    style HM fill:#fff3e0
-    style GPU fill:#f3e5f5
-    style LP fill:#e1f5fe
+    AST --> SL
+    BIO --> SL
+    DS --> SL
+    
+    style OS fill:#e1f5fe
+    style CN fill:#e8f5e9
+    style SP fill:#fff3e0
+    style SL fill:#f3e5f5
 ```
 
-**Figure: HPC cluster partitions showing different resource types and their specific use cases**
+**Figure: ILIFU cloud infrastructure architecture supporting multiple research domains**
 
-### Hardware Overview
+### Resource Specifications
 
-**Partition Specifications:**
+Based on ILIFU's cloud infrastructure configuration:
 
-| Partition | Configuration | Nodes | Use Case |
-|-----------|--------------|--------|----------|
-| **Main, Jupyter, Devel** | 32 cores, ~232GB RAM | 85 + 12 | Stable, computational processing |
-| **GPU** | 32 cores, ~232GB RAM, NVIDIA GPUs | 7 | GPU-accelerated computing |
-| **HighMem** | 32 cores (503GB) / 96 cores (1.5TB RAM) | 3 | High-memory single jobs |
+#### Maximum Job Resources
 
-**Node Types:**
+- **CPUs**: Up to 96 cores per job
+- **Memory**: Up to 1500 GB (1.5 TB) RAM per job
+- **Runtime**: Maximum 336 hours (14 days) per job
+- **Storage**: Distributed file systems for large-scale data
 
-- **Login Node**: Access point for SLURM commands (cd, mkdir, ls, etc.)
-- **Jupyter/Dev Node**: Development space for new code, workflows, debugging
-- **Main Partition**: Stable, computationally heavy processing  
-- **HighMem/GPU**: Specialized resources for memory-intensive or GPU workloads
+#### Key Features
+
+- **OpenStack Platform**: Provides flexible cloud computing resources
+- **Singularity Containers**: Enables reproducible, portable workflows
+- **SLURM Scheduler**: Manages resource allocation and job queuing
+- **Multi-domain Support**: Serves astronomy, bioinformatics, and data science communities
+
+#### Access Methods
+
+- SSH access to login nodes
+- Jupyter notebooks for interactive computing
+- Web-based interfaces for specific services
+- API access for programmatic interaction
+
+### Infrastructure Components
+
+| Component | Description | Purpose |
+|-----------|-------------|---------|
+| **OpenStack** | Cloud computing platform | Infrastructure management and virtualization |
+| **SLURM** | Workload manager | Job scheduling and resource allocation |
+| **Singularity** | Container platform | Application deployment and portability |
+| **CephFS** | Distributed storage | High-performance shared file system |
+| **Login Nodes** | Access points | User entry and job submission |
+| **Compute Nodes** | Processing units | Actual computation execution |
+
+**Note**: ILIFU operates as a cloud infrastructure rather than a traditional fixed HPC cluster, allowing dynamic resource allocation based on user requirements. Specific hardware configurations may vary as resources are allocated on-demand through the OpenStack platform
 
 ---
 
-## Getting Started
+## Getting Started with ILIFU
 
 ### Account Setup
 
@@ -323,7 +346,7 @@ module load python/3.12.3  # Or use system python3
 
 ### File System Layout
 
-```
+```bash
 /home/username/          # Your home directory (limited space)
 /scratch/username/       # Temporary fast storage
 /data/project/          # Shared project data
@@ -403,6 +426,8 @@ graph TB
 ```
 
 **Figure: HPC cluster architecture showing the relationship between users, login nodes, SLURM scheduler, compute nodes, and shared storage**
+
+#### About SLURM
 
 **Simple Linux Utility for Resource Management (SLURM)** is a job scheduling and cluster management tool that:
 
@@ -490,11 +515,11 @@ To save and exit nano:
 
 ### Understanding Resources
 
-1. **CPU Cores**: Processing units
-2. **Memory (RAM)**: Working memory
-3. **GPU**: Graphics processing units
-4. **Storage**: Disk space
-5. **Network**: Data transfer bandwidth
+- **CPU Cores**: Processing units
+- **Memory (RAM)**: Working memory
+- **GPU**: Graphics processing units
+- **Storage**: Disk space
+- **Network**: Data transfer bandwidth
 
 ### Resource Allocation Strategies
 
@@ -535,11 +560,11 @@ scontrol show job job_id
 
 ### Job Submission
 
-1. **Test small first**: Start with short test runs
-2. **Use checkpoints**: Save progress regularly
-3. **Estimate resources**: Don't over-request
-4. **Use appropriate partitions**: Match job to partition
-5. **Clean up**: Remove temporary files
+- **Test small first**: Start with short test runs
+- **Use checkpoints**: Save progress regularly
+- **Estimate resources**: Don't over-request
+- **Use appropriate partitions**: Match job to partition
+- **Clean up**: Remove temporary files
 
 ### Code Optimization
 
@@ -555,10 +580,10 @@ with Pool(8) as pool:
 
 ### Data Management
 
-1. **Use scratch space** for temporary files
-2. **Compress data** when possible
-3. **Clean up regularly**
-4. **Use appropriate file formats**
+- **Use scratch space** for temporary files
+- **Compress data** when possible
+- **Clean up regularly**
+- **Use appropriate file formats**
 
 ### Common Mistakes to Avoid
 
@@ -747,11 +772,11 @@ module load python/3.12.3  # Or use system python3
 
 ### Getting Help
 
-1. **Documentation**: Check ILIFU docs
-2. **Help Desk**: Submit support tickets
-3. **Community**: Ask on forums or Slack
-4. **Training**: Attend workshops
-5. **Practical Tutorials**: Work through [High Performance Computing with SLURM: Practical Tutorial](./slurm-practical-tutorial.md)
+- **Documentation**: Check ILIFU docs
+- **Help Desk**: Submit support tickets
+- **Community**: Ask on forums or Slack
+- **Training**: Attend workshops
+- **Practical Tutorials**: Work through [High Performance Computing with SLURM: Practical Tutorial](./slurm-practical-tutorial.md)
 
 ---
 
