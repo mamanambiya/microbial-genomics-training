@@ -20,7 +20,6 @@ mkdir -p ${outquast}"vc"
 Delete ${outspades} and ${outquast} and create them using one line of code and not four as above
 
 ```bash
-mkdir -p ${outspades}tb ${outspades}vc ${outquast}tb ${outquast}vc
 # Request for an interactive node (Resources)
 ## Use this command to retrieve the previously used "srun" command
 history | grep "srun"
@@ -47,6 +46,8 @@ indir="/data/users/${USER}/data_analysis/trimmed_trimmomatic/"
 outdir="/data/users/${USER}/data_analysis/assembly-test/"
 outspades=${outdir}"01_spades/"
 outquast=${outdir}"02_quast/"
+
+mkdir -p ${outspades}tb ${outspades}vc ${outquast}tb ${outquast}vc
 
 cd /data/users/${USER}/
 # Run SPAdes for M. tuberculosis
@@ -93,6 +94,8 @@ outdir="/data/users/${USER}/data_analysis/assembly/"
 outspades=${outdir}"01_spades/"
 outquast=${outdir}"02_quast/"
 
+# Change into the DIR with "tb_IDs"
+cd /data/users/${USER}/data_analysis/
 # Run SPAdes for M. tuberculosis
 echo "Starting M. tuberculosis assembly at $(date)"
 for SAMPLE in $(cat tb_IDs); do
@@ -105,7 +108,7 @@ done
 echo "M. tuberculosis assembly completed at $(date)"
 
 for SAMPLE in $(cat vc_IDs); do
-  echo "[TB|SPADES] $SAMPLE"
+  echo "[VC|SPADES] $SAMPLE"
   spades.py -1 ${indir}vc/${SAMPLE}_1.fastq.gz \
     -2 ${indir}vc/${SAMPLE}_2.fastq.gz \
     --careful -t 16 \
@@ -155,12 +158,13 @@ outdir="/data/users/${USER}/data_analysis/assembly-test/"
 outspades=${outdir}"01_spades/"
 outquast=${outdir}"02_quast/"
 
+mkdir -p ${outdir}"02_quast/"
 # Remove modules in your env
 modules purge
 # Load module
 module load quast
 # Use the subset of our data
-cd cd /data/users/${USER}/
+cd /data/users/${USER}/
 for SAMPLE in $(cat 02_tb_IDs)
 do
   echo "[TB|SPADES] $SAMPLE"
@@ -196,6 +200,7 @@ outdir="/data/users/${USER}/data_analysis/assembly/"
 outspades=${outdir}"01_spades/"
 outquast=${outdir}"02_quast/"
 
+mkdir -p ${outdir}"01_spades" ${outdir}"02_quast"
 # Run QUAST for a subset of M. tuberculosis dataset
 echo "Running QUAST analysis for M. tuberculosis..."
 # Remove modules in your env
@@ -203,7 +208,7 @@ modules purge
 # Load module
 module load quast
 # Use the sample IDs for our data
-cd /data/users/${USER}/
+cd /data/users/${USER}/data_analysis
 for SAMPLE in $(cat tb_IDs)
 do
   echo "[TB|QUAST] $SAMPLE"
@@ -215,7 +220,7 @@ do
 done
 
 for SAMPLE in $(cat vc_IDs); do
-  echo "[TB|QUAST] $SAMPLE"
+  echo "[VC|QUAST] $SAMPLE"
   quast.py ${outspades}vc/${SAMPLE}/contigs.fasta \
     #-r /data/TB_H37Rv.fasta -g /data/TB_H37rv.gff \
     -o ${outquast}tb/${SAMPLE} \
@@ -228,6 +233,7 @@ done
 # CLOSE THE FILE
 # ctrl + x
 ```
+
 ```bash
 # Assess all assembly results for all TB ands VC samples
 # In case you didn't create these above
@@ -250,6 +256,7 @@ outdir="/data/users/${USER}/data_analysis/assembly/"
 outspades=${outdir}"01_spades/"
 outquast=${outdir}"02_quast/"
 
+mkdir -p ${outdir}"02_quast/tb" ${outdir}"02_quast/vc"
 # Run Prokka for M. tuberculosis
 echo "Starting M. tuberculosis annotation at $(date)"
 for SAMPLE in $(cat tb_IDs); do
@@ -261,10 +268,10 @@ done
 echo "M. tuberculosis annotation completed at $(date)"
 
 for SAMPLE in $(cat vc_IDs); do
-  echo "[TB|SPADES] $SAMPLE"
+  echo "[VC|SPADES] $SAMPLE"
   spades.py -1 ${indir}vc/${SAMPLE}_1.fastq.gz \
     -2 ${indir}vc/${SAMPLE}_2.fastq.gz \
-    --careful -t 16 \
+    --careful -t 8 \
     -o ${outspades}vc/${SAMPLE}
 done
 ## SAVE THIS IN NANO BY
@@ -273,21 +280,3 @@ done
 # CLOSE THE FILE
 # ctrl + x
 ```
-**Before submission of your script, verify if all the input directory and files exist.**
-
-```bash
-## SUBMIT THE ASSEMBLY SCRIPT
-sbatch /users/${USER}/scripts/assembly_01.sh
-```
-```bash
-echo "Genome annotation"
-prokka hybrid_assembly/assembly.fasta \
-       --outdir hybrid_annotation \
-       --cpus 8 \
-       --kingdom Bacteria
-```
-
-
-
-# Quality Assessment
-We need assess the quality of the contigs so that we are confident that they are of good quality.
