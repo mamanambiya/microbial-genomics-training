@@ -81,34 +81,34 @@ It aims to piece together the reads to create a continuous sequence that represe
 #### Examples of Long-Read Assemblers for Bacterial Genomes
 
 1. FLYE (Recommended for most bacterial genomes)
-   
-   - Excellent for PacBio and Oxford Nanopore
-   - Good repeat resolution
-   - Usage: flye --nano-raw reads.fastq --out-dir output --genome-size 4.5m
+     
+- Excellent for PacBio and Oxford Nanopore
+- Good repeat resolution
+- Usage: flye --nano-raw reads.fastq --out-dir output --genome-size 4.5m
 
-3. Canu (High accuracy, slower)
+2. Canu (High accuracy, slower)
    
-   - Gold standard for accuracy
-   - Requires significant computational resources
-   - Usage: canu -p prefix -d output genomeSize=4.5m -nanopore reads.fastq
+ - Gold standard for accuracy
+ - Requires significant computational resources
+ - Usage: canu -p prefix -d output genomeSize=4.5m -nanopore reads.fastq
 
-5. Unicycler (Hybrid approach)
+3. Unicycler (Hybrid approach)
    
-   - Combines short and long reads
-   - Excellent for complete genomes
-   - Usage: unicycler -1 short_R1.fq -2 short_R2.fq -l long_reads.fq -o output
+- Combines short and long reads
+- Excellent for complete genomes
+- Usage: unicycler -1 short_R1.fq -2 short_R2.fq -l long_reads.fq -o output
 
-7. Raven (Fast, lightweight)
+4. Raven (Fast, lightweight)
    
-   - Quick assemblies for preliminary analysis
-   - Good for large datasets
-   - Usage: raven reads.fastq > assembly.fasta
+- Quick assemblies for preliminary analysis
+- Good for large datasets
+- Usage: raven reads.fastq > assembly.fasta
 
-9. NextDenovo (High accuracy for Nanopore)
-    
-   - Specialized for Oxford Nanopore data
-   - Good error correction
-   - Usage: nextDenovo config.txt
+5. NextDenovo (High accuracy for Nanopore)
+  
+ - Specialized for Oxford Nanopore data
+ - Good error correction
+ - Usage: nextDenovo config.txt
 
 **Polishing Tools:**
 
