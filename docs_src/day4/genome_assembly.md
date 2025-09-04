@@ -55,7 +55,7 @@ It aims to piece together the reads to create a continuous sequence that represe
         
 ### De Bruijn Graph (DBG)
 - Best for short-read sequencing (e.g., illumina).
-- uses small overlapping sequences (*k-mers*) to build a graph, nodes: *k-mers*, and edges: overlaps.
+- Uses small overlapping sequences (*k-mers*) to build a graph, nodes: *k-mers*, and edges: overlaps.
 - Fast and memory efficient for large datasets
 - Struggles with repetitive regions
 
@@ -77,7 +77,39 @@ It aims to piece together the reads to create a continuous sequence that represe
 - Can span entire genes and repetitive regions
 - Optimized for platforms like PacBio and ONT.​
 - Higher error rates (can be corrected by short reads or polishing)
-- Canu, Celera, Flye
+
+#### Examples of Long-Read Assemblers for Bacterial Genomes
+==============================================
+
+1. FLYE (Recommended for most bacterial genomes)
+   - Excellent for PacBio and Oxford Nanopore
+   - Good repeat resolution
+   - Usage: flye --nano-raw reads.fastq --out-dir output --genome-size 4.5m
+
+2. Canu (High accuracy, slower)
+   - Gold standard for accuracy
+   - Requires significant computational resources
+   - Usage: canu -p prefix -d output genomeSize=4.5m -nanopore reads.fastq
+
+3. Unicycler (Hybrid approach)
+   - Combines short and long reads
+   - Excellent for complete genomes
+   - Usage: unicycler -1 short_R1.fq -2 short_R2.fq -l long_reads.fq -o output
+
+4. Raven (Fast, lightweight)
+   - Quick assemblies for preliminary analysis
+   - Good for large datasets
+   - Usage: raven reads.fastq > assembly.fasta
+
+5. NextDenovo (High accuracy for Nanopore)
+   - Specialized for Oxford Nanopore data
+   - Good error correction
+   - Usage: nextDenovo config.txt
+
+**Polishing Tools:**
+- Medaka (Nanopore): medaka_consensus -i reads.fastq -d assembly.fasta -o polished
+- Pilon (with short reads): pilon --genome assembly.fasta --frags mapped_reads.bam
+- Racon: racon reads.fastq mappings.paf assembly.fasta
   
 ### Hybrid Assemblers​
 - Combine short and long reads, integrating DBG and OLC methods for improved accuracy and contiguity.​
@@ -94,7 +126,7 @@ It aims to piece together the reads to create a continuous sequence that represe
 ## NOTE
 | **Assembly Strategy** | **Subtypes** | **Read Type Compatibility** | **Examples** | **Notes** |
 |------------|-------|-------|---------|---------|
-| De novo assembly | DBG, OLC, Hybrid | Short, long, hybrid  | Velvet, SPAdes, Canu, Flye, MaSuRCA | No reference genome used |
+| De novo assembly | DBG, OLC, Hybrid | Short, long, hybrid  | Velvet, SPAdes, Canu, Flye, MaSuRCA, UniCycler| No reference genome used |
 | Reference-guided assembly | Mapping-based	|Short, long	| BWA, Bowtie2, Novoalign, Minimap2 |	Aligns reads to a known reference genome |
 
 ## Assembler Selection Factors​
@@ -109,6 +141,3 @@ Choosing an assembler depends on"
 - Use iterative rounds of assembly, scaffolding, and polishing to gradually improve the assembly.
 - Validate the final assembly using independent data, such as long-read sequencing or optical mapping.
 - Keep detailed records of all parameters and steps used in the assembly process for reproducibility.
-
-# Genome Quality Assessment
-
