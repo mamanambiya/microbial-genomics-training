@@ -74,7 +74,7 @@ The 10-day intensive training course covers fundamental to advanced topics in mi
 | Time (CAT) | Topic | Links | Trainer |
 |------------|-------|-------|---------|
 | **09:00** | *Recap: Quality checking and control, and species identification* | [Practical](https://github.com/Arash-Iranzadeh/Microbial-Genomics/blob/main/scripts/qc_cleaning_detection.sh) | Arash Iranzadeh |
-| **10:00** | *Genome assembly, quality assessment and annotation* |[Notes](../day3/genome_assembly_notes.md). [Practical](../day3/practical_genome_assmbly.md) | Ephifania Geza |
+| **10:00** | *Genome assembly, quality assessment and annotation* |[Notes](../day4/genome_assembly_notes.md). [Practical](../day4/practical_genome_assmbly.md) | Ephifania Geza |
 | **11:30** | **Break** | | |
 | **12:00** | *Multi-locus sequence typing, and serotyping* | | Arash Iranzadeh |
 
