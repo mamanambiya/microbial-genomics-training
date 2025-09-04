@@ -79,45 +79,52 @@ It aims to piece together the reads to create a continuous sequence that represe
 - Higher error rates (can be corrected by short reads or polishing)
 
 #### Examples of Long-Read Assemblers for Bacterial Genomes
-==============================================
 
 1. FLYE (Recommended for most bacterial genomes)
+   
    - Excellent for PacBio and Oxford Nanopore
    - Good repeat resolution
    - Usage: flye --nano-raw reads.fastq --out-dir output --genome-size 4.5m
 
-2. Canu (High accuracy, slower)
+3. Canu (High accuracy, slower)
+   
    - Gold standard for accuracy
    - Requires significant computational resources
    - Usage: canu -p prefix -d output genomeSize=4.5m -nanopore reads.fastq
 
-3. Unicycler (Hybrid approach)
+5. Unicycler (Hybrid approach)
+   
    - Combines short and long reads
    - Excellent for complete genomes
    - Usage: unicycler -1 short_R1.fq -2 short_R2.fq -l long_reads.fq -o output
 
-4. Raven (Fast, lightweight)
+7. Raven (Fast, lightweight)
+   
    - Quick assemblies for preliminary analysis
    - Good for large datasets
    - Usage: raven reads.fastq > assembly.fasta
 
-5. NextDenovo (High accuracy for Nanopore)
+9. NextDenovo (High accuracy for Nanopore)
+    
    - Specialized for Oxford Nanopore data
    - Good error correction
    - Usage: nextDenovo config.txt
 
 **Polishing Tools:**
+
 - Medaka (Nanopore): medaka_consensus -i reads.fastq -d assembly.fasta -o polished
 - Pilon (with short reads): pilon --genome assembly.fasta --frags mapped_reads.bam
 - Racon: racon reads.fastq mappings.paf assembly.fasta
   
 ### Hybrid Assemblers​
+
 - Combine short and long reads, integrating DBG and OLC methods for improved accuracy and contiguity.​
 - Balances accuracy (short reads) and completeness (long reads, resolving repeats and structural variants)
 - Requires careful data integration
 - Unicycler, MaSuRCA
 
 ### Reference-guided Assembly
+
 - Works well given a closely related reference genome
 - Aligns reads to a reference genome and fills gaps
 - Faster and less computationally demanding
