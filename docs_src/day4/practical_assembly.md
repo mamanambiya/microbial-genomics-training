@@ -280,3 +280,8 @@ done
 # CLOSE THE FILE
 # ctrl + x
 ```
+
+```bash
+## Clean-up
+rm -rf /data/users/${USER}/data_analysis/assembly-test/
+```
