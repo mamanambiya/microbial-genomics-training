@@ -74,11 +74,11 @@ The 10-day intensive training course covers fundamental to advanced topics in mi
 | Time (CAT) | Topic | Links | Trainer |
 |------------|-------|-------|---------|
 | **09:00** | *Recap: Quality checking and control, and species identification* | [Practical](https://github.com/Arash-Iranzadeh/Microbial-Genomics/blob/main/scripts/qc_cleaning_detection.sh) | Arash Iranzadeh |
-| **10:00** | *Genome assembly, quality assessment and annotation* |[Notes](../day4/genome_assembly.md). [Practical](../day4/practical_assembly.md) | Ephifania Geza |
-| **11:30** | **Break** | | |
-| **12:00** | *Multi-locus sequence typing, and serotyping* | | Arash Iranzadeh |
+| **10:30** | *Genome assembly, quality assessment* |[Notes](../day4/genome_assembly.md). [Practical](../day4/practical_assembly.md) | Ephifania Geza |
+| **11:00** | **Break** | | |
+| **11:30** | *Genome assembly, quality assessment: Continuation* |[Notes](../day4/genome_assembly.md). [Practical](../day4/practical_assembly.md) | Ephifania Geza |
 
-**Key Learning Outcomes**: Genome assembly, assessment and annotation, MLST
+**Key Learning Outcomes**: Quality control, Genome assembly, assessment
 
 
 ---
@@ -88,11 +88,14 @@ The 10-day intensive training course covers fundamental to advanced topics in mi
 **Date**: September 5, 2025  
 **[→ View detailed module](../modules/day5/index.md)**
 
-| **09:00** | *Antimicrobial Resistance gene detection and resistance prediction* | | Ephifania Geza |
+| Time (CAT) | Topic | Links | Trainer |
+|------------|-------|-------|---------|
+| **09:00** | *Recap: Genome assembly, quality assessment* |[Notes](../day4/genome_assembly.md). [Practical](../day4/practical_assembly.md) | 
+| **10:00** | *Genome annotation and Multi-Locus Sequence Typing* | | Arash Iranzadeh |
 | **11:30** | **Break** | | |
-| **12:00** | *Role of plasmids, integrons, and transposons in AMR spread* | | Ephifania Geza |
+| **12:00** | *Antimicrobial Resistance gene detection and resistance prediction* | | Ephifania Geza |
 
-**Key Learning Outcomes**: AMR and virulence factors and plasmid detection
+**Key Learning Outcomes**: Genome quality and functional gene annotation fundamentals, AMR and virulence factors and plasmid detection
 
 ## Day 6: Nextflow Pipeline Development
 
@@ -121,6 +124,7 @@ The 10-day intensive training course covers fundamental to advanced topics in mi
 | **11:30** | **Break** | | |
 | **12:00** | *Introduction to Git and GitHub basics* | | Mamana Mbiyavanga |
 
+
 **Key Learning Outcomes**: Pipeline completion, basic Git commands, GitHub repository management
 
 ---
@@ -137,6 +141,7 @@ The 10-day intensive training course covers fundamental to advanced topics in mi
 | **10:30** | *Microbiome profiling and diversity metrics (R or QIIME2)* | | Ephifania Geza |
 | **11:30** | **Break** | | |
 | **12:00** | *Microbiome profiling and diversity metrics (R or QIIME2)* | | Ephifania Geza |
+| **13:00** | Role of plasmids, integrons, and transposons in AMR spread | | Ephifania Geza |
 
 **Key Learning Outcomes**: Metagenomic sequencing principles, microbiome analysis, diversity metrics
 
@@ -153,6 +158,7 @@ The 10-day intensive training course covers fundamental to advanced topics in mi
 | **10:30** | *Phylogenomics: Inferring evolutionary relationships from core SNPs* | | Arash Iranzadeh |
 | **11:30** | **Break** | | |
 | **12:00** | *Phylogenomics: Tree construction and visualisation* | | Arash Iranzadeh |
+
 
 **Key Learning Outcomes**: Pan-genome analysis, phylogenetic inference, tree construction and visualization
 
