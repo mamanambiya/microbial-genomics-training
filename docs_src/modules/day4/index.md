@@ -1,59 +1,36 @@
-# Day 4: Genomic Characterization
+# Day 4: Genome Assembly Essentials: QC, Identification, and assembly
 
 **Date**: September 4, 2025  
 **Duration**: 09:00-13:00 CAT  
-**Focus**: Genome annotation, AMR detection, MLST and serotyping
-
+**Focus**: Genome assembly and assessment
 ## Overview
 
-Day 4 continues genomic characterization with genome annotation, followed by antimicrobial resistance gene detection, and molecular typing methods including MLST and serotyping for pathogen classification and surveillance.
+Day 4 builds on Day 3 by starting with a recap on quality control, followed by genome assembly and assessment of assemblies to ensure.
 
 ## Learning Objectives
 
 By the end of Day 4, you will be able to:
 
-- Annotate bacterial genomes using Prokka
-- Interpret and utilize genome annotation outputs
-- Detect antimicrobial resistance genes using tools like AMRFinderPlus and CARD
-- Predict resistance phenotypes from genotypic data
-- Perform multi-locus sequence typing (MLST) for strain characterization
-- Conduct serotyping for pathogen classification
-- Interpret molecular typing results for epidemiological surveillance
+- Execute de novo genome assembly using SPAdes or other assemblers
+- Assess assembly quality using QUAST and other metrics
 
 ## Schedule
 
 | Time (CAT) | Topic | Links | Trainer |
 |------------|-------|-------|---------|
-| **09:00** | *Genome Annotation* | | Arash Iranzadeh |
-| **10:00** | *Antimicrobial Resistance gene detection and resistance prediction* | | Ephifania Geza |
-| **11:30** | **Break** | | |
-| **12:00** | *Multi-locus sequence typing, and serotyping* | | Arash Iranzadeh |
+| **09:00** | *Recap: Quality checking and control, and species identification* | [Practical](https://github.com/Arash-Iranzadeh/Microbial-Genomics/blob/main/scripts/qc_cleaning_detection.sh) | Arash Iranzadeh |
+| **10:30** | *Genome assembly, quality assessment* |[Notes](../day4/genome_assembly.md). | Ephifania Geza |
+| **11:00** | **Break** | | |
+| **11:30** | *Genome assembly, quality assessment: Continuation* | [Practical](../day4/practical_assembly.md) | Ephifania Geza |
 
 ## Key Topics
 
-### 1. Pangenome Analysis
-- Core vs accessory genome concepts
-- Gene presence/absence analysis
-- Population structure assessment
-- Functional annotation of variable regions
+### 1. Genome assembly and assessing contigs
+- De novo assembly algorithms and approaches
+- Short-read vs long-read assembly strategies
+- Assembly quality metrics and interpretation
+- Assembly polishing and gap filling
 
-### 2. Phylogenetic Analysis
-- Maximum likelihood methods
-- Bootstrap support assessment
-- Root placement and outgroup selection
-- Molecular clock analysis
-
-### 3. SNP-based Analysis
-- Core genome SNP calling
-- Recombination detection and removal
-- Distance matrix construction
-- Transmission cluster identification
-
-### 4. Outbreak Investigation
-- Epidemiological data integration
-- Transmission network inference
-- Source attribution methods
-- Temporal analysis of spread
 
 ## Datasets Used
 
@@ -68,6 +45,17 @@ By the end of Day 4, you will be able to:
 ## Tools Introduced
 
 ### Pangenome Analysis
+- **SPAdes** - De novo genome assembler
+- **Unicycler** - Hybrid assembly pipeline
+- **Flye** - Long-read assembly
+- **QUAST** - Assembly quality assessment
+
+### Annotation Tools
+- **Prokka** - Automated prokaryotic annotation
+- **RAST** - Rapid Annotation using Subsystem Technology
+- **NCBI PGAP** - Prokaryotic Genome Annotation Pipeline
+- **Bakta** - Rapid bacterial genome annotation
+
 - **Panaroo** - Pangenome pipeline
 - **Roary** - Rapid large-scale prokaryote pangenome analysis
 - **PPanGGOLiN** - Depicting microbial diversity via pangenomes
@@ -83,6 +71,20 @@ By the end of Day 4, you will be able to:
 - **Gubbins** - Recombination detection in bacterial genomes
 
 ## Hands-on Exercises
+
+### Exercise 1: Genome Assembly and Quality Assessment (60 minutes)
+Assemble bacterial genomes and evaluate assembly quality.
+
+```bash
+# De novo assembly with SPAdes
+spades.py --careful -1 sample_R1.fastq.gz -2 sample_R2.fastq.gz -o assembly_output/
+
+# Assembly quality assessment
+quast.py assembly_output/scaffolds.fasta -o quast_results/
+
+# Check assembly statistics
+assembly-stats assembly_output/scaffolds.fasta
+
 
 ### Exercise 1: Pangenome Analysis (60 minutes)
 Analyze the core and accessory genome of *V. cholerae* outbreak strains.
@@ -121,6 +123,14 @@ cluster_analysis.py --snp-threshold 10 --epi-data metadata.csv
 ```
 
 ## Key Concepts
+
+### Assembly Quality Metrics
+| Metric | Good Assembly | Poor Assembly | Action |
+|--------|---------------|---------------|--------|
+| N50 | >50 kb | <10 kb | Optimize parameters |
+| Contigs | <100 | >500 | Check contamination |
+| Genome size | Expected ±10% | >20% difference | Review input data |
+| Coverage | >50x | <20x | Sequence more |
 
 ### Pangenome Structure
 - **Core genome**: Genes present in all strains (housekeeping functions)
@@ -163,6 +173,10 @@ cluster_analysis.py --snp-threshold 10 --epi-data metadata.csv
 - Identify transmission clusters based on genomic data
 
 ### Group Discussion
+- Compare assembly strategies and results
+
+## Common Challenges
+
 - Interpret pangenome diversity in outbreak context
 - Evaluate phylogenetic support for transmission hypotheses
 - Discuss integration of genomic and epidemiological evidence
@@ -198,6 +212,13 @@ transmission_chains.py --max-generations 3
 ```
 
 ## Resources
+
+## Resources
+
+### Assembly Resources
+- [SPAdes Manual](http://cab.spbu.ru/software/spades/)
+- [QUAST Documentation](http://quast.sourceforge.net/)
+- [Assembly Best Practices](https://github.com/rrwick/Perfect-bacterial-genome-tutorial)
 
 ### Key Publications
 - Page et al. (2015). Roary: rapid large-scale prokaryote pangenome analysis
