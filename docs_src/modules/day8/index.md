@@ -30,6 +30,29 @@ By the end of Day 8, you will be able to:
 
 ## Key Topics
 
+ - Core vs accessory genome concepts
+- Gene presence/absence analysis
+- Population structure assessment
+- Functional annotation of variable regions
+
+### 2. Phylogenetic Analysis
+- Maximum likelihood methods
+- Bootstrap support assessment
+- Root placement and outgroup selection
+- Molecular clock analysis
+
+### 3. SNP-based Analysis
+- Core genome SNP calling
+- Recombination detection and removal
+- Distance matrix construction
+- Transmission cluster identification
+
+### 4. Outbreak Investigation
+- Epidemiological data integration
+- Transmission network inference
+- Source attribution methods
+- Temporal analysis of spread
+- 
 ### 1. Advanced Pipeline Architecture
 - Multi-sample processing strategies
 - Conditional execution and branching
