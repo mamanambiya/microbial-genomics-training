@@ -91,7 +91,7 @@ The 10-day intensive training course covers fundamental to advanced topics in mi
 | Time (CAT) | Topic | Links | Trainer |
 |------------|-------|-------|---------|
 | **09:00** | *Recap: Genome assembly, quality assessment* |[Notes](../day4/genome_assembly.md). [Practical](../day4/practical_assembly.md) | 
-| **10:00** | *Genome annotation and Multi-Locus Sequence Typing* | | Arash Iranzadeh |
+| **10:00** | *Genome annotation and Multi-Locus Sequence Typing* | [Notes](https://github.com/Arash-Iranzadeh/Microbial-Genomics/blob/main/scripts/de-novo_assembly_annotation.sh)| Arash Iranzadeh |
 | **11:30** | **Break** | | |
 | **12:00** | *Antimicrobial Resistance gene detection and resistance prediction* | | Ephifania Geza |
 
