@@ -434,7 +434,7 @@ The core runtime that interprets and executes your pipeline:
 
 Where Nextflow stores intermediate files and task execution:
 
-```
+```text
 work/
 ├── 12/
 │   └── 3456789abcdef.../
@@ -651,7 +651,7 @@ git push
 - **Reproducibility**: Others can use your exact pipeline version
 
 ### Git Workflow
-```
+```text
 Working Directory → Staging Area → Local Repository → Remote Repository
      (edit)           (git add)      (git commit)        (git push)
 ```
