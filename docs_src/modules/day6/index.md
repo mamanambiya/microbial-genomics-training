@@ -858,23 +858,28 @@ graph LR
 </div>
 
 **1. Fast Prototyping**
+
 - Simple syntax that lets you reuse existing scripts and tools
 - Quick to write and test new workflows
 
 **2. Reproducibility**
+
 - Built-in support for Docker, Singularity, and Conda
 - Consistent execution environments across platforms
 - Same results every time, on any platform
 
 **3. Portability & Interoperability**
+
 - Write once, run anywhere (laptop, HPC cluster, cloud)
 - Separates workflow logic from execution environment
 
 **4. Simple Parallelism**
+
 - Based on dataflow programming model
 - Automatically runs independent tasks in parallel
 
 **5. Continuous Checkpoints**
+
 - Tracks all intermediate results automatically
 - Resume from the last successful step if something fails
 
@@ -2101,17 +2106,20 @@ fi
 !!! tip "Key Learning Points"
 
     **Resume Functionality:**
+
     - `-resume` only re-runs processes that have changed
     - Saves time and computational resources
     - Essential for large-scale analyses
     - Works by comparing input file checksums
 
     **Execution Environments:**
+
     - **Local**: Good for development and small datasets
     - **Cluster**: Essential for production and large datasets
     - **Cloud**: Scalable option for variable workloads
 
     **Best Practices:**
+
     - Always use `-resume` when re-running pipelines
     - Test locally before moving to cluster
     - Monitor resource usage and adjust accordingly
@@ -2568,6 +2576,7 @@ cat results/pipeline_trace.txt | head -10
 !!! info "Local vs Cluster Execution Comparison"
 
     **Local Execution Benefits:**
+
     - ✅ **Immediate start**: No queue waiting time
     - ✅ **Interactive debugging**: Easy to test and troubleshoot
     - ✅ **Simple setup**: No cluster configuration needed
@@ -2575,6 +2584,7 @@ cat results/pipeline_trace.txt | head -10
     - ❌ **No parallelization**: Limited concurrent jobs
 
     **Cluster Execution Benefits:**
+
     - ✅ **Massive parallelization**: 100+ samples simultaneously
     - ✅ **High-memory nodes**: 64GB+ RAM for large assemblies
     - ✅ **Automatic scheduling**: Optimal resource allocation
@@ -2583,6 +2593,7 @@ cat results/pipeline_trace.txt | head -10
     - ❌ **Complex setup**: Requires cluster configuration
 
     **When to Use Each:**
+
     - **Local**: Testing, small datasets (1-5 samples), development
     - **Cluster**: Production runs, large datasets (10+ samples), resource-intensive tasks
 
@@ -2634,24 +2645,28 @@ nextflow run qc_pipeline.nf -c pbs.config --input samplesheet.csv
 !!! tip "Key Learning Points from Exercise 3"
 
     **Pipeline Design Concepts:**
+
     - **Channel Duplication**: Use `.into{}` to send data to multiple processes
     - **Process Dependencies**: Trimmomatic → FastQC creates a dependency chain
     - **Result Aggregation**: MultiQC collects and summarizes all FastQC reports
     - **Parallel Processing**: Raw FastQC and Trimmomatic run simultaneously
 
     **Real-World Bioinformatics:**
+
     - **Quality Control**: Always check data quality before and after processing
     - **Adapter Trimming**: Remove sequencing adapters and low-quality bases
     - **Comparative Analysis**: Compare raw vs processed data quality
     - **Comprehensive Reporting**: MultiQC provides publication-ready summaries
 
     **Nextflow Best Practices:**
+
     - **Modular Design**: Each process does one thing well
     - **Resource Management**: Use `tag` for process identification
     - **Result Organization**: Use `publishDir` to organize outputs
     - **Configuration**: Use profiles for different analysis strategies
 
     **Performance Optimization:**
+    
     - **Resume Functionality**: Only reprocess changed samples
     - **Parallel Execution**: Multiple samples processed simultaneously
     - **Resource Allocation**: Configure CPU/memory per process
@@ -3257,6 +3272,7 @@ nextflow log
     ```
 
     **What to look for:**
+
     - **STATUS: OK** - Pipeline completed successfully
     - **DURATION** - Shows how long it took
     - **No ERROR messages** in the terminal output
@@ -3300,6 +3316,7 @@ find results/ -type f -name "*.html" -o -name "*.txt" -o -name "*.count"
     ```
 
     **Red flags:**
+
     - **STATUS: ERR** - Pipeline failed
     - **Empty results directory** - No outputs created
     - **Red ERROR text** in terminal
@@ -3825,15 +3842,18 @@ Input Data → Process 1 → Process 2 → Process 3 → Final Results
 **Day 7 Preview**: Applied Genomics & Advanced Topics
 
 ### Professional Development
+
 - Git and GitHub for pipeline version control and collaboration
 - Professional workflow development and team collaboration
 
 ### Applied Genomics
+
 - **MTB analysis pipeline development** - Real-world tuberculosis genomics workflows
 - **Genome assembly workflows** - Complete bacterial genome assembly pipelines
 - **Pathogen surveillance** - Outbreak investigation and AMR detection pipelines
 
 ### Advanced Nextflow & Deployment
+
 - **Container technologies** - Docker and Singularity for reproducible environments
 - **Advanced Nextflow features** - Complex workflow patterns and optimization
 - **Pipeline deployment** - HPC, cloud, and container deployment strategies
