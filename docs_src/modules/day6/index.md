@@ -121,9 +121,9 @@ cp file1.txt backup/       # Copy files
 mv old_name.txt new_name.txt  # Rename/move files
 
 # File content examination
-head -n 10 data.fastq      # First 10 lines
+zcat data.fastq.gz | head -n 10  # First 10 lines of compressed FASTQ
 tail -n 5 logfile.txt      # Last 5 lines
-wc -l sequences.fasta      # Count lines
+zcat sequences.fastq.gz | wc -l  # Count lines in compressed file
 grep ">" sequences.fasta   # Find FASTA headers
 
 # Process management
@@ -148,6 +148,7 @@ For Day 6, we'll focus on basic software installation and environment setup. Con
 **All tools are pre-installed and available through the module system. No installation required!**
 
 **Step 1: Check if module system is available**
+
 ```bash
 # Test if module command works
 module --version
@@ -156,6 +157,7 @@ module --version
 ```
 
 **Step 2: Check available modules**
+
 ```bash
 # List all available modules
 module avail
@@ -167,6 +169,7 @@ module avail fastqc
 ```
 
 **Step 3: Load required modules**
+
 ```bash
 # Load Java 17 (required for Nextflow)
 module load java/openjdk-17.0.2
@@ -181,6 +184,7 @@ module load multiqc/1.22.3
 ```
 
 **Step 4: Verify loaded modules**
+
 ```bash
 # Check what modules are currently loaded
 module list
@@ -192,6 +196,7 @@ fastqc --version
 ```
 
 **Step 5: Module management**
+
 ```bash
 # Unload a specific module
 module unload fastqc/0.12.1
@@ -211,6 +216,7 @@ chmod +x setup_modules.sh
 ```
 
 **Troubleshooting: If module command is not found**
+
 ```bash
 # Only if you get "module: command not found", try:
 source /opt/lmod/8.7/lmod/lmod/init/bash
@@ -230,6 +236,7 @@ Let's ensure your environment is ready for Nextflow development:
 <h5>✅ Environment Verification</h5>
 
 **Complete verification workflow:**
+
 ```bash
 # Step 1: Test module system
 module --version
@@ -262,6 +269,7 @@ module list
 ```
 
 **If module command is not found:**
+
 ```bash
 # Initialize module system (only if needed)
 source /opt/lmod/8.7/lmod/lmod/init/bash
@@ -271,6 +279,7 @@ module --version
 ```
 
 **If modules are not available:**
+
 ```bash
 # Search for modules with different names
 module avail 2>&1 | grep -i nextflow
@@ -280,6 +289,7 @@ module avail 2>&1 | grep -i java
 ```
 
 **Quick Setup Script:**
+
 ```bash
 # Create a one-command setup (handles module initialization if needed)
 cat > ~/setup_day6.sh << 'EOF'
@@ -344,16 +354,16 @@ Consider analyzing 100 bacterial genomes without workflow management:
 ```bash
 # Manual approach - tedious and error-prone
 for sample in sample1 sample2 sample3 ... sample100; do
-    fastqc ${sample}_R1.fastq ${sample}_R2.fastq
+    fastqc ${sample}_R1.fastq.gz ${sample}_R2.fastq.gz
     if [ $? -ne 0 ]; then echo "FastQC failed"; exit 1; fi
 
-    trimmomatic PE ${sample}_R1.fastq ${sample}_R2.fastq \
-        ${sample}_R1_trimmed.fastq ${sample}_R1_unpaired.fastq \
-        ${sample}_R2_trimmed.fastq ${sample}_R2_unpaired.fastq \
+    trimmomatic PE ${sample}_R1.fastq.gz ${sample}_R2.fastq.gz \
+        ${sample}_R1_trimmed.fastq.gz ${sample}_R1_unpaired.fastq.gz \
+        ${sample}_R2_trimmed.fastq.gz ${sample}_R2_unpaired.fastq.gz \
         SLIDINGWINDOW:4:20
     if [ $? -ne 0 ]; then echo "Trimming failed"; exit 1; fi
 
-    spades.py -1 ${sample}_R1_trimmed.fastq -2 ${sample}_R2_trimmed.fastq \
+    spades.py -1 ${sample}_R1_trimmed.fastq.gz -2 ${sample}_R2_trimmed.fastq.gz \
         -o ${sample}_assembly
     if [ $? -ne 0 ]; then echo "Assembly failed"; exit 1; fi
 
@@ -499,7 +509,7 @@ Let's see how the same basic task - running FastQC on multiple samples - would b
 ```bash
 # Manual approach - sequential processing
 for sample in sample1 sample2 sample3; do
-    fastqc ${sample}_R1.fastq ${sample}_R2.fastq -o results/
+    fastqc ${sample}_R1.fastq.gz ${sample}_R2.fastq.gz -o results/
     if [ $? -ne 0 ]; then echo "FastQC failed for $sample"; exit 1; fi
 done
 ```
@@ -736,6 +746,7 @@ graph TD
 </div>
 
 **Benefits of Nextflow approach:**
+
 - **Parallel processing**: All samples start simultaneously
 - **Efficient resource use**: Uses all available CPU cores
 - **Total time**: 60 minutes (1 hour) for 3 samples
@@ -891,7 +902,7 @@ process FASTQC {
 ```groovy
 // Create a channel from files
 Channel
-    .fromPath("data/*.fastq")
+    .fromPath("/data/Dataset_Mt_Vc/tb/raw_data/*.fastq.gz")
     .set { reads_ch }
 ```
 
@@ -903,6 +914,14 @@ workflow {
 ```
 
 ### Understanding Processes, Channels, and Workflows
+
+!!! info "Visual Convention in Diagrams"
+    Throughout this module, we use consistent colors in diagrams to help you distinguish Nextflow components:
+
+    - 🔵 **Blue boxes** = **Channels** (data streams)
+    - 🟢 **Green boxes** = **Processes** (computational tasks)
+    - ⚪ **Gray boxes** = **Input/Output files**
+    - 🟠 **Orange boxes** = **Reports/Results**
 
 #### **Processes in Detail**
 
@@ -926,7 +945,7 @@ process COUNT_READS {
     script:
     """
     echo "Counting reads in ${sample_id}"
-    wc -l ${reads} > ${sample_id}.count
+    zcat ${reads} | wc -l > ${sample_id}.count
     """
 }
 ```
@@ -945,10 +964,10 @@ process COUNT_READS {
 // Different ways to create channels
 
 // From files matching a pattern
-Channel.fromPath("data/*.fastq")
+Channel.fromPath("/data/Dataset_Mt_Vc/tb/raw_data/*.fastq.gz")
 
 // From pairs of files (R1/R2)
-Channel.fromFilePairs("data/*_{R1,R2}.fastq")
+Channel.fromFilePairs("/data/Dataset_Mt_Vc/tb/raw_data/*_{1,2}.fastq.gz")
 
 // From a list of values
 Channel.from(['sample1', 'sample2', 'sample3'])
@@ -970,10 +989,37 @@ graph LR
     D --> E[Process 2]
     E --> F[Final Results]
 
-    style B fill:#e1f5fe
-    style D fill:#e1f5fe
+    %% Channels - Blue background
+    style B fill:#e3f2fd,stroke:#1976d2,stroke-width:2px,color:#000
+    style D fill:#e3f2fd,stroke:#1976d2,stroke-width:2px,color:#000
+
+    %% Processes - Green background
+    style C fill:#e8f5e8,stroke:#388e3c,stroke-width:2px,color:#000
+    style E fill:#e8f5e8,stroke:#388e3c,stroke-width:2px,color:#000
+
+    %% Input/Output - Light gray
+    style A fill:#f5f5f5,stroke:#757575,stroke-width:1px,color:#000
+    style F fill:#f5f5f5,stroke:#757575,stroke-width:1px,color:#000
 ```
 
+</div>
+
+<div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #007bff;">
+<h5>🎨 Color Legend for Nextflow Diagrams</h5>
+<div style="display: flex; gap: 20px; flex-wrap: wrap; margin-top: 10px;">
+    <div style="display: flex; align-items: center; gap: 8px;">
+        <div style="width: 20px; height: 20px; background: #e3f2fd; border: 2px solid #1976d2; border-radius: 4px;"></div>
+        <span><strong>Channels</strong> - Data streams (blue)</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 8px;">
+        <div style="width: 20px; height: 20px; background: #e8f5e8; border: 2px solid #388e3c; border-radius: 4px;"></div>
+        <span><strong>Processes</strong> - Computational tasks (green)</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 8px;">
+        <div style="width: 20px; height: 20px; background: #f5f5f5; border: 1px solid #757575; border-radius: 4px;"></div>
+        <span><strong>Input/Output</strong> - Data files (gray)</span>
+    </div>
+</div>
 </div>
 
 #### **Workflows in Detail**
@@ -983,7 +1029,7 @@ The **workflow** section defines how processes connect together. It's like the a
 ```groovy
 workflow {
     // Create input channel
-    reads_ch = Channel.fromPath("data/*.fastq")
+    reads_ch = Channel.fromPath("/data/Dataset_Mt_Vc/tb/raw_data/*.fastq.gz")
 
     // Run processes in order
     FASTQC(reads_ch)
@@ -1032,7 +1078,7 @@ Let's look at a complete, simple example that counts lines in a file:
 #!/usr/bin/env nextflow
 
 // Parameters (can be changed when running)
-params.input = "data/sample.fastq"
+params.input = "/data/Dataset_Mt_Vc/tb/raw_data/ERR036221_1.fastq.gz"
 
 // Create input channel
 input_ch = Channel.fromPath(params.input)
@@ -1054,12 +1100,13 @@ process NUM_LINES {
     script:
     """
     echo "Processing: ${read}"
-    wc -l ${read}
+    zcat ${read} | wc -l
     """
 }
 ```
 
 **Run the Nextflow script:**
+
 ```bash
 nextflow run count_lines.nf
 ```
@@ -1075,6 +1122,7 @@ nextflow run count_lines.nf
     ```
 
     **What this output means:**
+    
     - **Line 1**: Nextflow version information
     - **Line 2**: Script name and unique run identifier
     - **Line 3**: Executor type (local computer)
@@ -1124,16 +1172,19 @@ graph TD
 You don't change your workflow code! Instead, you use configuration:
 
 **For local execution (default):**
+
 ```bash
 nextflow run my_pipeline.nf
 ```
 
 **For [SLURM](https://slurm.schedmd.com/documentation.html) cluster:**
+
 ```bash
 nextflow run my_pipeline.nf -profile slurm
 ```
 
 **For [AWS](https://aws.amazon.com/batch/) cloud:**
+
 ```bash
 nextflow run my_pipeline.nf -profile aws
 ```
@@ -1356,6 +1407,7 @@ document.querySelectorAll('.folder-item').forEach(item => {
 Here are essential commands for exploring Nextflow outputs:
 
 **Check overall structure:**
+
 ```bash
 tree -L 2
 ```
@@ -1379,11 +1431,13 @@ tree -L 2
     ```
 
 **Find the most recent task directory:**
+
 ```bash
 find work/ -name "*.exitcode" -exec dirname {} \; | head -1
 ```
 
 **Check task execution details:**
+
 ```bash
 # Navigate to a task directory (use actual path from above)
 cd work/a1/b2c3d4e5f6...
@@ -1399,6 +1453,7 @@ cat .command.err
 ```
 
 **Monitor pipeline progress:**
+
 ```bash
 # Watch log in real-time
 tail -f .nextflow.log
@@ -1634,16 +1689,27 @@ flowchart LR
     E --> I[Assembly Stats]
     F --> J[Gene Predictions]
 
-    style A fill:#e1f5fe
-    style G fill:#c8e6c9
-    style H fill:#fff3e0
-    style I fill:#fff3e0
-    style J fill:#fff3e0
+    %% Input/Output data - Gray
+    style A fill:#f5f5f5,stroke:#757575,stroke-width:1px,color:#000
+    style G fill:#f5f5f5,stroke:#757575,stroke-width:1px,color:#000
+
+    %% Processes (bioinformatics tools) - Green
+    style B fill:#e8f5e8,stroke:#388e3c,stroke-width:2px,color:#000
+    style C fill:#e8f5e8,stroke:#388e3c,stroke-width:2px,color:#000
+    style D fill:#e8f5e8,stroke:#388e3c,stroke-width:2px,color:#000
+    style E fill:#e8f5e8,stroke:#388e3c,stroke-width:2px,color:#000
+    style F fill:#e8f5e8,stroke:#388e3c,stroke-width:2px,color:#000
+
+    %% Reports/Outputs - Light orange
+    style H fill:#fff3e0,stroke:#f57c00,stroke-width:1px,color:#000
+    style I fill:#fff3e0,stroke:#f57c00,stroke-width:1px,color:#000
+    style J fill:#fff3e0,stroke:#f57c00,stroke-width:1px,color:#000
 ```
 
 </div>
 
 **What Each Step Does:**
+
 1. **Quality Control**: Check if your sequencing data is good quality
 2. **Read Trimming**: Remove low-quality parts of sequences
 3. **Genome Assembly**: Put the pieces together to reconstruct the genome
@@ -1719,6 +1785,7 @@ nextflow run hello.nf
     ```
 
     **What this means:**
+
     - Nextflow automatically created 3 parallel tasks (one for each sample)
     - All 3 tasks completed successfully (3 of 3 ✔)
     - The output shows messages from all samples
@@ -1789,6 +1856,7 @@ counts_ch.view { "Read count file: $it" }
 ```
 
 **Step 1: Explore the available data**
+
 ```bash
 # Check the real genomic data available
 ls -la /data/Dataset_Mt_Vc/
@@ -3389,11 +3457,11 @@ docker ps</pre>
 <strong>Solutions:</strong>
 <ol>
 <li><strong>Check file paths:</strong>
-<pre style="background: #f5f5f5; padding: 10px; border-radius: 3px;">ls data/
-ls data/*.fastq</pre>
+<pre style="background: #f5f5f5; padding: 10px; border-radius: 3px;">ls /data/Dataset_Mt_Vc/tb/raw_data/
+ls /data/Dataset_Mt_Vc/tb/raw_data/*.fastq.gz</pre>
 </li>
 <li><strong>Use absolute paths:</strong>
-<pre style="background: #f5f5f5; padding: 10px; border-radius: 3px;">nextflow run script.nf --reads '/full/path/to/data/*.fastq'</pre>
+<pre style="background: #f5f5f5; padding: 10px; border-radius: 3px;">nextflow run script.nf --reads '/data/Dataset_Mt_Vc/tb/raw_data/*.fastq.gz'</pre>
 </li>
 <li><strong>Check file naming pattern:</strong>
 <pre style="background: #f5f5f5; padding: 10px; border-radius: 3px;"># Files should match pattern like:
@@ -3556,7 +3624,7 @@ Channels are asynchronous data streams that connect processes:
 
 ```nextflow
 // Create channel from file pairs
-reads_ch = Channel.fromFilePairs("data/*_R{1,2}.fastq.gz")
+reads_ch = Channel.fromFilePairs("/data/Dataset_Mt_Vc/tb/raw_data/*_{1,2}.fastq.gz")
 
 // Create channel from a list
 samples_ch = Channel.from(['sample1', 'sample2', 'sample3'])
@@ -3680,7 +3748,7 @@ Create `channel_examples.nf`:
 
 workflow {
     // Channel from file pairs
-    reads_ch = Channel.fromFilePairs("data/*_R{1,2}.fastq.gz")
+    reads_ch = Channel.fromFilePairs("/data/Dataset_Mt_Vc/tb/raw_data/*_{1,2}.fastq.gz")
     reads_ch.view { sample, files -> "Sample: $sample, Files: $files" }
 
     // Channel from list
@@ -3782,7 +3850,7 @@ Create `fastqc_pipeline.nf`:
 #!/usr/bin/env nextflow
 
 // Parameters
-params.reads = "data/*_R{1,2}.fastq.gz"
+params.reads = "/data/Dataset_Mt_Vc/tb/raw_data/*_{1,2}.fastq.gz"
 params.outdir = "results"
 
 // Main workflow
