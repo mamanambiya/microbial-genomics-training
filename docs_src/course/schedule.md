@@ -113,19 +113,27 @@ The 10-day intensive training course covers fundamental to advanced topics in mi
 
 ---
 
-## Day 7: Nextflow Pipeline Development & Version Control with GitHub
+## Day 7: Advanced Nextflow, Version Control with GitHub & Real Genomics Applications
 
-**Date**: September 9, 2025  
+**Date**: September 9, 2025
 **[→ View detailed module](../modules/day7/index.md)**
 
 | Time (CAT) | Topic | Links | Trainer |
 |------------|-------|-------|---------|
-| **09:00** | *Pipeline development continued and testing* | | Mamana Mbiyavanga |
-| **11:30** | **Break** | | |
-| **12:00** | *Introduction to Git and GitHub basics* | | Mamana Mbiyavanga |
+| **09:00** | *Git and GitHub for Pipeline Version Control* | | Mamana Mbiyavanga |
+| **09:45** | *MTB Analysis Pipeline Development* | | Mamana Mbiyavanga |
+| **10:30** | **Break** | | |
+| **10:45** | *Genome Assembly Workflows* | | Mamana Mbiyavanga |
+| **11:30** | *Advanced Nextflow Features & Optimization* | | Mamana Mbiyavanga |
+| **12:15** | *Pipeline Deployment Strategies* | | Mamana Mbiyavanga |
+| **13:00** | **End** | | |
 
-
-**Key Learning Outcomes**: Pipeline completion, basic Git commands, GitHub repository management
+**Key Learning Outcomes**:
+- Professional version control with Git/GitHub for collaborative pipeline development
+- Real-world MTB genomics workflows for clinical applications
+- Complete genome assembly pipelines from raw reads to annotated genomes
+- Advanced Nextflow features including modules, subworkflows, and optimization
+- Multi-platform deployment strategies (local, HPC, cloud environments)
 
 ---
 
