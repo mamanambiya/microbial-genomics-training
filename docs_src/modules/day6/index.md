@@ -1,239 +1,359 @@
-# Day 6: Nextflow Pipeline Development & Version Control with GitHub
+# Day 6: Nextflow Foundations & Core Concepts
 
-**Date**: September 8, 2025  
-**Duration**: 09:00-13:00 CAT  
-**Focus**: Pipeline completion and introduction to version control with Git/GitHub
+**Date**: September 8, 2025
+**Duration**: 09:00-13:00 CAT
+**Focus**: Introduction to workflow management, Nextflow fundamentals, and first pipelines
 
 ## Overview
 
-Day 6 continues Nextflow pipeline development with a focus on completing the genomic analysis pipeline and introducing basic version control using Git and GitHub. Participants will learn fundamental Git commands to track their pipeline development, create a GitHub repository, and perform basic operations like committing changes and syncing with remote repositories.
+Day 6 introduces participants to workflow management systems and Nextflow fundamentals. This comprehensive session covers the theoretical foundations of reproducible workflows, core Nextflow concepts, and hands-on development of basic pipelines. Participants will understand why workflow management is crucial for bioinformatics and gain practical experience with Nextflow's core components.
 
 ## Learning Objectives
 
 By the end of Day 6, you will be able to:
 
-- Complete a functional Nextflow pipeline for genomic analysis
-- Initialize a Git repository for your pipeline project
-- Make commits to track changes in your pipeline
-- Create a GitHub account and repository
-- Push your local repository to GitHub
-- Pull changes from GitHub to your local machine
-- Write a basic README file for your pipeline
+- Understand the challenges in bioinformatics reproducibility and benefits of workflow management systems
+- Explain Nextflow's core features and architecture
+- Identify the main components of a Nextflow script (processes, channels, workflows)
+- Write and execute basic Nextflow processes and workflows
+- Use channels to manage data flow between processes
+- Configure Nextflow for different execution environments
+- Debug common Nextflow issues and understand error messages
+- Apply best practices for pipeline development
 
 ## Schedule
 
-| Time (CAT) | Topic | Links | Trainer |
-|------------|-------|-------|---------|
-| **09:00** | *Pipeline development continued and testing* | | Mamana Mbiyavanga |
-| **11:30** | **Break** | | |
-| **12:00** | *Introduction to Git and GitHub basics* | | Mamana Mbiyavanga |
+| Time (CAT) | Topic | Duration | Trainer |
+|------------|-------|----------|---------|
+| **09:00** | *Foundation: Command line, Git, Containers review* | 30 min | Mamana Mbiyavanga |
+| **09:30** | *Introduction to Workflow Management Systems* | 45 min | Mamana Mbiyavanga |
+| **10:15** | *Nextflow Basics: Core concepts and first pipelines* | 75 min | Mamana Mbiyavanga |
+| **11:30** | **Break** | 15 min | |
+| **11:45** | *Hands-on: Building your first Nextflow pipeline* | 75 min | Mamana Mbiyavanga |
 
 ## Key Topics
 
-### 1. Completing the Nextflow Pipeline
-- Finalizing QC, assembly, and annotation processes
-- Testing pipeline with sample data
-- Debugging common pipeline issues
-- Running the complete pipeline end-to-end
+### 1. Foundation Review (30 minutes)
 
-### 2. Introduction to Version Control
-- Why version control matters for bioinformatics
-- Understanding Git concepts (repository, commit, staging)
-- Benefits of tracking pipeline development
-- Version control best practices
+- Command line proficiency check
+- Git basics and version control concepts
+- Container technologies (Docker/Singularity) overview
+- Setting up the development environment
 
-### 3. Basic Git Commands
-- `git init` - Initialize a repository
-- `git add` - Stage changes
-- `git commit` - Save changes with a message
-- `git status` - Check repository status
-- `git log` - View commit history
+### 2. Introduction to Workflow Management (45 minutes)
 
-### 4. Getting Started with GitHub
-- Creating a GitHub account
-- Creating your first repository
-- Connecting local repository to GitHub
-- Understanding remote repositories
+- The challenge of complex genomics analyses
+- Problems with traditional scripting approaches
+- Benefits of workflow management systems
+- Nextflow vs other systems (Snakemake, CWL, WDL)
+- Reproducibility, portability, and scalability
 
-### 5. Essential GitHub Operations
-- `git push` - Upload changes to GitHub
-- `git pull` - Download changes from GitHub
-- `git clone` - Copy a repository
-- Writing a simple README.md file
+### 3. Nextflow Core Concepts (75 minutes)
+
+- Nextflow architecture and execution model
+- Processes: encapsulated tasks with inputs, outputs, and scripts
+- Channels: asynchronous data streams connecting processes
+- Workflows: orchestrating process execution and data flow
+- The work directory structure and caching mechanism
+- Executors and execution platforms
+
+### 4. Hands-on Pipeline Development (75 minutes)
+
+- Writing your first Nextflow process
+- Creating channels and managing data flow
+- Building a simple QC workflow
+- Testing and debugging pipelines
+- Understanding the work directory
 
 ## Tools and Software
 
-### Pipeline Development
-- **Nextflow** - Workflow orchestration
-- **Docker/Singularity** - Container platforms
-- **Text editor** - For editing pipeline scripts
+### Core Requirements
 
-### Version Control
-- **Git** - Version control system (command line)
-- **GitHub** - Online code repository hosting
-- **Web browser** - For accessing GitHub website
+- **Nextflow** (version 20.10.0 or later) - Workflow orchestration system
+- **Java** (version 11 or later) - Required for Nextflow execution
+- **Docker** or **Singularity** - Container platforms for reproducibility
+- **Text editor** - VS Code with Nextflow extension recommended
 
-## Hands-on Exercises
+### Bioinformatics Tools
 
-### Exercise 1: Complete the Pipeline (90 minutes)
-Finalize and test your Nextflow pipeline.
+- **FastQC** - Read quality control assessment
+- **MultiQC** - Aggregate quality control reports
+- **Trimmomatic** - Read trimming and filtering
+- **SPAdes** - Genome assembly (for later exercises)
 
-```groovy
-// Complete pipeline structure
-workflow {
-    // Input channels
-    ch_reads = Channel.fromFilePairs(params.reads)
-    
-    // QC Process
-    FASTQC(ch_reads)
-    
-    // Assembly Process
-    SPADES(ch_reads)
-    
-    // Annotation Process
-    PROKKA(SPADES.out.contigs)
-    
-    // MultiQC Report
-    MULTIQC(FASTQC.out.zip.collect())
+### Development Environment
+
+- **Git** - Version control system
+- **GitHub account** - For sharing and collaboration
+- **Terminal/Command line** - For running Nextflow commands
+
+## Part 1: The Challenge of Complex Genomics Analyses
+
+### Why Workflow Management Matters
+
+Consider analyzing 100 bacterial genomes without workflow management:
+
+```bash
+# Manual approach - tedious and error-prone
+for sample in sample1 sample2 sample3 ... sample100; do
+    fastqc ${sample}_R1.fastq ${sample}_R2.fastq
+    if [ $? -ne 0 ]; then echo "FastQC failed"; exit 1; fi
+
+    trimmomatic PE ${sample}_R1.fastq ${sample}_R2.fastq \
+        ${sample}_R1_trimmed.fastq ${sample}_R1_unpaired.fastq \
+        ${sample}_R2_trimmed.fastq ${sample}_R2_unpaired.fastq \
+        SLIDINGWINDOW:4:20
+    if [ $? -ne 0 ]; then echo "Trimming failed"; exit 1; fi
+
+    spades.py -1 ${sample}_R1_trimmed.fastq -2 ${sample}_R2_trimmed.fastq \
+        -o ${sample}_assembly
+    if [ $? -ne 0 ]; then echo "Assembly failed"; exit 1; fi
+
+    # What if step 3 fails for sample 67?
+    # How do you restart from where it failed?
+    # How do you run samples in parallel efficiently?
+    # How do you ensure reproducibility across different systems?
+done
+```
+
+### Problems with Traditional Approaches
+
+1. **Error Handling**: Manual error checking is verbose and error-prone
+2. **Parallelization**: Difficult to efficiently use multiple cores/nodes
+3. **Resumability**: No easy way to restart from failed steps
+4. **Reproducibility**: Hard to ensure same results across different systems
+5. **Scalability**: Doesn't scale well from laptop to HPC to cloud
+6. **Dependency Management**: Software installation and version conflicts
+7. **Resource Management**: No automatic optimization of CPU/memory usage
+
+### The Workflow Management Solution
+
+With Nextflow, you define the workflow once and it handles:
+
+- **Automatic parallelization** of all 100 samples
+- **Intelligent resource management** (memory, CPUs)
+- **Automatic retry** of failed tasks with different resources
+- **Resume capability** from the last successful step
+- **Container integration** for reproducibility
+- **Detailed execution reports** and monitoring
+- **Platform portability** (laptop → HPC → cloud)
+
+## Part 2: Nextflow Architecture and Core Concepts
+
+### Nextflow's Key Components
+
+#### 1. **Nextflow Engine**
+
+The core runtime that interprets and executes your pipeline:
+
+- Parses the workflow script
+- Manages task scheduling and execution
+- Handles data flow between processes
+- Provides caching and resume capabilities
+
+#### 2. **Work Directory**
+
+Where Nextflow stores intermediate files and task execution:
+
+```
+work/
+├── 12/
+│   └── 3456789abcdef.../
+│       ├── .command.sh      # The actual script executed
+│       ├── .command.run     # Wrapper script
+│       ├── .command.out     # Standard output
+│       ├── .command.err     # Standard error
+│       ├── .command.log     # Execution log
+│       ├── .exitcode       # Exit status
+│       └── input_file.fastq # Staged input files
+└── ab/
+    └── cdef123456789.../
+        └── ...
+```
+
+#### 3. **Executors**
+
+Interface with different computing platforms:
+
+- **Local**: Run on your laptop/desktop
+- **SLURM**: Submit jobs to HPC clusters
+- **AWS Batch**: Execute on Amazon cloud
+- **Kubernetes**: Run on container orchestration platforms
+
+### Core Nextflow Components
+
+#### **Process**
+
+A process defines a task to be executed. It's the basic building block of a Nextflow pipeline:
+
+```nextflow
+process FASTQC {
+    // Process directives
+    tag "$sample_id"
+    container 'biocontainers/fastqc:v0.11.9_cv8'
+    publishDir "${params.outdir}/fastqc", mode: 'copy'
+
+    input:
+    tuple val(sample_id), path(reads)
+
+    output:
+    tuple val(sample_id), path("*_fastqc.{html,zip}"), emit: reports
+
+    script:
+    """
+    fastqc ${reads}
+    """
 }
 ```
 
-Test the pipeline:
-```bash
-# Run with test data
-nextflow run main.nf --reads "data/*_{1,2}.fastq.gz"
+**Key Elements:**
 
-# Check outputs
-ls -la results/
+- **Directives**: Configure how the process runs (container, resources, etc.)
+- **Input**: Define what data the process expects
+- **Output**: Define what data the process produces
+- **Script**: The actual command(s) to execute
+
+#### **Channel**
+
+Channels are asynchronous data streams that connect processes:
+
+```nextflow
+// Create channel from file pairs
+reads_ch = Channel.fromFilePairs("data/*_R{1,2}.fastq.gz")
+
+// Create channel from a list
+samples_ch = Channel.from(['sample1', 'sample2', 'sample3'])
+
+// Create channel from a file
+reference_ch = Channel.fromPath("reference.fasta")
 ```
 
-### Exercise 2: Initialize Git Repository (30 minutes)
-Set up version control for your pipeline.
+**Channel Types:**
 
-```bash
-# Navigate to your pipeline directory
-cd my-nextflow-pipeline/
+- **Queue channels**: Can be consumed only once
+- **Value channels**: Can be consumed multiple times
+- **File channels**: Handle file paths and staging
 
-# Initialize Git repository
-git init
+#### **Workflow**
 
-# Check status
-git status
+The workflow block orchestrates process execution:
 
-# Create .gitignore file
-nano .gitignore
-# Add these lines:
-# work/
-# .nextflow/
-# .nextflow.log*
-# results/
-# Save with Ctrl+X, Y, Enter
+```nextflow
+workflow {
+    // Define input channels
+    reads_ch = Channel.fromFilePairs(params.reads)
 
-# Add files to staging
-git add main.nf
-git add nextflow.config
-git add README.md
-git add .gitignore
+    // Execute processes
+    FASTQC(reads_ch)
 
-# Make your first commit
-git commit -m "Initial commit: Basic Nextflow pipeline"
+    // Chain processes together
+    TRIMMOMATIC(reads_ch)
+    SPADES(TRIMMOMATIC.out.trimmed)
 
-# View commit history
-git log --oneline
+    // Access outputs
+    FASTQC.out.reports.view()
+}
 ```
 
-### Exercise 3: Create GitHub Repository (30 minutes)
-Share your pipeline on GitHub.
+## Part 3: Hands-on Exercises
 
-1. **Create GitHub Account** (if needed):
-   - Go to https://github.com
-   - Sign up for free account
-   - Verify email address
+### Exercise 1: Installation and Setup (15 minutes)
 
-2. **Create New Repository**:
-   ```
-   - Click "New repository" button
-   - Name: my-genomics-pipeline
-   - Description: Nextflow pipeline for QC, assembly, and annotation
-   - Set as Public or Private
-   - DO NOT initialize with README (we already have one)
-   - Click "Create repository"
-   ```
-
-3. **Connect Local to GitHub**:
-   ```bash
-   # Add remote repository (replace USERNAME with your GitHub username)
-   git remote add origin https://github.com/USERNAME/my-genomics-pipeline.git
-   
-   # Push to GitHub
-   git push -u origin main
-   
-   # Enter GitHub username and password/token when prompted
-   ```
-
-### Exercise 4: Basic Git Workflow (30 minutes)
-Practice the edit-add-commit-push cycle.
+**Objective**: Install Nextflow and verify the environment
 
 ```bash
-# Make changes to your pipeline
-nano main.nf
-# Add a comment or modify a parameter
+# Check Java version (must be 11 or later)
+java -version
 
-# Check what changed
-git status
-git diff
+# Install Nextflow
+curl -s https://get.nextflow.io | bash
 
-# Stage the changes
-git add main.nf
+# Make executable and add to PATH
+chmod +x nextflow
+sudo mv nextflow /usr/local/bin/
 
-# Commit with descriptive message
-git commit -m "Add parameter for minimum contig length"
+# Verify installation
+nextflow info
 
-# Push to GitHub
-git push
-
-# Pull any changes (if working with others)
-git pull
+# Test with hello world
+nextflow run hello
 ```
 
-### Exercise 5: Create README (30 minutes)
-Document your pipeline with a README file.
+### Exercise 2: Your First Nextflow Script (30 minutes)
+
+**Objective**: Create and run a simple Nextflow pipeline
+
+Create a file called `word_count.nf`:
+
+```nextflow
+#!/usr/bin/env nextflow
+
+// Pipeline parameters
+params.input = "data/yeast/reads/ref1_1.fq.gz"
+
+// Input channel
+input_ch = Channel.fromPath(params.input)
+
+// Main workflow
+workflow {
+    NUM_LINES(input_ch)
+    NUM_LINES.out.view()
+}
+
+// Process definition
+process NUM_LINES {
+    input:
+    path read
+
+    output:
+    stdout
+
+    script:
+    """
+    printf '${read}\\t'
+    gunzip -c ${read} | wc -l
+    """
+}
+```
+
+**Run the pipeline:**
 
 ```bash
-# Create or edit README
-nano README.md
+# Create test data directory
+mkdir -p data/yeast/reads
+
+# Download test file (or create a dummy file)
+echo -e "@read1\nACGT\n+\nIIII" | gzip > data/yeast/reads/ref1_1.fq.gz
+
+# Run the pipeline
+nextflow run word_count.nf
+
+# Examine the work directory
+ls -la work/
 ```
 
-Add this content:
-```markdown
-# My Genomics Pipeline
+### Exercise 3: Understanding Channels (20 minutes)
 
-## Description
-A Nextflow pipeline for bacterial genome analysis including:
-- Quality control with FastQC
-- De novo assembly with SPAdes
-- Annotation with Prokka
+**Objective**: Learn different ways to create and manipulate channels
 
-## Requirements
-- Nextflow (version 20.10 or later)
-- Docker or Singularity
+Create `channel_examples.nf`:
 
-## Usage
-```bash
-nextflow run main.nf --reads "data/*_{1,2}.fastq.gz"
-```
+```nextflow
+#!/usr/bin/env nextflow
 
-## Parameters
-- `--reads`: Path to paired-end FASTQ files
-- `--outdir`: Output directory (default: results)
+workflow {
+    // Channel from file pairs
+    reads_ch = Channel.fromFilePairs("data/*_R{1,2}.fastq.gz")
+    reads_ch.view { sample, files -> "Sample: $sample, Files: $files" }
 
-## Output
-- `fastqc/`: Quality control reports
-- `assembly/`: Assembled contigs
-- `annotation/`: Genome annotations
+    // Channel from list
+    samples_ch = Channel.from(['sample1', 'sample2', 'sample3'])
+    samples_ch.view { "Processing: $it" }
 
-## Author
-Your Name
+    // Channel from path pattern
+    ref_ch = Channel.fromPath("*.fasta")
+    ref_ch.view { "Reference: $it" }
+}
 ```
 
 Save and push to GitHub:
@@ -319,12 +439,103 @@ git config --global user.email "your.email@example.com"
 
 ## Looking Ahead
 
-**Day 7 Preview**: Metagenomic Profiling
-- Metagenomic sequencing principles
-- Quality control for metagenomic data
-- Microbiome profiling with R and QIIME2
-- Diversity metrics and analysis
+**Day 7 Preview**: Applied Genomics & Advanced Topics
+
+- MTB analysis pipeline development
+- Genome assembly workflows
+- Advanced Nextflow features and optimization
+- Pipeline deployment and best practices
+
+### Exercise 4: Building a QC Process (30 minutes)
+
+**Objective**: Create a real bioinformatics process
+
+Create `fastqc_pipeline.nf`:
+
+```nextflow
+#!/usr/bin/env nextflow
+
+// Parameters
+params.reads = "data/*_R{1,2}.fastq.gz"
+params.outdir = "results"
+
+// Main workflow
+workflow {
+    // Create channel from paired reads
+    reads_ch = Channel.fromFilePairs(params.reads, checkIfExists: true)
+
+    // Run FastQC
+    FASTQC(reads_ch)
+
+    // View results
+    FASTQC.out.view { sample, reports ->
+        "FastQC completed for $sample: $reports"
+    }
+}
+
+// FastQC process
+process FASTQC {
+    tag "$sample_id"
+    container 'biocontainers/fastqc:v0.11.9_cv8'
+    publishDir "${params.outdir}/fastqc", mode: 'copy'
+
+    input:
+    tuple val(sample_id), path(reads)
+
+    output:
+    tuple val(sample_id), path("*_fastqc.{html,zip}")
+
+    script:
+    """
+    fastqc ${reads}
+    """
+}
+```
+
+**Test the pipeline:**
+
+```bash
+# Create test data
+mkdir -p data
+echo -e "@read1\nACGTACGT\n+\nIIIIIIII" > data/sample1_R1.fastq
+echo -e "@read1\nTGCATGCA\n+\nIIIIIIII" > data/sample1_R2.fastq
+
+# Run pipeline
+nextflow run fastqc_pipeline.nf
+
+# Check results
+ls -la results/fastqc/
+```
+
+## Troubleshooting Guide
+
+### Installation Issues
+
+```bash
+# Java version problems
+java -version  # Must be 11 or later
+
+# Nextflow not found
+echo $PATH
+which nextflow
+
+# Permission issues
+chmod +x nextflow
+```
+
+### Pipeline Debugging
+
+```bash
+# Verbose output
+nextflow run pipeline.nf -with-trace -with-report -with-timeline
+
+# Check work directory
+ls -la work/
+
+# Resume from failure
+nextflow run pipeline.nf -resume
+```
 
 ---
 
-**Key Learning Outcome**: Completing a functional Nextflow pipeline and establishing version control with Git/GitHub provides the foundation for reproducible, shareable bioinformatics research.
+**Key Learning Outcome**: Understanding workflow management fundamentals and Nextflow core concepts provides the foundation for building reproducible, scalable bioinformatics pipelines.
