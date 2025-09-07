@@ -325,6 +325,7 @@ echo "Real genomic data available in /data/Dataset_Mt_Vc/"
 <h5>💡 Pro Tip: Development Best Practices</h5>
 
 **Recommended setup:**
+
 - Use a dedicated directory for each project
 - Keep data, scripts, and results separate
 - Use meaningful file names and directory structure
@@ -415,35 +416,35 @@ done
 
 #### How Workflow Management Systems Solve Traditional Problems:
 
-**Automatic Parallelization**
-- Analyze task dependencies and run independent steps simultaneously
-- Efficiently utilize all available CPU cores and computing nodes
-- Scale from single machines to massive HPC clusters and cloud environments
+- **Automatic Parallelization**
+    - Analyze task dependencies and run independent steps simultaneously
+    - Efficiently utilize all available CPU cores and computing nodes
+    - Scale from single machines to massive HPC clusters and cloud environments
 
-**Built-in Error Recovery**
-- Automatic retry mechanisms for failed tasks
-- Resume functionality to restart from failure points
-- Intelligent caching to avoid re-running successful steps
+- **Built-in Error Recovery**
+    - Automatic retry mechanisms for failed tasks
+    - Resume functionality to restart from failure points
+    - Intelligent caching to avoid re-running successful steps
 
-**Resource Management**
-- Automatic CPU and memory allocation based on task requirements
-- Integration with job schedulers ([SLURM](https://slurm.schedmd.com/documentation.html), [PBS](https://www.openpbs.org/), [SGE](https://gridscheduler.sourceforge.net/))
-- Dynamic scaling in cloud environments
+- **Resource Management**
+    - Automatic CPU and memory allocation based on task requirements
+    - Integration with job schedulers ([SLURM](https://slurm.schedmd.com/documentation.html), [PBS](https://www.openpbs.org/), [SGE](https://gridscheduler.sourceforge.net/))
+    - Dynamic scaling in cloud environments
 
-**Reproducibility by Design**
-- Container integration (Docker, Singularity) for consistent environments
-- Version tracking for all software dependencies
-- Portable execution across different computing platforms
+- **Reproducibility by Design**
+    - Container integration (Docker, Singularity) for consistent environments
+    - Version tracking for all software dependencies
+    - Portable execution across different computing platforms
 
-**Progress Monitoring**
-- Real-time pipeline execution tracking
-- Detailed logging and reporting
-- Performance metrics and resource usage statistics
+- **Progress Monitoring**
+    - Real-time pipeline execution tracking
+    - Detailed logging and reporting
+    - Performance metrics and resource usage statistics
 
-**Modular Architecture**
-- Reusable workflow components
-- Easy parameter configuration
-- Clean separation of logic and execution
+- **Modular Architecture**
+    - Reusable workflow components
+    - Easy parameter configuration
+    - Clean separation of logic and execution
 
 ### Comparison of Popular Workflow Languages
 
@@ -609,10 +610,10 @@ requirements:
 
 #### **Key Differences in Syntax:**
 
-**Nextflow**: Uses Groovy syntax with channels for data flow, processes define computational steps
-**Snakemake**: Python-based with rules that define input/output relationships, uses wildcards for pattern matching
-**CWL**: YAML-based with explicit input/output definitions, requires separate tool and workflow files
-**WDL**: Custom syntax with strong typing, task-based approach with explicit variable declarations
+- **Nextflow**: Uses Groovy syntax with channels for data flow, processes define computational steps
+- **Snakemake**: Python-based with rules that define input/output relationships, uses wildcards for pattern matching
+- **CWL**: YAML-based with explicit input/output definitions, requires separate tool and workflow files
+- **WDL**: Custom syntax with strong typing, task-based approach with explicit variable declarations
 
 ### Why Nextflow for This Course
 
@@ -692,6 +693,7 @@ graph TD
 </div>
 
 **Problems with traditional approach:**
+
 - **Sequential processing**: Must wait for each sample to finish completely
 - **Wasted resources**: Only uses one CPU core at a time
 - **Total time**: 180 minutes (3 hours) for 3 samples
@@ -930,6 +932,7 @@ process COUNT_READS {
 ```
 
 **Key Points:**
+
 - Each process runs independently (cannot talk to other processes)
 - If you have 3 input files, Nextflow automatically creates 3 separate tasks
 - Tasks can run in parallel if resources are available
@@ -1108,6 +1111,7 @@ graph TD
 </div>
 
 **Available Executors:**
+
 - **Local**: Your laptop/desktop (default, great for testing)
 - **[SLURM](https://slurm.schedmd.com/documentation.html)**: High-performance computing clusters
 - **[PBS/Torque](https://www.openpbs.org/)**: Another type of cluster scheduler
@@ -1137,6 +1141,7 @@ nextflow run my_pipeline.nf -profile aws
 #### **Resource Management**
 
 Nextflow automatically handles:
+
 - **CPU allocation**: How many cores each task gets
 - **Memory management**: How much RAM each task needs
 - **Queue submission**: Sending jobs to cluster schedulers
@@ -1719,6 +1724,7 @@ nextflow run hello.nf
     - The output shows messages from all samples
 
 **Key Learning Points:**
+
 - **Channels**: Move data between processes (like a conveyor belt)
 - **Processes**: Define what to do with each piece of data
 - **Parallelization**: All samples run at the same time automatically!
@@ -2608,6 +2614,7 @@ You've now built a **complete genomic analysis pipeline** that includes:
 6. **Resource Monitoring** (Trace, timeline, and reports)
 
 **Real Results Achieved:**
+
 - **Processed**: 4 TB clinical isolates (8+ million reads each)
 - **Generated**: 16 FastQC reports + 4 genome assemblies
 - **Assembly Stats**: ~250-264 contigs per genome, 4.3MB assemblies
@@ -2615,6 +2622,7 @@ You've now built a **complete genomic analysis pipeline** that includes:
 - **Execution Time**: 2-3 minutes per sample (local), scalable to 100+ samples (cluster)
 
 **Production Skills Learned:**
+
 - ✅ **Multi-step pipeline design** with process dependencies
 - ✅ **Resource specification** for different process types
 - ✅ **Cluster configuration** for SLURM and PBS systems
@@ -2675,6 +2683,7 @@ du -h results/fastqc/
     ```
 
 **Progressive Learning Concepts:**
+
 - **Paired-end reads**: Handle R1 and R2 files together using `fromFilePairs()`
 - **Containers**: Use Docker for consistent software environments
 - **publishDir**: Automatically save results to specific folders
