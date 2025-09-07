@@ -1,25 +1,207 @@
-# Day 7: Applied Genomics & Advanced Nextflow Topics
+# Day 7: Advanced Nextflow & Version Control with GitHub
 
 **Date**: September 9, 2025
 **Duration**: 09:00-13:00 CAT
-**Focus**: MTB analysis pipelines, genome assembly workflows, advanced features, and deployment
+**Focus**: Advanced pipeline development, Git/GitHub integration, and production deployment
+
+## Learning Philosophy: Build it → Optimize it → Share it → Deploy it
+
+Building on Day 6's foundation, Day 7 follows an advanced learning progression:
+
+- **Build it**: Create complex, real-world genomics pipelines
+- **Optimize it**: Implement performance tuning and best practices
+- **Share it**: Use Git/GitHub for collaboration and version control
+- **Deploy it**: Scale pipelines from laptop to HPC to cloud
+
+This approach ensures you develop not just technical skills, but professional workflows essential for modern bioinformatics.
 
 ## Overview
 
-Day 7 builds upon the Nextflow foundations from Day 6, focusing on real-world genomic applications and advanced pipeline development. Participants will develop comprehensive MTB (Mycobacterium tuberculosis) analysis pipelines, learn genome assembly workflows, explore advanced Nextflow features, and understand deployment strategies for production environments.
+Day 7 transforms you from a Nextflow beginner into a pipeline developer ready for real-world bioinformatics challenges. Building on Day 6's solid foundation, you'll master advanced concepts, professional development practices, and deployment strategies that separate hobbyist scripts from production-ready pipelines.
+
+### The Big Picture: Simple vs Advanced Pipeline Development
+
+To understand the journey from Day 6 to Day 7, let's visualize the evolution:
+
+#### Simple Pipeline Approach (Day 6 Level)
+```mermaid
+graph LR
+    A[Single Script] --> B[Basic Processes] --> C[Local Execution] --> D[Manual Results]
+
+    style A fill:#ffebee
+    style B fill:#ffebee
+    style C fill:#ffebee
+    style D fill:#ffebee
+```
+
+#### Advanced Pipeline Approach (Day 7 Level)
+```mermaid
+graph LR
+    A[Modular Design] --> B[Advanced Features] --> C[Multi-Platform] --> D[Automated Sharing]
+    A --> E[Version Control]
+    B --> F[Performance Tuning]
+    C --> G[Cloud Deployment]
+    D --> H[Community Impact]
+
+    style A fill:#e8f5e8
+    style B fill:#e8f5e8
+    style C fill:#e8f5e8
+    style D fill:#e8f5e8
+    style E fill:#e8f5e8
+    style F fill:#e8f5e8
+    style G fill:#e8f5e8
+    style H fill:#e8f5e8
+```
+
+<div id="pipeline-evolution" style="background: #f5f5f5; padding: 20px; border-radius: 8px; margin: 20px 0;">
+    <h4>🚀 Pipeline Development Evolution</h4>
+    <p>See how your skills will evolve from Day 6 to Day 7:</p>
+
+    <div style="display: flex; gap: 20px; margin: 20px 0;">
+        <div style="flex: 1; background: #ffebee; padding: 15px; border-radius: 8px; border-left: 4px solid #f44336;">
+            <h5>📝 Day 6: Foundation Level</h5>
+            <ul style="margin: 10px 0; padding-left: 20px;">
+                <li>Single-file scripts</li>
+                <li>Basic processes and channels</li>
+                <li>Local execution only</li>
+                <li>Manual result management</li>
+                <li>Individual development</li>
+            </ul>
+            <div style="text-align: center; margin-top: 15px; font-weight: bold; color: #d32f2f;">
+                Good for learning and simple tasks
+            </div>
+        </div>
+
+        <div style="flex: 1; background: #e8f5e8; padding: 15px; border-radius: 8px; border-left: 4px solid #4caf50;">
+            <h5>⚡ Day 7: Professional Level</h5>
+            <ul style="margin: 10px 0; padding-left: 20px;">
+                <li>Modular, reusable components</li>
+                <li>Advanced Nextflow features</li>
+                <li>Multi-platform deployment</li>
+                <li>Automated CI/CD pipelines</li>
+                <li>Collaborative development</li>
+            </ul>
+            <div style="text-align: center; margin-top: 15px; font-weight: bold; color: #2e7d32;">
+                Ready for production and research
+            </div>
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 20px; padding: 15px; background: #e3f2fd; border-radius: 5px;">
+        <strong>🎯 Today's Goal:</strong> Transform your Day 6 foundation into professional-grade pipeline development skills
+    </div>
+</div>
 
 ## Learning Objectives
 
-By the end of Day 7, you will be able to:
+<div id="learning-objectives" style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0;">
+    <h4>🎯 Interactive Learning Objectives Tracker</h4>
+    <p>Track your progress through today's advanced concepts:</p>
 
-- Develop complete MTB genomic analysis pipelines for clinical applications
-- Build genome assembly and annotation workflows
-- Implement advanced Nextflow features (modules, subworkflows, operators)
-- Optimize pipeline performance and resource management
-- Test and validate pipeline components with real data
-- Deploy pipelines across different execution platforms (local, HPC, cloud)
-- Apply production-ready best practices and error handling
-- Use nf-core tools and community resources
+    <div style="margin: 15px 0;">
+        <label style="display: flex; align-items: center; margin: 8px 0; padding: 10px; background: white; border-radius: 5px; border-left: 4px solid #2196f3;">
+            <input type="checkbox" class="objective-checkbox" style="margin-right: 10px;">
+            <div>
+                <strong>Advanced Pipeline Architecture</strong>
+                <div style="font-size: 0.9em; color: #666; margin-top: 5px;">
+                    Master modules, subworkflows, and complex data flow patterns
+                </div>
+            </div>
+        </label>
+
+        <label style="display: flex; align-items: center; margin: 8px 0; padding: 10px; background: white; border-radius: 5px; border-left: 4px solid #9c27b0;">
+            <input type="checkbox" class="objective-checkbox" style="margin-right: 10px;">
+            <div>
+                <strong>Git/GitHub Integration</strong>
+                <div style="font-size: 0.9em; color: #666; margin-top: 5px;">
+                    Version control, collaboration, and automated testing workflows
+                </div>
+            </div>
+        </label>
+
+        <label style="display: flex; align-items: center; margin: 8px 0; padding: 10px; background: white; border-radius: 5px; border-left: 4px solid #ff9800;">
+            <input type="checkbox" class="objective-checkbox" style="margin-right: 10px;">
+            <div>
+                <strong>Performance Optimization</strong>
+                <div style="font-size: 0.9em; color: #666; margin-top: 5px;">
+                    Resource management, caching, and scalability strategies
+                </div>
+            </div>
+        </label>
+
+        <label style="display: flex; align-items: center; margin: 8px 0; padding: 10px; background: white; border-radius: 5px; border-left: 4px solid #4caf50;">
+            <input type="checkbox" class="objective-checkbox" style="margin-right: 10px;">
+            <div>
+                <strong>Multi-Platform Deployment</strong>
+                <div style="font-size: 0.9em; color: #666; margin-top: 5px;">
+                    Local, HPC, and cloud execution with configuration profiles
+                </div>
+            </div>
+        </label>
+
+        <label style="display: flex; align-items: center; margin: 8px 0; padding: 10px; background: white; border-radius: 5px; border-left: 4px solid #f44336;">
+            <input type="checkbox" class="objective-checkbox" style="margin-right: 10px;">
+            <div>
+                <strong>Production-Ready Practices</strong>
+                <div style="font-size: 0.9em; color: #666; margin-top: 5px;">
+                    Error handling, testing, documentation, and community sharing
+                </div>
+            </div>
+        </label>
+
+        <label style="display: flex; align-items: center; margin: 8px 0; padding: 10px; background: white; border-radius: 5px; border-left: 4px solid #607d8b;">
+            <input type="checkbox" class="objective-checkbox" style="margin-right: 10px;">
+            <div>
+                <strong>Real-World Applications</strong>
+                <div style="font-size: 0.9em; color: #666; margin-top: 5px;">
+                    MTB analysis, genome assembly, and clinical genomics workflows
+                </div>
+            </div>
+        </label>
+    </div>
+
+    <div id="objectives-progress" style="margin-top: 20px;">
+        <div style="background: #e0e0e0; border-radius: 10px; height: 25px; overflow: hidden;">
+            <div id="objectives-progress-bar" style="background: linear-gradient(90deg, #4caf50, #8bc34a); height: 100%; width: 0%; transition: width 0.3s ease; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 0.9em;"></div>
+        </div>
+        <p id="objectives-progress-text" style="text-align: center; margin-top: 10px; font-weight: bold;">Learning Progress: 0/6 objectives mastered</p>
+    </div>
+
+    <div id="objectives-complete" style="display: none; background: #d4edda; color: #155724; padding: 20px; border-radius: 5px; margin-top: 15px; text-align: center;">
+        🎉 <strong>Congratulations!</strong> You've mastered all advanced Nextflow concepts!
+        <br><br>
+        <strong>You're now ready to:</strong>
+        <ul style="text-align: left; margin-top: 10px;">
+            <li>Develop production-ready bioinformatics pipelines</li>
+            <li>Lead collaborative pipeline development projects</li>
+            <li>Deploy pipelines at institutional scale</li>
+            <li>Contribute to the global bioinformatics community</li>
+        </ul>
+    </div>
+</div>
+
+<script>
+function updateObjectivesProgress() {
+    const checkboxes = document.querySelectorAll('.objective-checkbox');
+    const checked = document.querySelectorAll('.objective-checkbox:checked').length;
+    const total = checkboxes.length;
+    const percentage = (checked / total) * 100;
+
+    document.getElementById('objectives-progress-bar').style.width = percentage + '%';
+    document.getElementById('objectives-progress-bar').textContent = percentage > 0 ? Math.round(percentage) + '%' : '';
+    document.getElementById('objectives-progress-text').textContent = `Learning Progress: ${checked}/${total} objectives mastered`;
+
+    if (checked === total) {
+        document.getElementById('objectives-complete').style.display = 'block';
+    } else {
+        document.getElementById('objectives-complete').style.display = 'none';
+    }
+}
+
+document.querySelectorAll('.objective-checkbox').forEach(checkbox => {
+    checkbox.addEventListener('change', updateObjectivesProgress);
+});
+</script>
 
 ## Schedule
 
@@ -87,11 +269,71 @@ By the end of Day 7, you will be able to:
 - **Nextflow Tower** - Pipeline monitoring
 - **Docker/Singularity** - Container technologies
 
-## Part 1: Applied Genomics - MTB Analysis Pipeline
+## Part 1: Advanced Pipeline Development with Real-World Applications
+
+### From Foundation to Production: Building Professional Pipelines
+
+Now that you've mastered Nextflow basics, it's time to build pipelines that can handle real-world challenges. We'll use MTB (Mycobacterium tuberculosis) genomics as our case study - a perfect example of how advanced pipeline development can directly impact human health.
 
 ### The Global TB Crisis and Genomics Revolution
 
 Tuberculosis kills more people than any other infectious disease caused by a single agent. In 2023, 10.6 million people fell ill with TB and 1.3 million died. Drug-resistant TB threatens to reverse decades of progress. This section equips you with cutting-edge genomic tools to combat this ancient disease using modern technology.
+
+<div id="tb-impact-calculator" style="background: #f5f5f5; padding: 20px; border-radius: 8px; margin: 20px 0;">
+    <h4>🦠 TB Genomics Impact Calculator</h4>
+    <p>See how genomic analysis can accelerate TB diagnosis and treatment:</p>
+
+    <div style="margin: 10px 0;">
+        <label for="samples-per-day">Samples processed per day:</label>
+        <input type="range" id="samples-per-day" min="1" max="100" value="20" style="width: 200px;">
+        <span id="samples-display">20</span>
+    </div>
+
+    <div style="display: flex; justify-content: space-between; margin-top: 20px;">
+        <div style="background: #ffebee; padding: 15px; border-radius: 5px; width: 45%;">
+            <h5>🐌 Traditional Culture Method</h5>
+            <p><strong>Time to result: <span id="traditional-days">6-8 weeks</span></strong></p>
+            <p><strong>Daily capacity: <span id="traditional-capacity">5-10 samples</span></strong></p>
+            <p>Limited drug resistance testing</p>
+        </div>
+        <div style="background: #e8f5e8; padding: 15px; border-radius: 5px; width: 45%;">
+            <h5>⚡ Genomic Analysis</h5>
+            <p><strong>Time to result: <span id="genomic-days">1-2 days</span></strong></p>
+            <p><strong>Daily capacity: <span id="genomic-capacity">50-100 samples</span></strong></p>
+            <p>Complete resistance profiling</p>
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 15px; font-size: 1.2em; font-weight: bold; color: #2e7d32;">
+        Lives potentially saved per year: <span id="lives-saved">2,400</span>
+    </div>
+
+    <div style="margin-top: 15px; padding: 10px; background: #e3f2fd; border-radius: 5px; font-size: 0.9em;">
+        <strong>💡 Impact:</strong> Faster diagnosis means earlier treatment, reduced transmission, and better outcomes.
+        Your pipeline development skills can literally save lives!
+    </div>
+</div>
+
+<script>
+function updateTBCalculator() {
+    const samplesPerDay = document.getElementById('samples-per-day').value;
+    document.getElementById('samples-display').textContent = samplesPerDay;
+
+    // Calculate impact
+    const traditionalCapacity = Math.min(samplesPerDay, 10);
+    const genomicCapacity = samplesPerDay;
+    const additionalSamples = genomicCapacity - traditionalCapacity;
+    const timesSaved = additionalSamples * 30; // 30 days faster on average
+    const livesSaved = Math.round(additionalSamples * 365 * 0.1); // Assume 10% mortality reduction
+
+    document.getElementById('traditional-capacity').textContent = traditionalCapacity + ' samples';
+    document.getElementById('genomic-capacity').textContent = genomicCapacity + ' samples';
+    document.getElementById('lives-saved').textContent = livesSaved.toLocaleString();
+}
+
+document.getElementById('samples-per-day').addEventListener('input', updateTBCalculator);
+updateTBCalculator();
+</script>
 
 ### Why TB Genomics Matters
 
@@ -125,222 +367,1241 @@ graph TD
     H --> I
 ```
 
-### Exercise 1: MTB Quality Control Pipeline (30 minutes)
+### Understanding Advanced Pipeline Architecture
 
-**Objective**: Build a QC pipeline for MTB sequencing data
+Before diving into exercises, let's understand how professional pipelines differ from basic scripts:
 
-Create `mtb_qc.nf`:
+<div id="architecture-comparison" style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0;">
+    <h4>🏗️ Pipeline Architecture Evolution</h4>
+    <p>Click to explore different architectural approaches:</p>
+
+    <div style="margin: 15px 0;">
+        <button class="arch-btn" data-arch="basic" style="display: block; width: 100%; padding: 12px; margin: 8px 0; background: #ffebee; border: 1px solid #f44336; border-radius: 5px; text-align: left; cursor: pointer;">
+            📝 Basic Script (Day 6 Level)
+        </button>
+
+        <button class="arch-btn" data-arch="modular" style="display: block; width: 100%; padding: 12px; margin: 8px 0; background: #e3f2fd; border: 1px solid #2196f3; border-radius: 5px; text-align: left; cursor: pointer;">
+            🧩 Modular Pipeline (Day 7 Level)
+        </button>
+
+        <button class="arch-btn" data-arch="production" style="display: block; width: 100%; padding: 12px; margin: 8px 0; background: #e8f5e8; border: 1px solid #4caf50; border-radius: 5px; text-align: left; cursor: pointer;">
+            🚀 Production Pipeline (Advanced)
+        </button>
+    </div>
+
+    <div id="arch-display" style="margin-top: 20px; padding: 15px; background: white; border-radius: 5px; display: none;">
+        <div id="arch-content"></div>
+    </div>
+</div>
+
+<script>
+const architectures = {
+    basic: {
+        title: "📝 Basic Script Architecture",
+        content: `
+<strong>Structure:</strong>
+<pre style="background: #f5f5f5; padding: 10px; border-radius: 3px;">
+single_script.nf
+├── All processes in one file
+├── Hardcoded parameters
+├── No error handling
+└── Manual execution only
+</pre>
+
+<strong>Characteristics:</strong>
+<ul>
+<li>✅ Simple to understand</li>
+<li>✅ Quick to write</li>
+<li>❌ Hard to maintain</li>
+<li>❌ Not reusable</li>
+<li>❌ No version control</li>
+<li>❌ Limited scalability</li>
+</ul>
+
+<strong>Best for:</strong> Learning, prototyping, one-off analyses
+        `
+    },
+    modular: {
+        title: "🧩 Modular Pipeline Architecture",
+        content: `
+<strong>Structure:</strong>
+<pre style="background: #f5f5f5; padding: 10px; border-radius: 3px;">
+pipeline/
+├── main.nf                 # Main workflow
+├── modules/
+│   ├── fastqc.nf          # Reusable modules
+│   ├── trimmomatic.nf
+│   └── bwa.nf
+├── subworkflows/
+│   └── qc_workflow.nf     # Combined processes
+├── nextflow.config        # Configuration
+└── README.md              # Documentation
+</pre>
+
+<strong>Characteristics:</strong>
+<ul>
+<li>✅ Reusable components</li>
+<li>✅ Clear organization</li>
+<li>✅ Configurable parameters</li>
+<li>✅ Basic error handling</li>
+<li>✅ Version controlled</li>
+<li>✅ Team collaboration</li>
+</ul>
+
+<strong>Best for:</strong> Research projects, team development, reusable workflows
+        `
+    },
+    production: {
+        title: "🚀 Production Pipeline Architecture",
+        content: `
+<strong>Structure:</strong>
+<pre style="background: #f5f5f5; padding: 10px; border-radius: 3px;">
+pipeline/
+├── main.nf
+├── modules/
+├── subworkflows/
+├── conf/
+│   ├── base.config
+│   ├── modules.config
+│   └── test.config
+├── tests/
+│   ├── test_data/
+│   └── test_main.nf
+├── .github/
+│   └── workflows/
+│       └── ci.yml         # Automated testing
+├── docs/
+├── CHANGELOG.md
+└── LICENSE
+</pre>
+
+<strong>Characteristics:</strong>
+<ul>
+<li>✅ Comprehensive testing</li>
+<li>✅ Automated CI/CD</li>
+<li>✅ Multi-platform deployment</li>
+<li>✅ Robust error handling</li>
+<li>✅ Complete documentation</li>
+<li>✅ Community standards</li>
+</ul>
+
+<strong>Best for:</strong> Clinical applications, published methods, community tools
+        `
+    }
+};
+
+document.querySelectorAll('.arch-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        const arch = this.dataset.arch;
+        const architecture = architectures[arch];
+
+        // Reset all buttons
+        document.querySelectorAll('.arch-btn').forEach(b => {
+            b.style.opacity = '0.7';
+        });
+
+        // Highlight selected button
+        this.style.opacity = '1';
+
+        // Show architecture
+        document.getElementById('arch-content').innerHTML =
+            '<h5>' + architecture.title + '</h5>' + architecture.content;
+        document.getElementById('arch-display').style.display = 'block';
+    });
+});
+</script>
+
+### Exercise 1: Building a Modular MTB QC Pipeline (45 minutes)
+
+**Objective**: Transform a basic script into a modular, professional pipeline
+
+**Setup: Create the project structure**
+
+```bash
+mkdir mtb-pipeline
+cd mtb-pipeline
+mkdir modules subworkflows conf
+```
+
+??? success "Expected directory structure"
+    ```text
+    mtb-pipeline/
+    ├── modules/
+    ├── subworkflows/
+    ├── conf/
+    ├── main.nf
+    └── nextflow.config
+    ```
+
+**Step 1: Create reusable modules**
+
+Create `modules/fastqc.nf`:
 
 ```nextflow
-#!/usr/bin/env nextflow
-
-// Parameters
-params.reads = "data/mtb/*_R{1,2}.fastq.gz"
-params.outdir = "results"
-params.reference = "data/reference/H37Rv.fasta"
-
-// Main workflow
-workflow {
-    // Input channels
-    reads_ch = Channel.fromFilePairs(params.reads, checkIfExists: true)
-    reference_ch = Channel.fromPath(params.reference, checkIfExists: true)
-
-    // Quality control
-    FASTQC(reads_ch)
-
-    // Read trimming
-    TRIMMOMATIC(reads_ch)
-
-    // Post-trimming QC
-    FASTQC_TRIMMED(TRIMMOMATIC.out.trimmed)
-
-    // Aggregate reports
-    qc_files = FASTQC.out.zip.mix(FASTQC_TRIMMED.out.zip).collect()
-    MULTIQC(qc_files)
-}
-
-// Process definitions
 process FASTQC {
-    tag "$sample_id"
+    tag "$meta.id"
+    label 'process_medium'
     container 'biocontainers/fastqc:v0.11.9_cv8'
-    publishDir "${params.outdir}/fastqc_raw", mode: 'copy'
 
     input:
-    tuple val(sample_id), path(reads)
+    tuple val(meta), path(reads)
 
     output:
-    tuple val(sample_id), path("*_fastqc.{html,zip}"), emit: reports
-    path "*_fastqc.zip", emit: zip
+    tuple val(meta), path("*.html"), emit: html
+    tuple val(meta), path("*.zip") , emit: zip
+    path "versions.yml"           , emit: versions
+
+    when:
+    task.ext.when == null || task.ext.when
 
     script:
+    def args = task.ext.args ?: ''
+    def prefix = task.ext.prefix ?: "${meta.id}"
     """
-    fastqc ${reads}
-    """
-}
+    fastqc \\
+        $args \\
+        --threads $task.cpus \\
+        $reads
 
-process TRIMMOMATIC {
-    tag "$sample_id"
-    container 'quay.io/biocontainers/trimmomatic:0.39--hdfd78af_2'
-    publishDir "${params.outdir}/trimmed", mode: 'copy'
-
-    input:
-    tuple val(sample_id), path(reads)
-
-    output:
-    tuple val(sample_id), path("${sample_id}_R{1,2}_trimmed.fastq.gz"), emit: trimmed
-    path "${sample_id}_trimming_report.txt", emit: report
-
-    script:
-    """
-    trimmomatic PE \\
-        ${reads[0]} ${reads[1]} \\
-        ${sample_id}_R1_trimmed.fastq.gz ${sample_id}_R1_unpaired.fastq.gz \\
-        ${sample_id}_R2_trimmed.fastq.gz ${sample_id}_R2_unpaired.fastq.gz \\
-        ILLUMINACLIP:TruSeq3-PE.fa:2:30:10 \\
-        LEADING:3 TRAILING:3 SLIDINGWINDOW:4:20 MINLEN:36 \\
-        2> ${sample_id}_trimming_report.txt
-    """
-}
-
-process FASTQC_TRIMMED {
-    tag "$sample_id"
-    container 'biocontainers/fastqc:v0.11.9_cv8'
-    publishDir "${params.outdir}/fastqc_trimmed", mode: 'copy'
-
-    input:
-    tuple val(sample_id), path(reads)
-
-    output:
-    tuple val(sample_id), path("*_fastqc.{html,zip}"), emit: reports
-    path "*_fastqc.zip", emit: zip
-
-    script:
-    """
-    fastqc ${reads}
-    """
-}
-
-process MULTIQC {
-    container 'quay.io/biocontainers/multiqc:1.12--pyhdfd78af_0'
-    publishDir "${params.outdir}/multiqc", mode: 'copy'
-
-    input:
-    path qc_files
-
-    output:
-    path "multiqc_report.html"
-    path "multiqc_data"
-
-    script:
-    """
-    multiqc .
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        fastqc: \$(fastqc --version | sed -e "s/FastQC v//g")
+    END_VERSIONS
     """
 }
 ```
 
-### Exercise 2: MTB Variant Calling Pipeline (45 minutes)
+**Step 2: Create a subworkflow**
 
-**Objective**: Build a complete MTB variant calling workflow
+Create `subworkflows/qc_workflow.nf`:
 
-Create `mtb_variant_calling.nf`:
+```nextflow
+include { FASTQC } from '../modules/fastqc'
+include { TRIMMOMATIC } from '../modules/trimmomatic'
+include { MULTIQC } from '../modules/multiqc'
+
+workflow QC_WORKFLOW {
+    take:
+    reads    // channel: [ val(meta), [ reads ] ]
+
+    main:
+    ch_versions = Channel.empty()
+
+    // Pre-trimming QC
+    FASTQC(reads)
+    ch_versions = ch_versions.mix(FASTQC.out.versions)
+
+    // Read trimming
+    TRIMMOMATIC(reads)
+    ch_versions = ch_versions.mix(TRIMMOMATIC.out.versions)
+
+    // Post-trimming QC
+    FASTQC_TRIMMED = FASTQC
+    FASTQC_TRIMMED(TRIMMOMATIC.out.trimmed)
+
+    // Aggregate QC reports
+    qc_files = FASTQC.out.zip
+        .mix(FASTQC_TRIMMED.out.zip)
+        .map { meta, files -> files }
+        .collect()
+
+    MULTIQC(qc_files)
+    ch_versions = ch_versions.mix(MULTIQC.out.versions)
+
+    emit:
+    trimmed_reads = TRIMMOMATIC.out.trimmed
+    fastqc_raw    = FASTQC.out.zip
+    fastqc_trim   = FASTQC_TRIMMED.out.zip
+    multiqc       = MULTIQC.out.report
+    versions      = ch_versions
+}
+```
+
+**Step 3: Create the main workflow**
+
+Create `main.nf`:
 
 ```nextflow
 #!/usr/bin/env nextflow
 
-// Parameters
-params.reads = "data/mtb/*_R{1,2}.fastq.gz"
-params.reference = "data/reference/H37Rv.fasta"
-params.outdir = "results"
+nextflow.enable.dsl = 2
 
+// Include subworkflows
+include { QC_WORKFLOW } from './subworkflows/qc_workflow'
+
+// Main workflow
 workflow {
-    // Input channels
-    reads_ch = Channel.fromFilePairs(params.reads, checkIfExists: true)
-    reference_ch = Channel.fromPath(params.reference, checkIfExists: true)
+    // Input validation
+    if (!params.input) {
+        error "Please provide an input samplesheet with --input"
+    }
 
-    // Index reference
-    BWA_INDEX(reference_ch)
+    // Create input channel from samplesheet
+    ch_input = Channel
+        .fromPath(params.input)
+        .splitCsv(header: true)
+        .map { row ->
+            def meta = [:]
+            meta.id = row.sample
+            meta.single_end = false
 
-    // Align reads
-    BWA_MEM(reads_ch, BWA_INDEX.out.index)
+            def reads = []
+            if (meta.single_end) {
+                reads = [file(row.fastq_1)]
+            } else {
+                reads = [file(row.fastq_1), file(row.fastq_2)]
+            }
 
-    // Call variants
-    BCFTOOLS_MPILEUP(BWA_MEM.out.bam, reference_ch)
+            return [meta, reads]
+        }
 
-    // Drug resistance prediction
-    TB_PROFILER(reads_ch)
+    // Run QC workflow
+    QC_WORKFLOW(ch_input)
+
+    // Collect software versions
+    ch_versions = QC_WORKFLOW.out.versions.unique().collectFile(name: 'software_versions.yml')
 }
 
-process BWA_INDEX {
-    container 'biocontainers/bwa:v0.7.17_cv1'
+// Workflow completion
+workflow.onComplete {
+    println "Pipeline completed at: $workflow.complete"
+    println "Execution status: ${ workflow.success ? 'OK' : 'failed' }"
+    println "Execution duration: $workflow.duration"
+}
+```
+
+**Step 4: Create configuration**
+
+Create `nextflow.config`:
+
+```groovy
+// Global default params
+params {
+    // Input options
+    input                      = null
+    outdir                     = './results'
+
+    // QC options
+    skip_fastqc                = false
+    skip_multiqc               = false
+
+    // Trimming options
+    clip_r1                    = null
+    clip_r2                    = null
+    three_prime_clip_r1        = null
+    three_prime_clip_r2        = null
+    trim_nextseq               = null
+    save_trimmed               = false
+
+    // Resource limits
+    max_memory                 = '128.GB'
+    max_cpus                   = 16
+    max_time                   = '240.h'
+}
+
+// Load base config
+includeConfig 'conf/base.config'
+
+// Profiles
+profiles {
+    debug { process.beforeScript = 'echo $HOSTNAME' }
+    conda {
+        conda.enabled          = true
+        docker.enabled         = false
+        singularity.enabled    = false
+        podman.enabled         = false
+        shifter.enabled        = false
+        charliecloud.enabled   = false
+    }
+    docker {
+        docker.enabled         = true
+        docker.userEmulation   = true
+        singularity.enabled    = false
+        podman.enabled         = false
+        shifter.enabled        = false
+        charliecloud.enabled   = false
+    }
+    singularity {
+        singularity.enabled    = true
+        singularity.autoMounts = true
+        docker.enabled         = false
+        podman.enabled         = false
+        shifter.enabled        = false
+        charliecloud.enabled   = false
+    }
+    test { includeConfig 'conf/test.config' }
+}
+```
+
+**Run the modular pipeline:**
+
+```bash
+# Create a sample sheet
+echo "sample,fastq_1,fastq_2" > samplesheet.csv
+echo "sample1,data/sample1_R1.fastq.gz,data/sample1_R2.fastq.gz" >> samplesheet.csv
+
+# Run the pipeline
+nextflow run main.nf --input samplesheet.csv --outdir results -profile docker
+```
+
+??? success "Expected output"
+    ```text
+    N E X T F L O W  ~  version 23.10.0
+    Launching `main.nf` [amazing_volta] - revision: a1b2c3d4
+
+    executor >  local (6)
+    [a1/b2c3d4] process > QC_WORKFLOW:FASTQC (sample1)           [100%] 1 of 1 ✔
+    [e5/f6g7h8] process > QC_WORKFLOW:TRIMMOMATIC (sample1)      [100%] 1 of 1 ✔
+    [i9/j0k1l2] process > QC_WORKFLOW:FASTQC_TRIMMED (sample1)   [100%] 1 of 1 ✔
+    [m3/n4o5p6] process > QC_WORKFLOW:MULTIQC                    [100%] 1 of 1 ✔
+
+    Pipeline completed at: 2024-01-15T10:30:45.123Z
+    Execution status: OK
+    Execution duration: 2m 15s
+    ```
+
+## Part 2: Git/GitHub Integration for Collaborative Development
+
+### Why Version Control Matters for Bioinformatics
+
+Version control isn't just for software developers - it's essential for reproducible science and collaborative research. Let's see why:
+
+<div id="version-control-benefits" style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0;">
+    <h4>🔄 Version Control Impact Calculator</h4>
+    <p>See how Git/GitHub transforms your research workflow:</p>
+
+    <div style="margin: 10px 0;">
+        <label for="team-size">Team size:</label>
+        <input type="range" id="team-size" min="1" max="20" value="5" style="width: 200px;">
+        <span id="team-display">5</span> people
+    </div>
+
+    <div style="margin: 10px 0;">
+        <label for="project-duration">Project duration (months):</label>
+        <input type="range" id="project-duration" min="1" max="36" value="12" style="width: 200px;">
+        <span id="duration-display">12</span> months
+    </div>
+
+    <div style="display: flex; gap: 20px; margin: 20px 0;">
+        <div style="flex: 1; background: #ffebee; padding: 15px; border-radius: 8px; border-left: 4px solid #f44336;">
+            <h5>📧 Email/Dropbox Approach</h5>
+            <ul style="margin: 10px 0; padding-left: 20px; font-size: 0.9em;">
+                <li>Version conflicts: <span id="conflicts-email">60</span> per month</li>
+                <li>Lost work incidents: <span id="lost-work">12</span> total</li>
+                <li>Time spent on coordination: <span id="coord-time">40</span> hours/month</li>
+                <li>Reproducibility issues: <span id="repro-issues">High</span></li>
+            </ul>
+        </div>
+
+        <div style="flex: 1; background: #e8f5e8; padding: 15px; border-radius: 8px; border-left: 4px solid #4caf50;">
+            <h5>🚀 Git/GitHub Approach</h5>
+            <ul style="margin: 10px 0; padding-left: 20px; font-size: 0.9em;">
+                <li>Version conflicts: <span id="conflicts-git">2</span> per month</li>
+                <li>Lost work incidents: <span id="lost-work-git">0</span> total</li>
+                <li>Time spent on coordination: <span id="coord-time-git">5</span> hours/month</li>
+                <li>Reproducibility issues: <span id="repro-git">None</span></li>
+            </ul>
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 15px; font-size: 1.2em; font-weight: bold; color: #2e7d32;">
+        Time saved per project: <span id="time-saved-git">420</span> hours
+    </div>
+</div>
+
+<script>
+function updateGitCalculator() {
+    const teamSize = document.getElementById('team-size').value;
+    const duration = document.getElementById('project-duration').value;
+
+    document.getElementById('team-display').textContent = teamSize;
+    document.getElementById('duration-display').textContent = duration;
+
+    // Calculate impacts
+    const conflictsEmail = Math.round(teamSize * teamSize * 2);
+    const conflictsGit = Math.max(1, Math.round(teamSize * 0.4));
+    const lostWork = Math.round(teamSize * duration * 0.2);
+    const coordTimeEmail = Math.round(teamSize * 8);
+    const coordTimeGit = Math.max(2, Math.round(teamSize * 1));
+    const timeSaved = (coordTimeEmail - coordTimeGit) * duration;
+
+    document.getElementById('conflicts-email').textContent = conflictsEmail;
+    document.getElementById('conflicts-git').textContent = conflictsGit;
+    document.getElementById('lost-work').textContent = lostWork;
+    document.getElementById('lost-work-git').textContent = '0';
+    document.getElementById('coord-time').textContent = coordTimeEmail;
+    document.getElementById('coord-time-git').textContent = coordTimeGit;
+    document.getElementById('time-saved-git').textContent = timeSaved;
+}
+
+document.getElementById('team-size').addEventListener('input', updateGitCalculator);
+document.getElementById('project-duration').addEventListener('input', updateGitCalculator);
+updateGitCalculator();
+</script>
+
+### Exercise 2: Setting Up Git/GitHub for Your Pipeline (30 minutes)
+
+**Objective**: Transform your local pipeline into a collaborative, version-controlled project
+
+**Step 1: Initialize Git repository**
+
+```bash
+# Navigate to your pipeline directory
+cd mtb-pipeline
+
+# Initialize Git
+git init
+```
+
+??? success "Expected output"
+    ```text
+    Initialized empty Git repository in /path/to/mtb-pipeline/.git/
+    ```
+
+**Step 2: Create essential files**
+
+Create `.gitignore`:
+```
+
+```text
+# Nextflow files
+work/
+.nextflow/
+.nextflow.log*
+timeline.html
+report.html
+trace.txt
+dag.dot
+dag.html
+
+# Results (optional - you might want to track some results)
+results/
+
+# IDE files
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+```
+
+Create `README.md`:
+
+```markdown
+# MTB Genomics Pipeline
+
+A modular Nextflow pipeline for Mycobacterium tuberculosis genomic analysis.
+
+## Quick Start
+
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/mtb-pipeline.git
+cd mtb-pipeline
+
+# Run with test data
+nextflow run main.nf --input test_data/samplesheet.csv -profile test,docker
+
+# Run with your data
+nextflow run main.nf --input samplesheet.csv --outdir results -profile docker
+```
+
+## Features
+
+- 🧬 Quality control with FastQC and MultiQC
+- ✂️ Adapter trimming with Trimmomatic
+- 📊 Comprehensive reporting
+- 🐳 Containerized for reproducibility
+- ⚡ Scalable from laptop to HPC
+
+## Requirements
+
+- Nextflow (≥ 23.04.0)
+- Docker or Singularity
+- 4+ GB RAM
+
+## Input
+
+Provide a CSV samplesheet with the following columns:
+
+| Column    | Description                |
+|-----------|----------------------------|
+| sample    | Sample identifier          |
+| fastq_1   | Path to R1 FASTQ file     |
+| fastq_2   | Path to R2 FASTQ file     |
+
+## Output
+
+- `fastqc/` - Quality control reports
+- `trimmed/` - Trimmed FASTQ files
+- `multiqc/` - Aggregated QC report
+
+## Citation
+
+If you use this pipeline, please cite:
+[Your publication here]
+
+## License
+
+MIT License - see LICENSE file for details.
+```
+
+**Step 3: Make your first commit**
+
+```bash
+# Add files to staging
+git add .
+
+# Make initial commit
+git commit -m "Initial commit: MTB QC pipeline with modular structure"
+```
+
+??? success "Expected output"
+    ```text
+    [main (root-commit) a1b2c3d] Initial commit: MTB QC pipeline with modular structure
+     8 files changed, 245 insertions(+)
+     create mode 100644 .gitignore
+     create mode 100644 README.md
+     create mode 100644 main.nf
+     create mode 100644 nextflow.config
+     create mode 100644 modules/fastqc.nf
+     create mode 100644 subworkflows/qc_workflow.nf
+     create mode 100644 conf/base.config
+    ```
+
+**Step 4: Create GitHub repository and push**
+
+```bash
+# Create repository on GitHub (via web interface or GitHub CLI)
+gh repo create mtb-pipeline --public --description "MTB genomics analysis pipeline"
+
+# Add remote and push
+git remote add origin https://github.com/yourusername/mtb-pipeline.git
+git branch -M main
+git push -u origin main
+```
+
+??? success "Expected output"
+    ```text
+    Enumerating objects: 10, done.
+    Counting objects: 100% (10/10), done.
+    Delta compression using up to 8 threads
+    Compressing objects: 100% (8/8), done.
+    Writing objects: 100% (10/10), 2.45 KiB | 2.45 MiB/s, done.
+    Total 10 (delta 0), reused 0 (delta 0), pack-reused 0
+    To https://github.com/yourusername/mtb-pipeline.git
+     * [new branch]      main -> main
+    Branch 'main' set up to track remote branch 'main' from 'origin'.
+    ```
+
+### Exercise 3: Setting Up Automated Testing with GitHub Actions (30 minutes)
+
+**Objective**: Implement continuous integration for your pipeline
+
+**Step 1: Create GitHub Actions workflow**
+
+Create `.github/workflows/ci.yml`:
+
+```yaml
+name: CI
+on:
+  push:
+    branches: [ main, dev ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    name: Run pipeline tests
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        NXF_VER:
+          - '23.04.0'
+          - '23.10.0'
+          - 'latest-everything'
+    steps:
+      - name: Check out pipeline code
+        uses: actions/checkout@v3
+
+      - name: Install Nextflow
+        uses: nf-core/setup-nextflow@v1
+        with:
+          version: "${{ matrix.NXF_VER }}"
+
+      - name: Run pipeline with test data
+        run: |
+          nextflow run ${GITHUB_WORKSPACE} -profile test,docker --outdir ./results
+```
+
+**Step 2: Create test configuration**
+
+Create `conf/test.config`:
+
+```groovy
+// Test configuration
+params {
+    config_profile_name        = 'Test profile'
+    config_profile_description = 'Minimal test dataset to check pipeline function'
+
+    // Limit resources so that this can run on GitHub Actions
+    max_cpus   = 2
+    max_memory = '6.GB'
+    max_time   = '6.h'
+
+    // Input data
+    input = 'https://raw.githubusercontent.com/nf-core/test-datasets/viralrecon/samplesheet/samplesheet_test_illumina_amplicon.csv'
+}
+```
+
+**Step 3: Commit and push changes**
+
+```bash
+# Add new files
+git add .github/ conf/test.config
+
+# Commit changes
+git commit -m "Add CI/CD with GitHub Actions and test configuration"
+
+# Push to GitHub
+git push origin main
+```
+
+??? success "Expected result"
+    ```text
+    [main a1b2c3d] Add CI/CD with GitHub Actions and test configuration
+     2 files changed, 45 insertions(+)
+     create mode 100644 .github/workflows/ci.yml
+     create mode 100644 conf/test.config
+
+    Enumerating objects: 7, done.
+    Counting objects: 100% (7/7), done.
+    Delta compression using up to 8 threads
+    Compressing objects: 100% (5/5), done.
+    Writing objects: 100% (6/6), 1.23 KiB | 1.23 MiB/s, done.
+    Total 6 (delta 1), reused 0 (delta 0), pack-reused 0
+    To https://github.com/yourusername/mtb-pipeline.git
+       1a2b3c4..5d6e7f8  main -> main
+    ```
+
+## Part 3: Advanced Nextflow Features & Performance Optimization
+
+### Understanding Advanced Pipeline Patterns
+
+<div id="advanced-features" style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0;">
+    <h4>🚀 Advanced Features Explorer</h4>
+    <p>Discover powerful Nextflow features that separate professional pipelines from basic scripts:</p>
+
+    <div style="margin: 15px 0;">
+        <button class="feature-btn" data-feature="operators" style="display: block; width: 100%; padding: 12px; margin: 8px 0; background: #e3f2fd; border: 1px solid #2196f3; border-radius: 5px; text-align: left; cursor: pointer;">
+            🔄 Advanced Channel Operators
+        </button>
+
+        <button class="feature-btn" data-feature="caching" style="display: block; width: 100%; padding: 12px; margin: 8px 0; background: #f3e5f5; border: 1px solid #9c27b0; border-radius: 5px; text-align: left; cursor: pointer;">
+            💾 Intelligent Caching & Resume
+        </button>
+
+        <button class="feature-btn" data-feature="error" style="display: block; width: 100%; padding: 12px; margin: 8px 0; background: #fff3e0; border: 1px solid #ff9800; border-radius: 5px; text-align: left; cursor: pointer;">
+            🛡️ Error Handling & Retry Logic
+        </button>
+
+        <button class="feature-btn" data-feature="resources" style="display: block; width: 100%; padding: 12px; margin: 8px 0; background: #e8f5e8; border: 1px solid #4caf50; border-radius: 5px; text-align: left; cursor: pointer;">
+            ⚡ Dynamic Resource Allocation
+        </button>
+
+        <button class="feature-btn" data-feature="monitoring" style="display: block; width: 100%; padding: 12px; margin: 8px 0; background: #ffebee; border: 1px solid #f44336; border-radius: 5px; text-align: left; cursor: pointer;">
+            📊 Pipeline Monitoring & Reporting
+        </button>
+    </div>
+
+    <div id="feature-display" style="margin-top: 20px; padding: 15px; background: white; border-radius: 5px; display: none;">
+        <div id="feature-content"></div>
+    </div>
+</div>
+
+<script>
+const advancedFeatures = {
+    operators: {
+        title: "🔄 Advanced Channel Operators",
+        content: `
+<strong>Transform your data flow with powerful operators:</strong>
+
+<pre style="background: #f5f5f5; padding: 15px; border-radius: 5px;">
+// Combine multiple channels
+reads_ch = Channel.fromFilePairs(params.reads)
+metadata_ch = Channel.fromPath(params.metadata)
+combined_ch = reads_ch.combine(metadata_ch)
+
+// Join channels by key
+samples_ch = Channel.from([
+    ['sample1', 'condition_A'],
+    ['sample2', 'condition_B']
+])
+reads_with_meta = reads_ch.join(samples_ch)
+
+// Filter and transform
+large_files = reads_ch.filter { sample, files ->
+    files[0].size() > 1000000
+}
+
+// Group by condition
+grouped = reads_with_meta.groupTuple(by: 1)
+
+// Branch into multiple paths
+reads_ch.branch {
+    small: it[1][0].size() < 1000000
+    large: it[1][0].size() >= 1000000
+}
+</pre>
+
+<strong>Benefits:</strong>
+<ul>
+<li>Complex data routing and transformation</li>
+<li>Conditional processing based on metadata</li>
+<li>Efficient memory usage with streaming</li>
+<li>Parallel processing of different data types</li>
+</ul>
+        `
+    },
+    caching: {
+        title: "💾 Intelligent Caching & Resume",
+        content: `
+<strong>Never lose work again with smart caching:</strong>
+
+<pre style="background: #f5f5f5; padding: 15px; border-radius: 5px;">
+// Enable caching in nextflow.config
+process {
+    cache = 'lenient'  // or 'strict', 'deep'
+
+    withName: EXPENSIVE_PROCESS {
+        cache = 'deep'  // Hash all inputs deeply
+    }
+}
+
+// Resume failed runs
+nextflow run main.nf -resume
+
+// Clean specific cache
+nextflow clean -f [run_name]
+
+// Cache strategies
+process ANALYSIS {
+    cache 'deep'  // Hash file contents
 
     input:
-    path reference
-
-    output:
-    path "reference.*", emit: index
+    path input_file
 
     script:
     """
-    cp ${reference} reference.fasta
-    bwa index reference.fasta
+    # This will only re-run if input_file content changes
+    expensive_analysis.py ${input_file}
     """
 }
+</pre>
 
-process BWA_MEM {
-    tag "$sample_id"
-    container 'biocontainers/bwa:v0.7.17_cv1'
+<strong>Cache Strategies:</strong>
+<ul>
+<li><strong>standard:</strong> Hash file path and size (default)</li>
+<li><strong>lenient:</strong> Hash only file path</li>
+<li><strong>deep:</strong> Hash file contents (slower but safer)</li>
+</ul>
+
+<strong>Benefits:</strong>
+<ul>
+<li>Resume from any failed step</li>
+<li>Skip unchanged processes automatically</li>
+<li>Massive time savings during development</li>
+<li>Safe iterative pipeline development</li>
+</ul>
+        `
+    },
+    error: {
+        title: "🛡️ Error Handling & Retry Logic",
+        content: `
+<strong>Build resilient pipelines that handle failures gracefully:</strong>
+
+<pre style="background: #f5f5f5; padding: 15px; border-radius: 5px;">
+process ROBUST_ANALYSIS {
+    errorStrategy 'retry'
+    maxRetries 3
+
+    // Dynamic resource allocation on retry
+    memory { 4.GB * task.attempt }
+    time { 2.h * task.attempt }
 
     input:
-    tuple val(sample_id), path(reads)
-    path index
+    tuple val(meta), path(reads)
 
     output:
-    tuple val(sample_id), path("${sample_id}.bam"), emit: bam
+    tuple val(meta), path("*.results"), emit: results
 
     script:
     """
-    bwa mem -t ${task.cpus} reference.fasta ${reads} | \\
-    samtools sort -@ ${task.cpus} -o ${sample_id}.bam -
-    samtools index ${sample_id}.bam
+    # Attempt analysis with current resources
+    analysis_tool --memory ${task.memory.toGiga()}G ${reads}
     """
 }
 
-process BCFTOOLS_MPILEUP {
-    tag "$sample_id"
-    container 'biocontainers/bcftools:v1.15.1_cv1'
-    publishDir "${params.outdir}/variants", mode: 'copy'
+// Global error strategies
+process {
+    errorStrategy = { task.exitStatus in [143,137,104,134,139] ? 'retry' : 'finish' }
+    maxRetries = 1
+    maxErrors = '-1'
+}
 
-    input:
-    tuple val(sample_id), path(bam)
-    path reference
-
-    output:
-    tuple val(sample_id), path("${sample_id}.vcf.gz"), emit: vcf
+// Conditional error handling
+process CONDITIONAL_RETRY {
+    errorStrategy { task.attempt <= 2 ? 'retry' : 'ignore' }
 
     script:
     """
-    bcftools mpileup -f ${reference} ${bam} | \\
-    bcftools call -mv -Oz -o ${sample_id}.vcf.gz
-    bcftools index ${sample_id}.vcf.gz
+    if [ ${task.attempt} -gt 1 ]; then
+        echo "Retry attempt ${task.attempt}"
+        # Use alternative method
+        alternative_tool input.fastq
+    else
+        # Try primary method first
+        primary_tool input.fastq
+    fi
     """
 }
+</pre>
 
-process TB_PROFILER {
-    tag "$sample_id"
-    container 'quay.io/biocontainers/tb-profiler:4.4.0--pyhdfd78af_0'
-    publishDir "${params.outdir}/tb_profiler", mode: 'copy'
+<strong>Error Strategies:</strong>
+<ul>
+<li><strong>terminate:</strong> Stop entire pipeline (default)</li>
+<li><strong>finish:</strong> Complete other tasks, then stop</li>
+<li><strong>ignore:</strong> Continue pipeline, skip failed task</li>
+<li><strong>retry:</strong> Retry with more resources</li>
+</ul>
+        `
+    },
+    resources: {
+        title: "⚡ Dynamic Resource Allocation",
+        content: `
+<strong>Optimize resource usage for maximum efficiency:</strong>
+
+<pre style="background: #f5f5f5; padding: 15px; border-radius: 5px;">
+// Dynamic allocation based on input size
+process ADAPTIVE_ASSEMBLY {
+    cpus { Math.min(16, reads.size() > 1000000000 ? 16 : 8) }
+    memory { reads.size() > 1000000000 ? '32.GB' : '16.GB' }
+    time { reads.size() > 1000000000 ? '8.h' : '4.h' }
 
     input:
-    tuple val(sample_id), path(reads)
-
-    output:
-    path "${sample_id}.*", emit: results
+    tuple val(meta), path(reads)
 
     script:
+    def mem_gb = task.memory.toGiga()
     """
-    tb-profiler profile -1 ${reads[0]} -2 ${reads[1]} -p ${sample_id} --txt
+    spades.py \\
+        --threads ${task.cpus} \\
+        --memory ${mem_gb} \\
+        -1 ${reads[0]} \\
+        -2 ${reads[1]} \\
+        -o assembly
     """
 }
+
+// Resource labels for different process types
+process {
+    withLabel: process_low {
+        cpus = 2
+        memory = 4.GB
+        time = 1.h
+    }
+
+    withLabel: process_medium {
+        cpus = 8
+        memory = 16.GB
+        time = 4.h
+    }
+
+    withLabel: process_high {
+        cpus = 16
+        memory = 64.GB
+        time = 12.h
+    }
+}
+
+// Environment-specific resources
+profiles {
+    laptop {
+        process.cpus = 4
+        process.memory = '8.GB'
+    }
+
+    hpc {
+        process.cpus = 32
+        process.memory = '128.GB'
+        process.queue = 'batch'
+    }
+
+    cloud {
+        process.cpus = 64
+        process.memory = '256.GB'
+        aws.batch.cliPath = '/usr/local/bin/aws'
+    }
+}
+</pre>
+
+<strong>Benefits:</strong>
+<ul>
+<li>Automatic scaling based on data size</li>
+<li>Efficient resource utilization</li>
+<li>Platform-specific optimization</li>
+<li>Cost reduction in cloud environments</li>
+</ul>
+        `
+    },
+    monitoring: {
+        title: "📊 Pipeline Monitoring & Reporting",
+        content: `
+<strong>Track performance and generate comprehensive reports:</strong>
+
+<pre style="background: #f5f5f5; padding: 15px; border-radius: 5px;">
+// Enable comprehensive reporting
+nextflow.config:
+timeline {
+    enabled = true
+    file = "${params.outdir}/timeline.html"
+}
+
+report {
+    enabled = true
+    file = "${params.outdir}/report.html"
+}
+
+trace {
+    enabled = true
+    file = "${params.outdir}/trace.txt"
+    fields = 'task_id,hash,native_id,process,tag,name,status,exit,module,container,cpus,time,disk,memory,attempt,submit,start,complete,duration,realtime,queue,%cpu,%mem,rss,vmem,peak_rss,peak_vmem,rchar,wchar,syscr,syscw,read_bytes,write_bytes'
+}
+
+dag {
+    enabled = true
+    file = "${params.outdir}/dag.html"
+}
+
+// Custom notifications
+workflow.onComplete {
+    def msg = """\
+        Pipeline execution summary
+        ---------------------------
+        Completed at: ${workflow.complete}
+        Duration    : ${workflow.duration}
+        Success     : ${workflow.success}
+        workDir     : ${workflow.workDir}
+        exit status : ${workflow.exitStatus}
+        """.stripIndent()
+
+    sendMail(to: params.email, subject: 'Pipeline Completed', body: msg)
+}
+
+// Real-time monitoring with Nextflow Tower
+tower {
+    accessToken = 'your-tower-token'
+    enabled = true
+}
+</pre>
+
+<strong>Generated Reports:</strong>
+<ul>
+<li><strong>Timeline:</strong> Visual execution timeline</li>
+<li><strong>Report:</strong> Resource usage statistics</li>
+<li><strong>Trace:</strong> Detailed process metrics</li>
+<li><strong>DAG:</strong> Workflow dependency graph</li>
+</ul>
+
+<strong>Monitoring Options:</strong>
+<ul>
+<li>Real-time tracking with Nextflow Tower</li>
+<li>Email notifications on completion</li>
+<li>Slack/Teams integration</li>
+<li>Custom webhook notifications</li>
+</ul>
+        `
+    }
+};
+
+document.querySelectorAll('.feature-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        const feature = this.dataset.feature;
+        const featureData = advancedFeatures[feature];
+
+        // Reset all buttons
+        document.querySelectorAll('.feature-btn').forEach(b => {
+            b.style.opacity = '0.7';
+        });
+
+        // Highlight selected button
+        this.style.opacity = '1';
+
+        // Show feature
+        document.getElementById('feature-content').innerHTML =
+            '<h5>' + featureData.title + '</h5>' + featureData.content;
+        document.getElementById('feature-display').style.display = 'block';
+    });
+});
+</script>
+
+### Exercise 4: Advanced Pipeline Optimization (45 minutes)
+
+**Objective**: Implement advanced features to create a production-ready pipeline
+
+<div id="advanced-exercise-tracker" style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0;">
+    <h4>🎯 Advanced Exercise Progress</h4>
+    <p>Complete these advanced pipeline development tasks:</p>
+
+    <div class="advanced-exercise-item" style="margin: 15px 0; padding: 15px; border-left: 4px solid #ddd; background: white;">
+        <label style="display: flex; align-items: center;">
+            <input type="checkbox" class="advanced-checkbox" data-exercise="caching" style="margin-right: 10px;">
+            <div>
+                <strong>Task 1: Implement Smart Caching</strong>
+                <div style="font-size: 0.9em; color: #666; margin-top: 5px;">
+                    Add cache strategies and resume functionality to your pipeline
+                </div>
+            </div>
+        </label>
+        <div class="advanced-details" style="margin-top: 10px; display: none;">
+            <div style="background: #e8f5e8; padding: 10px; border-radius: 5px;">
+                ✅ <strong>Completed!</strong> Your pipeline now supports intelligent caching and resume.
+            </div>
+        </div>
+    </div>
+
+    <div class="advanced-exercise-item" style="margin: 15px 0; padding: 15px; border-left: 4px solid #ddd; background: white;">
+        <label style="display: flex; align-items: center;">
+            <input type="checkbox" class="advanced-checkbox" data-exercise="error" style="margin-right: 10px;">
+            <div>
+                <strong>Task 2: Add Error Handling</strong>
+                <div style="font-size: 0.9em; color: #666; margin-top: 5px;">
+                    Implement retry logic and graceful error recovery
+                </div>
+            </div>
+        </label>
+        <div class="advanced-details" style="margin-top: 10px; display: none;">
+            <div style="background: #e8f5e8; padding: 10px; border-radius: 5px;">
+                ✅ <strong>Completed!</strong> Your pipeline now handles failures gracefully.
+            </div>
+        </div>
+    </div>
+
+    <div class="advanced-exercise-item" style="margin: 15px 0; padding: 15px; border-left: 4px solid #ddd; background: white;">
+        <label style="display: flex; align-items: center;">
+            <input type="checkbox" class="advanced-checkbox" data-exercise="resources" style="margin-right: 10px;">
+            <div>
+                <strong>Task 3: Dynamic Resource Allocation</strong>
+                <div style="font-size: 0.9em; color: #666; margin-top: 5px;">
+                    Configure adaptive resource usage based on data size
+                </div>
+            </div>
+        </label>
+        <div class="advanced-details" style="margin-top: 10px; display: none;">
+            <div style="background: #e8f5e8; padding: 10px; border-radius: 5px;">
+                ✅ <strong>Completed!</strong> Your pipeline optimizes resources automatically.
+            </div>
+        </div>
+    </div>
+
+    <div class="advanced-exercise-item" style="margin: 15px 0; padding: 15px; border-left: 4px solid #ddd; background: white;">
+        <label style="display: flex; align-items: center;">
+            <input type="checkbox" class="advanced-checkbox" data-exercise="monitoring" style="margin-right: 10px;">
+            <div>
+                <strong>Task 4: Enable Comprehensive Monitoring</strong>
+                <div style="font-size: 0.9em; color: #666; margin-top: 5px;">
+                    Add timeline, reports, and notification systems
+                </div>
+            </div>
+        </label>
+        <div class="advanced-details" style="margin-top: 10px; display: none;">
+            <div style="background: #e8f5e8; padding: 10px; border-radius: 5px;">
+                ✅ <strong>Completed!</strong> Your pipeline provides comprehensive monitoring.
+            </div>
+        </div>
+    </div>
+
+    <div class="advanced-exercise-item" style="margin: 15px 0; padding: 15px; border-left: 4px solid #ddd; background: white;">
+        <label style="display: flex; align-items: center;">
+            <input type="checkbox" class="advanced-checkbox" data-exercise="deployment" style="margin-right: 10px;">
+            <div>
+                <strong>Task 5: Multi-Platform Deployment</strong>
+                <div style="font-size: 0.9em; color: #666; margin-top: 5px;">
+                    Create profiles for local, HPC, and cloud execution
+                </div>
+            </div>
+        </label>
+        <div class="advanced-details" style="margin-top: 10px; display: none;">
+            <div style="background: #e8f5e8; padding: 10px; border-radius: 5px;">
+                ✅ <strong>Completed!</strong> Your pipeline runs anywhere from laptop to cloud.
+            </div>
+        </div>
+    </div>
+
+    <div id="advanced-progress" style="margin-top: 20px;">
+        <div style="background: #e0e0e0; border-radius: 10px; height: 25px; overflow: hidden;">
+            <div id="advanced-progress-bar" style="background: linear-gradient(90deg, #ff9800, #ffc107); height: 100%; width: 0%; transition: width 0.3s ease; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 0.9em;"></div>
+        </div>
+        <p id="advanced-progress-text" style="text-align: center; margin-top: 10px; font-weight: bold;">Advanced Features: 0/5 implemented</p>
+    </div>
+
+    <div id="advanced-complete" style="display: none; background: #d4edda; color: #155724; padding: 20px; border-radius: 5px; margin-top: 15px; text-align: center;">
+        🚀 <strong>Outstanding!</strong> You've built a production-ready pipeline!
+        <br><br>
+        <strong>Your pipeline now features:</strong>
+        <ul style="text-align: left; margin-top: 10px;">
+            <li>Professional modular architecture</li>
+            <li>Intelligent caching and resume capabilities</li>
+            <li>Robust error handling and recovery</li>
+            <li>Dynamic resource optimization</li>
+            <li>Comprehensive monitoring and reporting</li>
+            <li>Multi-platform deployment support</li>
+        </ul>
+        <br>
+        <strong>🎓 You're now ready to lead bioinformatics pipeline development!</strong>
+    </div>
+</div>
+
+<script>
+function updateAdvancedProgress() {
+    const checkboxes = document.querySelectorAll('.advanced-checkbox');
+    const checked = document.querySelectorAll('.advanced-checkbox:checked').length;
+    const total = checkboxes.length;
+    const percentage = (checked / total) * 100;
+
+    document.getElementById('advanced-progress-bar').style.width = percentage + '%';
+    document.getElementById('advanced-progress-bar').textContent = percentage > 0 ? Math.round(percentage) + '%' : '';
+    document.getElementById('advanced-progress-text').textContent = `Advanced Features: ${checked}/${total} implemented`;
+
+    if (checked === total) {
+        document.getElementById('advanced-complete').style.display = 'block';
+    } else {
+        document.getElementById('advanced-complete').style.display = 'none';
+    }
+}
+
+document.querySelectorAll('.advanced-checkbox').forEach(checkbox => {
+    checkbox.addEventListener('change', function() {
+        const exerciseItem = this.closest('.advanced-exercise-item');
+        const details = exerciseItem.querySelector('.advanced-details');
+
+        if (this.checked) {
+            exerciseItem.style.borderLeftColor = '#4caf50';
+            details.style.display = 'block';
+        } else {
+            exerciseItem.style.borderLeftColor = '#ddd';
+            details.style.display = 'none';
+        }
+
+        updateAdvancedProgress();
+    });
+});
+</script>
 ```
 
 ## Part 2: Genome Assembly Workflows
@@ -828,4 +2089,112 @@ The skills you've learned enable you to:
 
 ---
 
-**Key Learning Outcome**: You now have the expertise to develop, optimize, and deploy production-ready bioinformatics pipelines that can scale from laptop to cloud, enabling reproducible and collaborative genomics research that can make a real impact in clinical and public health applications.
+## Day 7 Completion: From Beginner to Pipeline Developer
+
+<div id="completion-summary" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; border-radius: 12px; margin: 30px 0;">
+    <h3 style="color: white; margin-top: 0;">🎓 Congratulations! You've Completed Advanced Nextflow Training</h3>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0;">
+        <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 8px;">
+            <h4 style="color: white; margin-top: 0;">📈 Your Journey</h4>
+            <ul style="color: white; margin: 0;">
+                <li><strong>Day 6:</strong> Nextflow fundamentals</li>
+                <li><strong>Day 7:</strong> Professional development</li>
+                <li><strong>Result:</strong> Production-ready skills</li>
+            </ul>
+        </div>
+
+        <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 8px;">
+            <h4 style="color: white; margin-top: 0;">🛠️ Skills Mastered</h4>
+            <ul style="color: white; margin: 0;">
+                <li>Modular pipeline architecture</li>
+                <li>Git/GitHub collaboration</li>
+                <li>Advanced Nextflow features</li>
+                <li>Multi-platform deployment</li>
+            </ul>
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 25px; padding: 20px; background: rgba(255,255,255,0.1); border-radius: 8px;">
+        <h4 style="color: white; margin-top: 0;">🌟 You're Now Ready For:</h4>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px;">
+            <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 5px;">
+                <strong>🏥 Clinical Genomics</strong><br>
+                <small>Diagnostic pipeline development</small>
+            </div>
+            <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 5px;">
+                <strong>🔬 Research Leadership</strong><br>
+                <small>Leading bioinformatics projects</small>
+            </div>
+            <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 5px;">
+                <strong>🌍 Community Impact</strong><br>
+                <small>Contributing to global health</small>
+            </div>
+            <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 5px;">
+                <strong>☁️ Enterprise Deployment</strong><br>
+                <small>Institutional-scale pipelines</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+### Your Next Steps
+
+<div id="next-steps" style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0;">
+    <h4>🚀 Continue Your Bioinformatics Journey</h4>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin: 20px 0;">
+        <div style="background: white; padding: 20px; border-radius: 8px; border-left: 4px solid #2196f3;">
+            <h5>📚 Immediate Actions</h5>
+            <ul>
+                <li>Apply these skills to your research data</li>
+                <li>Share your pipeline on GitHub</li>
+                <li>Join the nf-core community</li>
+                <li>Start a bioinformatics journal club</li>
+            </ul>
+        </div>
+
+        <div style="background: white; padding: 20px; border-radius: 8px; border-left: 4px solid #4caf50;">
+            <h5>🌱 Continued Learning</h5>
+            <ul>
+                <li>Explore nf-core community pipelines</li>
+                <li>Learn cloud deployment (AWS, GCP, Azure)</li>
+                <li>Study advanced bioinformatics algorithms</li>
+                <li>Contribute to open-source projects</li>
+            </ul>
+        </div>
+
+        <div style="background: white; padding: 20px; border-radius: 8px; border-left: 4px solid #ff9800;">
+            <h5>🤝 Community Engagement</h5>
+            <ul>
+                <li>Attend bioinformatics conferences</li>
+                <li>Mentor other researchers</li>
+                <li>Collaborate on international projects</li>
+                <li>Publish your methods and pipelines</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+### Resources for Continued Growth
+
+**Essential Communities:**
+- [nf-core](https://nf-co.re/) - Community-curated bioinformatics pipelines
+- [Nextflow Slack](https://nextflow.io/slack-invite.html) - Get help and share knowledge
+- [Seqera Community](https://community.seqera.io/) - Advanced discussions and support
+
+**Advanced Learning:**
+- [Nextflow Patterns](https://nextflow-io.github.io/patterns/) - Best practices and design patterns
+- [nf-core Bytesize](https://nf-co.re/events/bytesize) - Weekly technical talks
+- [Carpentries Incubator](https://carpentries-incubator.github.io/) - Community-developed lessons
+
+**Professional Development:**
+- [ISCB](https://www.iscb.org/) - International Society for Computational Biology
+- [Galaxy Training](https://training.galaxyproject.org/) - Complementary workflow system
+- [Bioconductor](https://bioconductor.org/) - R packages for bioinformatics
+
+---
+
+**🎯 Key Learning Outcome**: You now have the expertise to develop, optimize, and deploy production-ready bioinformatics pipelines that can scale from laptop to cloud, enabling reproducible and collaborative genomics research that can make a real impact in clinical and public health applications.
+
+**🌟 Remember**: The skills you've learned today aren't just technical - they're tools for advancing human health through computational biology. Use them wisely, share them generously, and continue learning always.

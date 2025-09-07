@@ -37,7 +37,7 @@ By the end of Day 6, you will be able to:
 
 | Time (CAT) | Topic | Duration | Trainer |
 |------------|-------|----------|---------|
-| **09:00** | *Foundation: Command line, Git, Containers review* | 30 min | Mamana Mbiyavanga |
+| **09:00** | *Foundation: Command line and Containers review* | 30 min | Mamana Mbiyavanga |
 | **09:30** | *Introduction to Workflow Management Systems* | 45 min | Mamana Mbiyavanga |
 | **10:15** | *Nextflow Basics: Core concepts and first pipelines* | 75 min | Mamana Mbiyavanga |
 | **11:30** | **Break** | 15 min | |
@@ -48,7 +48,6 @@ By the end of Day 6, you will be able to:
 ### 1. Foundation Review (30 minutes)
 
 - Command line proficiency check
-- Git basics and version control concepts
 - Container technologies (Docker/Singularity) overview
 - Setting up the development environment
 
@@ -81,23 +80,22 @@ By the end of Day 6, you will be able to:
 
 ### Core Requirements
 
-- **Nextflow** (version 20.10.0 or later) - Workflow orchestration system
-- **Java** (version 11 or later) - Required for Nextflow execution
-- **Docker** or **Singularity** - Container platforms for reproducibility
-- **Text editor** - VS Code with Nextflow extension recommended
+- **[Nextflow](https://www.nextflow.io/)** (version 20.10.0 or later) - Workflow orchestration system
+- **[Java](https://openjdk.org/)** (version 11 or later) - Required for Nextflow execution
+- **[Docker](https://docs.docker.com/)** or **[Singularity](https://docs.sylabs.io/guides/latest/user-guide/)** - Container platforms for reproducibility
+- **Text editor** - [VS Code](https://code.visualstudio.com/) with [Nextflow extension](https://marketplace.visualstudio.com/items?itemName=nextflow.nextflow) recommended
 
 ### Bioinformatics Tools
 
-- **FastQC** - Read quality control assessment
-- **MultiQC** - Aggregate quality control reports
-- **Trimmomatic** - Read trimming and filtering
-- **SPAdes** - Genome assembly (for later exercises)
+- **[FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)** - Read quality control assessment
+- **[MultiQC](https://multiqc.info/)** - Aggregate quality control reports
+- **[Trimmomatic](http://www.usadellab.org/cms/?page=trimmomatic)** - Read trimming and filtering
+- **[SPAdes](https://cab.spbu.ru/software/spades/)** - Genome assembly (for later exercises)
 
 ### Development Environment
 
-- **Git** - Version control system
-- **GitHub account** - For sharing and collaboration
 - **Terminal/Command line** - For running Nextflow commands
+- **Text editor** - For writing pipeline scripts
 
 ## Part 1: The Challenge of Complex Genomics Analyses
 
@@ -192,7 +190,7 @@ done
 
 **Resource Management**
 - Automatic CPU and memory allocation based on task requirements
-- Integration with job schedulers (SLURM, PBS, SGE)
+- Integration with job schedulers ([SLURM](https://slurm.schedmd.com/documentation.html), [PBS](https://www.openpbs.org/), [SGE](https://gridscheduler.sourceforge.net/))
 - Dynamic scaling in cloud environments
 
 **Reproducibility by Design**
@@ -214,28 +212,28 @@ done
 
 The bioinformatics community has developed several powerful workflow management systems, each with unique strengths and design philosophies:
 
-#### 1. **Nextflow**
-- **Language Base**: Groovy (JVM-based)
+#### 1. **[Nextflow](https://www.nextflow.io/)**
+- **Language Base**: [Groovy](https://groovy-lang.org/) (JVM-based)
 - **Philosophy**: Dataflow programming with reactive streams
 - **Strengths**: Excellent parallelization, cloud-native, strong container support
-- **Community**: Large bioinformatics community, nf-core ecosystem
+- **Community**: Large bioinformatics community, [nf-core](https://nf-co.re/) ecosystem
 
-#### 2. **Snakemake**
-- **Language Base**: Python
-- **Philosophy**: Rule-based workflow definition inspired by GNU Make
+#### 2. **[Snakemake](https://snakemake.readthedocs.io/)**
+- **Language Base**: [Python](https://www.python.org/)
+- **Philosophy**: Rule-based workflow definition inspired by [GNU Make](https://www.gnu.org/software/make/)
 - **Strengths**: Pythonic syntax, excellent for Python developers, strong academic adoption
 - **Community**: Very active in computational biology and data science
 
-#### 3. **Common Workflow Language (CWL)**
-- **Language Base**: YAML/JSON
+#### 3. **[Common Workflow Language (CWL)](https://www.commonwl.org/)**
+- **Language Base**: [YAML](https://yaml.org/)/[JSON](https://www.json.org/)
 - **Philosophy**: Vendor-neutral, standards-based approach
 - **Strengths**: Platform independence, strong metadata support, scientific reproducibility focus
 - **Community**: Broad industry and academic support across multiple domains
 
-#### 4. **Workflow Description Language (WDL)**
+#### 4. **[Workflow Description Language (WDL)](https://openwdl.org/)**
 - **Language Base**: Custom domain-specific language
 - **Philosophy**: Human-readable workflow descriptions with strong typing
-- **Strengths**: Excellent cloud integration, strong at Broad Institute and genomics centers
+- **Strengths**: Excellent cloud integration, strong at [Broad Institute](https://www.broadinstitute.org/) and genomics centers
 - **Community**: Strong in genomics, particularly for large-scale sequencing projects
 
 ### Feature Comparison Table
@@ -247,10 +245,10 @@ The bioinformatics community has developed several powerful workflow management 
 | **Parallelization** | Excellent (automatic) | Excellent | Good | Excellent |
 | **Container Support** | Native (Docker/Singularity) | Native | Native | Native |
 | **Cloud Integration** | Excellent (AWS, GCP, Azure) | Good | Good | Excellent |
-| **HPC Support** | Excellent (SLURM, PBS, etc.) | Excellent | Good | Good |
+| **HPC Support** | Excellent ([SLURM](https://slurm.schedmd.com/documentation.html), [PBS](https://www.openpbs.org/), etc.) | Excellent | Good | Good |
 | **Resume Capability** | Excellent | Excellent | Limited | Good |
 | **Community Size** | Large (bioinformatics) | Large (data science) | Medium | Medium |
-| **Package Ecosystem** | nf-core (500+ pipelines) | Snakemake Wrappers | Limited | Limited |
+| **Package Ecosystem** | [nf-core](https://nf-co.re/) (500+ pipelines) | [Snakemake Wrappers](https://snakemake-wrappers.readthedocs.io/) | Limited | Limited |
 | **Debugging Tools** | Good (Tower, reports) | Excellent | Limited | Good |
 | **Best Use Cases** | Multi-omics, clinical pipelines | Data analysis, research | Standards compliance | Large-scale genomics |
 | **Industry Adoption** | High (pharma, biotech) | High (academia) | Growing | High (genomics centers) |
@@ -384,7 +382,7 @@ requirements:
 This course focuses on **Nextflow** for several compelling reasons that make it particularly well-suited for microbial genomics workflows:
 
 #### **1. Bioinformatics Community Adoption**
-- **nf-core ecosystem**: Over 500 community-curated pipelines specifically for bioinformatics
+- **[nf-core](https://nf-co.re/) ecosystem**: Over 500 community-curated pipelines specifically for bioinformatics
 - **Industry standard**: Widely adopted by pharmaceutical companies, biotech firms, and genomics centers
 - **Active development**: Strong community support with regular updates and improvements
 
@@ -399,12 +397,12 @@ This course focuses on **Nextflow** for several compelling reasons that make it 
 - **Resume capability**: Minimizes computational waste in long-running genomic analyses
 
 #### **4. Multi-Platform Flexibility**
-- **HPC integration**: Native support for SLURM, PBS, and other job schedulers common in genomics
-- **Cloud-native**: Excellent support for AWS, Google Cloud, and Azure for scalable genomics
-- **Container support**: Seamless Docker and Singularity integration for reproducible environments
+- **HPC integration**: Native support for [SLURM](https://slurm.schedmd.com/documentation.html), [PBS](https://www.openpbs.org/), and other job schedulers common in genomics
+- **Cloud-native**: Excellent support for [AWS](https://aws.amazon.com/), [Google Cloud](https://cloud.google.com/), and [Azure](https://azure.microsoft.com/) for scalable genomics
+- **Container support**: Seamless [Docker](https://docs.docker.com/) and [Singularity](https://docs.sylabs.io/guides/latest/user-guide/) integration for reproducible environments
 
 #### **5. Microbial Genomics Specific Advantages**
-- **Pathogen surveillance pipelines**: Many nf-core pipelines designed for bacterial genomics
+- **Pathogen surveillance pipelines**: Many [nf-core](https://nf-co.re/) pipelines designed for bacterial genomics
 - **AMR analysis workflows**: Established patterns for antimicrobial resistance detection
 - **Outbreak investigation**: Scalable phylogenetic analysis capabilities
 - **Metagenomics support**: Robust handling of complex metagenomic datasets
@@ -412,7 +410,7 @@ This course focuses on **Nextflow** for several compelling reasons that make it 
 #### **6. Learning and Career Benefits**
 - **Industry relevance**: Skills directly transferable to genomics industry positions
 - **Growing demand**: Increasing adoption means more job opportunities
-- **Comprehensive ecosystem**: Learning Nextflow provides access to hundreds of ready-to-use pipelines
+- **Comprehensive ecosystem**: Learning [Nextflow](https://www.nextflow.io/) provides access to hundreds of ready-to-use pipelines
 
 The combination of these factors makes Nextflow an ideal choice for training the next generation of microbial genomics researchers and practitioners. Its balance of power, usability, and industry adoption ensures that skills learned in this course will be immediately applicable in real-world genomics applications.
 
@@ -603,7 +601,7 @@ graph LR
 
 **2. Reproducibility**
 - Built-in support for Docker, Singularity, and Conda
-- Version control integration with GitHub
+- Consistent execution environments across platforms
 - Same results every time, on any platform
 
 **3. Portability & Interoperability**
@@ -849,11 +847,11 @@ graph TD
 
 **Available Executors:**
 - **Local**: Your laptop/desktop (default, great for testing)
-- **SLURM**: High-performance computing clusters
-- **PBS/Torque**: Another type of cluster scheduler
-- **AWS Batch**: Amazon cloud computing
-- **Google Cloud**: Google's cloud platform
-- **Kubernetes**: Container orchestration platform
+- **[SLURM](https://slurm.schedmd.com/documentation.html)**: High-performance computing clusters
+- **[PBS/Torque](https://www.openpbs.org/)**: Another type of cluster scheduler
+- **[AWS Batch](https://aws.amazon.com/batch/)**: Amazon cloud computing
+- **[Google Cloud](https://cloud.google.com/batch)**: Google's cloud platform
+- **[Kubernetes](https://kubernetes.io/)**: Container orchestration platform
 
 #### **How to Choose Execution Platform**
 
@@ -864,12 +862,12 @@ You don't change your workflow code! Instead, you use configuration:
 nextflow run my_pipeline.nf
 ```
 
-**For SLURM cluster:**
+**For [SLURM](https://slurm.schedmd.com/documentation.html) cluster:**
 ```bash
 nextflow run my_pipeline.nf -profile slurm
 ```
 
-**For AWS cloud:**
+**For [AWS](https://aws.amazon.com/batch/) cloud:**
 ```bash
 nextflow run my_pipeline.nf -profile aws
 ```
@@ -2232,7 +2230,7 @@ sample1_1.fastq, sample1_2.fastq
 2. **Use parameters**: Make your pipeline configurable
 3. **Add error handling**: Make your pipeline more robust
 4. **Try nf-core**: Use community-built pipelines
-5. **Share your work**: Put your pipeline on GitHub
+5. **Document your work**: Create clear documentation and examples
 
 ### Recommended Learning Path:
 
@@ -2294,6 +2292,7 @@ which nextflow</pre>
 </li>
 <li><strong>Alternative installation:</strong>
 <pre style="background: #f5f5f5; padding: 10px; border-radius: 3px;">conda install -c bioconda nextflow</pre>
+<small>Requires <a href="https://docs.conda.io/en/latest/">Conda</a> or <a href="https://mamba.readthedocs.io/">Mamba</a></small>
 </li>
 </ol>
         `
@@ -2474,9 +2473,9 @@ work/
 Interface with different computing platforms:
 
 - **Local**: Run on your laptop/desktop
-- **SLURM**: Submit jobs to HPC clusters
-- **AWS Batch**: Execute on Amazon cloud
-- **Kubernetes**: Run on container orchestration platforms
+- **[SLURM](https://slurm.schedmd.com/documentation.html)**: Submit jobs to HPC clusters
+- **[AWS Batch](https://aws.amazon.com/batch/)**: Execute on Amazon cloud
+- **[Kubernetes](https://kubernetes.io/)**: Run on container orchestration platforms
 
 ### Core Nextflow Components
 
@@ -2654,95 +2653,83 @@ workflow {
 }
 ```
 
-Save and push to GitHub:
-```bash
-git add README.md
-git commit -m "Add README documentation"
-git push
-```
+Save your pipeline script for future use and documentation.
 
-## Key Concepts
+## Key Concepts Summary
 
-### Version Control Benefits
-- **Track Changes**: See what changed, when, and why
-- **Backup**: Your code is safe on GitHub
-- **Collaboration**: Work with others easily
-- **Reproducibility**: Others can use your exact pipeline version
+### Nextflow Core Principles
+- **Dataflow Programming**: Data flows through processes via channels
+- **Parallelization**: Automatic parallel execution of independent tasks
+- **Portability**: Same code runs on laptop, HPC, or cloud
+- **Reproducibility**: Consistent results across different environments
 
-### Git Workflow
+### Pipeline Development Best Practices
+- **Start simple**: Begin with basic processes and add complexity gradually
+- **Test frequently**: Run your pipeline with small datasets during development
+- **Use containers**: Ensure reproducible software environments
+- **Document clearly**: Add comments and meaningful process names
+- **Handle errors**: Plan for failures and edge cases
+
+### Nextflow Workflow Patterns
 ```text
-Working Directory → Staging Area → Local Repository → Remote Repository
-     (edit)           (git add)      (git commit)        (git push)
+Input Data → Process 1 → Process 2 → Process 3 → Final Results
+     ↓           ↓           ↓           ↓           ↓
+  Channel    Channel     Channel     Channel    Published
+ Creation   Transform   Transform   Transform    Output
 ```
 
-### Commit Best Practices
-- Write clear, descriptive messages
-- Commit logical units of change
-- Commit frequently
-- Don't commit generated files (use .gitignore)
-
-## Common Issues and Solutions
-
-### Git Configuration
-```bash
-# Set up your identity (first time only)
-git config --global user.name "Your Name"
-git config --global user.email "your.email@example.com"
-```
-
-### Authentication Issues
-```bash
-# If password authentication fails, use personal access token:
-# GitHub → Settings → Developer settings → Personal access tokens
-# Generate new token with 'repo' permissions
-# Use token instead of password when pushing
-```
-
-### Common Git Commands
-| Command | Purpose | Example |
-|---------|---------|---------|
-| `git status` | Check repository state | `git status` |
-| `git diff` | See changes | `git diff main.nf` |
-| `git add .` | Stage all changes | `git add .` |
-| `git commit -m` | Save changes | `git commit -m "Fix bug"` |
-| `git push` | Upload to GitHub | `git push origin main` |
-| `git pull` | Download from GitHub | `git pull origin main` |
+### Configuration Best Practices
+- Use profiles for different execution environments
+- Parameterize your pipelines for flexibility
+- Set appropriate resource requirements
+- Enable reporting and monitoring features
 
 ## Assessment Activities
 
 ### Individual Tasks
-- Successfully complete and run the Nextflow pipeline
-- Initialize a Git repository for your pipeline
-- Create a GitHub account and repository
-- Push your pipeline to GitHub
-- Create a comprehensive README file
+- Successfully complete and run all three Nextflow exercises
+- Understand the structure of Nextflow work directories
+- Create and modify basic Nextflow processes
+- Use channels to manage data flow between processes
+- Configure pipeline parameters and execution profiles
 
 ### Group Discussion
-- Share GitHub repository URLs with the class
-- Discuss pipeline design choices
-- Review each other's README files
-- Troubleshoot Git/GitHub issues together
+- Share pipeline design approaches and solutions
+- Discuss common challenges and troubleshooting strategies
+- Review different ways to structure Nextflow processes
+- Compare execution results and performance observations
 
 ## Resources
 
 ### Nextflow Resources
-- [Nextflow Documentation](https://www.nextflow.io/docs/latest/)
-- [nf-core pipelines](https://nf-co.re/)
+- [Nextflow Documentation](https://www.nextflow.io/docs/latest/) - Official comprehensive documentation
+- [Nextflow Patterns](https://nextflow-io.github.io/patterns/) - Common workflow patterns and best practices
+- [nf-core pipelines](https://nf-co.re/) - Community-curated bioinformatics pipelines
+- [Nextflow Training](https://training.nextflow.io/) - Official training materials and workshops
 
-### Git/GitHub Resources
-- [GitHub Guides](https://guides.github.com/)
-- [Git Handbook](https://guides.github.com/introduction/git-handbook/)
-- [GitHub Learning Lab](https://lab.github.com/)
-- [Pro Git Book (free)](https://git-scm.com/book)
+### Community and Support
+- [Nextflow Slack](https://nextflow.slack.com/) - Community discussion and support
+- [nf-core Slack](https://nfcore.slack.com/) - Pipeline-specific discussions
+- [Nextflow GitHub](https://github.com/nextflow-io/nextflow) - Source code and issue tracking
 
 ## Looking Ahead
 
 **Day 7 Preview**: Applied Genomics & Advanced Topics
 
-- MTB analysis pipeline development
-- Genome assembly workflows
-- Advanced Nextflow features and optimization
-- Pipeline deployment and best practices
+### Professional Development
+- Git and GitHub for pipeline version control and collaboration
+- Professional workflow development and team collaboration
+
+### Applied Genomics
+- **MTB analysis pipeline development** - Real-world tuberculosis genomics workflows
+- **Genome assembly workflows** - Complete bacterial genome assembly pipelines
+- **Pathogen surveillance** - Outbreak investigation and AMR detection pipelines
+
+### Advanced Nextflow
+- **Advanced Nextflow features** - Complex workflow patterns and optimization
+- **Pipeline deployment** - HPC, cloud, and container deployment strategies
+- **Performance optimization** - Resource management and scaling techniques
+- **Best practices** - Production-ready pipeline development
 
 ### Exercise 4: Building a QC Process (30 minutes)
 
