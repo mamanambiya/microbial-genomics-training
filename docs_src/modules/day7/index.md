@@ -9,6 +9,7 @@
 ### Advanced Nextflow & Professional Development
 
 **Coming Soon:**
+
 - Git and GitHub for pipeline version control and collaboration
 - MTB analysis pipeline development and real-world applications  
 - Genome assembly workflows and pathogen surveillance
