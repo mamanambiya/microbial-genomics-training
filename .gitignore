@@ -5,7 +5,6 @@ work/
 results/
 nextflow
 nxf-tmp.*
-nextflow.config
 
 # Test files
 test_*.sh
@@ -14,10 +13,6 @@ test_*.sh
 *Test_Results*.md
 *Testing_Checklist.md
 simple_module_test.sh
-
-# Nextflow scripts (temporary/development)
-*.nf
-workflows/*.nf
 
 # Sample sheets
 samplesheet*.csv
