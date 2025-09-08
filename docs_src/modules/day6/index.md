@@ -1,8 +1,8 @@
-# Day 6: Nextflow Foundations & Core Concepts
+# Day 6: Nextflow Pipeline Development
 
 **Date**: September 8, 2025
 **Duration**: 09:00-13:00 CAT
-**Focus**: Introduction to workflow management, Nextflow fundamentals, and first pipelines
+**Focus**: Workflow reproducibility, Nextflow basics, pipeline development
 
 ## Learning Philosophy: See it → Understand it → Try it → Build it → Master it
 
@@ -1118,12 +1118,12 @@ nextflow run count_lines.nf
 
 ??? success "Expected output"
     ```text
-    N E X T F L O W  ~  version 23.10.0
+    N E X T F L O W  ~  version 25.04.6
     Launching `count_lines.nf` [amazing_euler] - revision: a1b2c3d4
     executor >  local (1)
     [a1/b2c3d4] process > NUM_LINES (1) [100%] 1 of 1 ✔
-    Processing: sample.fastq
-    1000
+    Processing: /data/Dataset_Mt_Vc/tb/raw_data/ERR036221_1.fastq.gz
+    2452408
     ```
 
     **What this output means:**
