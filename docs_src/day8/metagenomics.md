@@ -1,0 +1,377 @@
+# Metagenomics in Clinical & Public Health
+
+## 1. Overview
+
+This section introduces **core principles of metagenomics**. Metagenomics is the study of genetic material recovered directly from environmental or clinical samples, allowing 
+analysis of **entire microbial communities** without the need for cultivation. This section includes conceptual notes, rationale for each step, practical commands, 
+and a **mini toy dataset exercise**. Unlike genomics (WGS) which focuses on analyzing individual genomes (such as bacterial isolate), metagenomics
+studies the collective genomes or markers from microbial communities.
+
+### Genomics vs Metagenomics
+
+
+| Description | Whole Genome Sequencing (WGS) | Metagenomics |
+|-------------|-------------------------------|--------------|
+| **Umbrella term** | Microbial Genomics | Microbial Profiling |
+| **Scope** | Sequencing of the entire genome of a single isolate (pure culture) | Sequences all genetic material in mixed community (without culturing)|
+| **Applications** | Species identification, genome assembly, annotation, AMR/virulence detection, plasmid/MGE analysis, outbreak tracking | Community profiling, functional potential, pathogen detection in mixed samples, ecology studies |
+| **Features** | Organism is known \& isolated before sequencing | Captures both known and unknown microbes from environment or host |
+
+
+### Metagenomic Strategies: Shotgun vs 16S rRNA
+
+
+| Description | Shotgun Metagenomics | 16S rRNA Amplicon Gene Sequencing |
+|-------------|-------------------------------|--------------|
+| **Definition** | Random sequencing of **All DNA** in a sample | **Targeted amplicon sequencing** of the 16 S rRNA gene |
+| **Resolution** | Species- and strain-level, **functional genes** (AMR, metabolism, plasmids, MGEs) | Genus-level (sometimes species-level), **no direct functional** information |
+| **Merits** | Comprehensive (taxonomy + function), **detects viruses and fungi** |  Limited to taxonomic resolution, can't detect fungi/viruses, lacks functional insights, **good for bacterial** surveys |
+| **Demerits** | More expensive, higher computational load | Cost-effective, standardized |
+
+---
+
+## 2. Workflow: From Sequencing to Interpretation
+
+### Step 1. Study Design & Sequencing
+
+- **Why**: Sequencing depth, read length, and platform choice directly influence resolution of taxa, detection of low-abundance organisms, and assembly quality.
+- **Example**:
+  - Illumina (short reads): accurate, cost-effective, widely used for clinical metagenomics.
+  - ONT/PacBio (long reads): useful for resolving repeats, plasmids, MGEs.
+
+We'll use a publicly available mock community dataset: ZymoBIOMICS Gut Microbiome Standard, SRA: l. You can download from SRA using `ncbi-tools` tools
+```bash
+# fasterq-dump SRR13827118 --progress --threads 8
+
+
+---
+
+### Step 2. Quality Control
+
+- **Why**: To reduce the effects of sequencing errors, remove adapters, and low-quality 
+reads which may reduce false positives.
+- **Tools**: `fastqc`, `multiqc`
+
+```bash
+# Load modules
+module load fastqc
+module multiqc
+
+indata="/data/users/user24/metagenomes/shotgun/"
+outfastqc="/data/users/${USER}/metagenomes/shotgun/data_analysis/01_qc/"
+
+mkdir -p ${outfastqc}
+
+# Run fastqc
+fastqc ${indata}*.fastq.gz -o ${outfastqc}
+multiqc ${outfastqc} -o ${outfastqc}
+```
+**What to think about?**
+- Which parts of the data are flagged as potentially problematic? GC% content of the dataset.
+NB: We are dealing with mixed community and organisms, so its difficult to  have a perfect normal distribution around the average.
+As such we consider this as normal given the biology of the system.
+- Does the sequencing length matches the libraries used? If sequences are shorter than expected, are adapters
+ a concern?
+- Are adapters and/or barcodes removed?
+  - Look at the Per base sequence content to diagnose this.
+- Is there unexpected sequence duplication?
+  - This can occur when low-input library preparations are used.
+- Are over-represented k-mers present?
+  - This can be a sign of adapter and barcode contamination.
+
+
+---
+
+### Step 3. Trimming & Filtering
+
+- **Why**: Removes adapters (which can cause false alignments \& false taxonomic assignments), low-quality bases (increase error rates), and very short 
+reads (to standardize read lengths) that bias downstream analysis.
+- **Tool**: `fastp`, `trimmomatic`, `BBMap`, `sickle`, `cutadapt`, etc.
+
+
+```bash
+#!/bin/bash
+
+
+# Load required modules/tools
+module load fastp trimmomatic
+
+# Define input and output dir
+indata="/data/users/user24/metagenomes/"
+wkdir="/data/users/${USER}/metagenomics/shotgun/"
+outtrimmomatic=${wkdir}"/data_analysis/02_trimmomatic"
+
+mkdir -p ${outtrimmomatic}
+
+# Trimming with Trimmomatic
+for file in `ls ${data}*1.fastq.gz`
+do
+  sample=$(basename ${file} _1.fastq.gz)
+  trimmomatic PE -threads 8 \
+      ${indata}${sample}_R1.fastq.gz {indata}${sample}_R2.fastq.gz \
+      ${outtrimmomatic}${sample}_R1.fastq.gz ${outtrimmomatic}${sample}_R1_unpaired.fastq.gz \
+      ${outtrimmomatic}${sample}_R2.fastq.gz ${outtrimmomatic}${sample}_R2_unpaired.fastq.gz \
+      ILLUMINACLIP:adapters.fa:2:30:10 \
+      LEADING:3 TRAILING:3 \
+      SLIDINGWINDOW:4:20 \
+      MINLEN:50
+done
+echo "Trimming with Trimmomatic completed"
+```
+
+> **Note:** The trimming parameters in `trimmomatic` are processed in the order they are specified. For instance, 
+
+---
+
+```bash
+for file in `ls ${data}*1.fastq.gz`
+do
+  sample=$(basename ${file} _1.fastq.gz)
+  trimmomatic PE -threads 8 \
+        ${indata}${sample}_R1.fastq.gz {indata}${sample}_R2.fastq.gz \
+        ${outtrimmomatic}${sample}_R1.fastq.gz ${outtrimmomatic}${sample}_R1_unpaired.fastq.gz \
+        ${outtrimmomatic}${sample}_R2.fastq.gz ${outtrimmomatic}${sample}_R2_unpaired.fastq.gz \
+        ILLUMINACLIP:adapters.fa:2:30:10 \
+        LEADING:3 TRAILING:3 \
+        MINLEN:50 \
+        SLIDINGWINDOW:4:20 
+done
+```
+means we remove sequences shorter than 50 bps and then qualiyty trim, thus if a sequence is trimmed to a length shorter than 50bps after trimming, the `MINLEN` filtering does not execute a second time.
+Parameter |	Type |	Description
+----------|------|-----------------------------
+PE |	positional |	Specifies whether we are analysing single- or paired-end reads
+-threads 2 |	keyword |	Specifies the number of threads to use when processing
+-phred33 |	keyword |	Specifies the fastq encoding used
+mock_R1.adapter_decay.fastq.gz / mock_R2.adapter_decay.fastq.gz |	positional 	| The paired forward and reverse reads to trim
+mock_R1.qc.fastq.gz |	positional 	|The file to write forward reads which passed quality trimming, if their reverse partner also passed
+mock_s1.qc.fastq.gz |	positional |	The file to write forward reads which passed quality trimming, if their reverse partner failed (orphan reads)
+mock_R2.qc.fastq.gz / mock_s2.qc.fastq.gz |	positional 	| The reverse-sequence equivalent of above
+ILLUMINACLIP:NexteraPE-PE.fa:1:25:7 |	positional |	Adapter trimming allowing for 1 seed mismatch, palindrome clip score threshold of 25, and simple clip score threshold of 7
+SLIDINGWINDOW:4:30 	| positional 	|Quality filtering command. Analyse each sequence in a 4 base pair sliding window and then truncate if the average quality drops below Q30
+MINLEN:50 	| positional |	Length filtering command. Discard sequences that are shorter than 80 base pairs after trimming
+
+```bash
+# Delete unnecessary files
+rm -rf ${outtrimmomatic}*${sample}*_unpaired.fastq.gz
+
+# Quality checking
+module load fastqc multiqc
+fastqc ${outtrimmomatic}* -o ${outtrimmomatic}
+multiqc  ${outtrimmomatic} -o  ${outtrimmomatic}
+```
+
+
+---
+
+
+### Step 4. Deduplication & Host DNA Removal
+
+- **Why**:
+- Often metagenomes are obtained from host-associated microbial communities. As a result, they contain significant amount of host DNA which may interfere with microbial analysis
+  and create privacy concerns.
+- Specifically any studies invloving human subjects or samples derived from Taonga species.
+- Although several approaches are used for this, the most popular is to map reads to a reference genome (includin human genome). That is remove all reads that map to the reference of the dataset.
+  
+- **Tools**: `clumpify` (dedup), `bowtie2` or `bwa mem` (host removal).
+
+```bash
+#!/bin/bash
+set -e  # Exit on error
+
+# Define dirs
+genome_dir="/data/users/user24/refs/human_reference/"
+
+## Remove human contamination using BWA and SAMtools
+## Create dir
+mkdir -p ${genome_dir}
+# Download the Human refence genome
+cd ${genome_dir}
+
+# Configuration
+GENOME_VERSION="GRCh38"
+BASE_URL="https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/001/405/GCA_000001405.15_GRCh38"
+
+echo "=== Downloading Human Reference Genome (${GENOME_VERSION}) ==="
+
+# Option 1: Download complete genome assembly (recommended for most applications)
+echo "Downloading complete genome assembly..."
+wget -c "${BASE_URL}/GCA_000001405.15_GRCh38_genomic.fna.gz" \
+     -O "GRCh38_genomic.fna.gz"
+# Decompress
+echo "Decompressing genome file..."
+gunzip -f GRCh38_genomic.fna.gz
+
+# Option 2: Download chromosome-only version (excludes contigs/scaffolds)
+echo "Downloading chromosome-only version..."
+wget -c "https://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.fa.gz" \
+     -O "hg38_chromosomes_only.fa.gz"
+
+gunzip -f hg38_chromosomes_only.fa.gz
+```
+
+```bash
+#!/bin/bash
+
+# Load modules
+module load bwa
+module load bowtie2
+
+echo "=== Building BWA Index ==="
+# Build BWA index for alignment (required for host removal, one time set-up)
+bwa index GRCh38_genomic.fna
+
+echo "=== Verifying Download ==="
+# Check file integrity
+echo "Genome file size:"
+ls -lh *.fna
+
+echo "Number of sequences:"
+grep -c ">" GRCh38_genomic.fna
+
+echo "First few sequence headers:"
+grep ">" GRCh38_genomic.fna | head -10
+
+echo "=== Download Complete ==="
+echo "Reference genome files are ready in: $(pwd)"
+echo "Main genome file: GRCh38_genomic.fna"
+echo "Chromosome-only file: hg38_chromosomes_only.fa"
+echo ""
+echo "Files generated:"
+echo "- GRCh38_genomic.fna (main reference)"
+echo "- GRCh38_genomic.fna.amb, .ann, .bwt, .pac, .sa (BWA index)"
+echo "- GRCh38_genomic.fna.fai (samtools index)"
+
+# Align reads to human genome
+for file in `ls ${indata}*1.fastq.gz`
+do
+  sample=$(basename ${file} _1.fastq.gz)
+  bowtie2 -x ${refs}human_index -1 {sample}${data}_trimmed_R1.fastq.gz -2 sample_trimmed_R2.fastq.gz \
+    --un-conc sample_host_removed.fastq.gz -S /dev/null
+
+
+  bwa mem -t 8 human_reference.fasta \
+      trimmed_R1_paired.fastq.gz trimmed_R2_paired.fastq.gz \
+      | samtools view -b -f 4 - > unmapped_reads.bam
+  
+  # Convert unmapped reads back to FASTQ
+  samtools fastq -1 dehosted_R1.fastq.gz -2 dehosted_R2.fastq.gz unmapped_reads.bam
+
+echo "Host removal completed"
+```
+
+---
+
+### Step 5. Taxonomic Profiling (Read-Based)
+
+- **Why**: Directly assigns taxonomy without assembly, faster and less computationally intensive.
+- **Tools**: Kraken2 + Bracken, MetaPhlAn
+
+```bash
+kraken2 --db kraken2_db --paired sample_host_removed.1.fq.gz sample_host_removed.2.fq.gz \
+  --output kraken2_output.txt --report kraken2_report.txt
+bracken -d kraken2_db -i kraken2_report.txt -o bracken_species.txt -r 150 -l S
+```
+
+---
+
+### Step 6. Functional Profiling (Read-Based)
+
+- **Why**: Identifies pathways/genes present without needing assembly.
+- **Tool**: HUMAnN
+
+```bash
+humann --input sample_host_removed.fastq.gz --output humann_out/
+```
+
+---
+
+### Step 7. Assembly-Based Profiling
+
+- **Why**: Reconstructs contigs/MAGs b enables strain-level analysis, discovery of new genes, plasmids, MGEs.
+- **Tools**: **MEGAHIT** or **metaSPAdes**
+
+#### MEGAHIT
+
+```bash
+megahit -1 sample_host_removed.1.fq.gz -2 sample_host_removed.2.fq.gz -o megahit_out/
+```
+
+#### metaSPAdes
+
+```bash
+spades.py --meta -1 sample_host_removed.1.fq.gz -2 sample_host_removed.2.fq.gz -o metaspades_out/
+```
+
+**MEGAHIT vs metaSPAdes:**
+
+- **MEGAHIT Advantages:**
+  - Extremely fast, lower memory usage.
+  - Scales better for very large datasets (e.g., population metagenomes).
+- **MEGAHIT Disadvantages:**
+  - May produce slightly shorter contigs than metaSPAdes.
+- **metaSPAdes Advantages:**
+  - Produces higher-quality, longer assemblies (useful for MAG recovery).
+- **metaSPAdes Disadvantages:**
+  - Requires more RAM and CPU time.
+
+---
+
+### Step 8. Mapping & Binning
+
+- **Why**: Group contigs into MAGs, quantify abundances.
+- **Tools**: `bowtie2`, `samtools`, `MetaBAT2`
+
+```bash
+bowtie2 -x megahit_out/final.contigs.fa -1 sample_host_removed.1.fq.gz -2 sample_host_removed.2.fq.gz | samtools sort -o aln.bam
+metabat2 -i megahit_out/final.contigs.fa -a depth.txt -o bins_dir/bin
+```
+
+---
+
+### Step 9. MAG Quality Control
+
+- **Why**: Ensures completeness & contamination are acceptable.
+- **Tool**: CheckM
+
+```bash
+checkm lineage_wf bins_dir/ checkm_out/
+```
+
+---
+
+### Step 10. Annotation & Specialized Analyses
+
+- **Why**: Identify AMR, virulence, plasmids, metabolic capacity.
+- **Tools**: Prokka, Bakta, AMRFinderPlus, ABRicate, DRAM
+
+#### Where DRAM fits in:
+
+- **Swap in DRAM** in place of Prokka/Bakta for **functional annotation of MAGs**.
+- DRAM produces detailed metabolic profiles, pathway reconstruction, and microbial ecology insights.
+
+```bash
+DRAM.py annotate -i bins_dir/ -o dram_out/ --threads 16
+```
+
+---
+
+### Step 11. Abundance Estimation & Visualization
+
+- **Why**: Quantifies taxa/genes b links to clinical or epidemiological metadata.
+- **Tools**: CoverM, Krona, R for plots.
+
+```bash
+coverm contig --bam-files aln.bam --reference megahit_out/final.contigs.fa --methods tpm > coverm_tpm.tsv
+```
+
+---
+
+### Step 12. Reporting & Reproducibility
+
+- **Why**: Essential for public health applications.
+- Use **Nextflow + Singularity/Conda** for reproducible pipelines.
+- Summarize results in Excel or RMarkdown reports.
+
+---
+
