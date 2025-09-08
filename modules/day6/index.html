@@ -2626,7 +2626,7 @@
 </span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>nohup<span class="w"> </span><span class="nb">command</span><span class="w"> </span><span class="p">&amp;</span><span class="w">            </span><span class="c1"># Run in background</span>
 </span></code></pre></div>
 
-**Expected competency:** You should be comfortable with basic file operations, text processing, and process management.
+<b>Expected competency:</b> You should be comfortable with basic file operations, text processing, and process management.
 </div>
 
 <h3 id="software-installation-overview">Software Installation Overview<a class="headerlink" href="#software-installation-overview" title="Permanent link">&para;</a></h3>
@@ -3260,7 +3260,7 @@
 <h3 id="the-big-picture-traditional-vs-modern-approaches">The Big Picture: Traditional vs Modern Approaches<a class="headerlink" href="#the-big-picture-traditional-vs-modern-approaches" title="Permanent link">&para;</a></h3>
 <p>To understand why workflow management systems like Nextflow are revolutionary, let's visualize the <strong>time difference</strong>:</p>
 <h4 id="traditional-shell-scripting-the-slow-way">Traditional Shell Scripting - The Slow Way<a class="headerlink" href="#traditional-shell-scripting-the-slow-way" title="Permanent link">&para;</a></h4>
-<pre class="mermaid"><code>graph TD
+<pre class="mermaid"><code>flowchart TD
     A1[Sample 1] --&gt; B1[FastQC - 5 min]
     B1 --&gt; C1[Trimming - 10 min]
     C1 --&gt; D1[Assembly - 30 min]
@@ -3293,7 +3293,7 @@
 <li><strong>Scaling nightmare</strong>: 100 samples = 100 hours!</li>
 </ul>
 <h4 id="nextflow-the-fast-way">Nextflow - The Fast Way<a class="headerlink" href="#nextflow-the-fast-way" title="Permanent link">&para;</a></h4>
-<pre class="mermaid"><code>graph TD
+<pre class="mermaid"><code>flowchart TD
     A4[Sample 1] --&gt; B4[FastQC - 5 min]
     A5[Sample 2] --&gt; B5[FastQC - 5 min]
     A6[Sample 3] --&gt; B6[FastQC - 5 min]
@@ -3430,7 +3430,7 @@ updateCalculator();
 <h3 id="what-is-nextflow">What is Nextflow?<a class="headerlink" href="#what-is-nextflow" title="Permanent link">&para;</a></h3>
 <p>Nextflow is a <strong>workflow management system</strong> that comprises both a runtime environment and a domain-specific language (DSL). It's designed specifically to manage computational data-analysis workflows in bioinformatics and other scientific fields.</p>
 <h3 id="core-nextflow-features">Core Nextflow Features<a class="headerlink" href="#core-nextflow-features" title="Permanent link">&para;</a></h3>
-<pre class="mermaid"><code>graph LR
+<pre class="mermaid"><code>flowchart LR
     A[Fast Prototyping] --&gt; B[Simple Syntax]
     C[Reproducibility] --&gt; D[Containers &amp; Conda]
     E[Portability] --&gt; F[Run Anywhere]
@@ -3553,7 +3553,7 @@ updateCalculator();
 </span><span id="__span-21-14"><a id="__codelineno-21-14" name="__codelineno-21-14" href="#__codelineno-21-14"></a><span class="w">    </span><span class="o">.</span><span class="na">splitCsv</span><span class="o">(</span><span class="nl">header:</span><span class="w"> </span><span class="kc">true</span><span class="o">)</span>
 </span></code></pre></div>
 <p><strong>Channel Flow Example:</strong></p>
-<pre class="mermaid"><code>graph LR
+<pre class="mermaid"><code>flowchart LR
     A[Input Files] --&gt; B[Channel]
     B --&gt; C[Process 1]
     C --&gt; D[Output Channel]
@@ -3614,7 +3614,7 @@ updateCalculator();
 <li><strong>Handle failures</strong>: Retries failed tasks or stops gracefully</li>
 <li><strong>Collect results</strong>: Gathers outputs in the specified locations</li>
 </ol>
-<pre class="mermaid"><code>graph TD
+<pre class="mermaid"><code>flowchart TD
     A[Nextflow Script] --&gt; B[Parse &amp; Plan]
     B --&gt; C[Submit Tasks]
     C --&gt; D[Monitor Execution]
@@ -3680,7 +3680,7 @@ updateCalculator();
 <h3 id="workflow-execution-and-executors">Workflow Execution and Executors<a class="headerlink" href="#workflow-execution-and-executors" title="Permanent link">&para;</a></h3>
 <p>One of Nextflow's most powerful features is that it separates <strong>what</strong> your workflow does from <strong>where</strong> it runs.</p>
 <h4 id="executors-where-your-workflow-runs"><strong>Executors: Where Your Workflow Runs</strong><a class="headerlink" href="#executors-where-your-workflow-runs" title="Permanent link">&para;</a></h4>
-<pre class="mermaid"><code>graph TD
+<pre class="mermaid"><code>flowchart TD
     A[Your Nextflow Script] --&gt; B{Choose Executor}
     B --&gt; C[Local Computer]
     B --&gt; D[SLURM Cluster]
@@ -3759,7 +3759,7 @@ updateCalculator();
 <p>This means all task execution directories will be created under <code>/data/users/mamana/nextflow-training/work/</code> (or your username).</p>
 <h4 id="nextflow-directory-structure">Nextflow Directory Structure<a class="headerlink" href="#nextflow-directory-structure" title="Permanent link">&para;</a></h4>
 <p>When you run a Nextflow pipeline, several directories are automatically created:</p>
-<pre class="mermaid"><code>graph TD
+<pre class="mermaid"><code>flowchart TD
     A[microbial-genomics-training/] --&gt; B[workflows/]
     A --&gt; C[data/]
     A --&gt; D[/data/users/$USER/nextflow-training/work/]
