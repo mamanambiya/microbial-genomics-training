@@ -1758,8 +1758,6 @@ document.getElementById('command-input').addEventListener('keydown', function(e)
     }
 });
 </script>
-```
-```
 
 ### Your First Genomics Pipeline
 
