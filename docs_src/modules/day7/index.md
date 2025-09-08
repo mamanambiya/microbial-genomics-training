@@ -17,26 +17,31 @@ Building on Exercise 3 from Day 6, this module transforms your basic pipeline in
 ## Table of Contents
 
 ### **🔧 Building on Exercise 3**
+
 - [From Exercise 3 to Production Pipeline](#from-exercise-3-to-production-pipeline)
 - [Pipeline Enhancement Strategy](#pipeline-enhancement-strategy)
 
 ### **📚 Version Control Fundamentals**
+
 - [Git Basics for Bioinformatics](#git-basics-for-bioinformatics)
 - [GitHub for Pipeline Collaboration](#github-for-pipeline-collaboration)
 - [Versioning Nextflow Workflows](#versioning-nextflow-workflows)
 
 ### **🐳 Containerization Introduction**
+
 - [Docker Fundamentals](#docker-fundamentals)
 - [DockerHub for Bioinformatics Tools](#dockerhub-for-bioinformatics-tools)
 - [Container Integration in Nextflow](#container-integration-in-nextflow)
 
 ### **🧬 MTB Analysis Pipeline Development**
+
 - [Mycobacterium tuberculosis Genomics](#mycobacterium-tuberculosis-genomics)
 - [Pathogen-Specific Considerations](#pathogen-specific-considerations)
 - [Clinical Genomics Applications](#clinical-genomics-applications)
 - [Production MTB Pipeline](#production-mtb-pipeline)
 
 ### **🚀 Professional Development**
+
 - [Pipeline Documentation](#pipeline-documentation)
 - [Testing and Validation](#testing-and-validation)
 - [Deployment Strategies](#deployment-strategies)
@@ -129,6 +134,7 @@ graph TD
 ```
 
 **Real-world scenarios:**
+
 - **Research labs**: Multiple researchers working on the same pipeline
 - **Clinical labs**: Regulatory requirements for change tracking
 - **Collaborations**: Sharing pipelines between institutions
@@ -252,6 +258,7 @@ nextflow run main.nf --input samplesheet.csv --outdir results/
 ## Citation
 
 If you use this pipeline, please cite: [Your Publication]
+
 ```
 
 ---
@@ -274,6 +281,7 @@ module load prokka/1.14.6
 ```
 
 **The Container Solution:**
+
 ```bash
 # Container approach - everything included
 container 'biocontainers/fastqc:v0.11.9'
@@ -342,6 +350,191 @@ container 'staphb/spades:3.15.4'            # Specific version
 container 'staphb/spades:latest'             # Latest version (not recommended for production)
 ```
 
+#### Testing Containers with Singularity
+
+**Why Test Containers First?**
+Before integrating containers into your Nextflow pipeline, it's good practice to test them individually to ensure they work correctly and understand their requirements.
+
+**Singularity vs Docker on HPC:**
+
+- **Docker**: Requires root privileges, not available on most HPC systems
+- **Singularity**: Designed for HPC environments, can run Docker containers without root
+- **Nextflow**: Automatically converts Docker containers to Singularity when needed
+
+**Basic Singularity Testing Commands:**
+
+```bash
+# Test FastQC container
+singularity exec docker://biocontainers/fastqc:v0.11.9 fastqc --version
+
+# Test with real data
+singularity exec docker://biocontainers/fastqc:v0.11.9 \
+    fastqc /data/Dataset_Mt_Vc/tb/raw_data/SRR1180160_1.fastq.gz --outdir ./test_output
+
+# Test Trimmomatic container
+singularity exec docker://staphb/trimmomatic:0.39 \
+    trimmomatic PE --help
+
+# Test SPAdes container
+singularity exec docker://staphb/spades:3.15.4 \
+    spades.py --version
+
+# Test Prokka container
+singularity exec docker://staphb/prokka:1.14.6 \
+    prokka --version
+```
+
+**Interactive Container Testing:**
+
+```bash
+# Enter container interactively to explore
+singularity shell docker://biocontainers/fastqc:v0.11.9
+
+# Inside the container, you can:
+# - Check what tools are available
+# - Explore file system structure
+# - Test commands manually
+# - Verify dependencies
+
+# Example interactive session:
+Singularity> which fastqc
+Singularity> fastqc --help
+Singularity> ls /usr/local/bin/
+Singularity> exit
+```
+
+**Testing with Bind Mounts:**
+
+```bash
+# Bind mount your data directory to test with real files
+singularity exec \
+    --bind /data/Dataset_Mt_Vc/tb/raw_data:/input \
+    --bind /tmp:/output \
+    docker://biocontainers/fastqc:v0.11.9 \
+    fastqc /input/SRR1180160_1.fastq.gz --outdir /output
+
+# Check the results
+ls -la /tmp/*.html /tmp/*.zip
+```
+
+**Container Validation Script:**
+
+Create a simple script to test all your containers:
+
+```bash
+#!/bin/bash
+# container_test.sh - Test bioinformatics containers
+
+echo "Testing bioinformatics containers..."
+
+# Test FastQC
+echo "Testing FastQC..."
+singularity exec docker://biocontainers/fastqc:v0.11.9 fastqc --version
+if [ $? -eq 0 ]; then
+    echo "✅ FastQC container works"
+else
+    echo "❌ FastQC container failed"
+fi
+
+# Test Trimmomatic
+echo "Testing Trimmomatic..."
+singularity exec docker://staphb/trimmomatic:0.39 trimmomatic -version
+if [ $? -eq 0 ]; then
+    echo "✅ Trimmomatic container works"
+else
+    echo "❌ Trimmomatic container failed"
+fi
+
+# Test SPAdes
+echo "Testing SPAdes..."
+singularity exec docker://staphb/spades:3.15.4 spades.py --version
+if [ $? -eq 0 ]; then
+    echo "✅ SPAdes container works"
+else
+    echo "❌ SPAdes container failed"
+fi
+
+# Test Prokka
+echo "Testing Prokka..."
+singularity exec docker://staphb/prokka:1.14.6 prokka --version
+if [ $? -eq 0 ]; then
+    echo "✅ Prokka container works"
+else
+    echo "❌ Prokka container failed"
+fi
+
+echo "Container testing complete!"
+```
+
+**Running the Test Script:**
+
+```bash
+# Make the script executable
+chmod +x container_test.sh
+
+# Run the tests
+./container_test.sh
+```
+
+**Expected Output:**
+
+```bash
+Testing bioinformatics containers...
+Testing FastQC...
+FastQC v0.11.9
+✅ FastQC container works
+Testing Trimmomatic...
+0.39
+✅ Trimmomatic container works
+Testing SPAdes...
+SPAdes v3.15.4
+✅ SPAdes container works
+Testing Prokka...
+prokka 1.14.6
+✅ Prokka container works
+Container testing complete!
+```
+
+**Troubleshooting Container Issues:**
+
+```bash
+# If a container fails, check:
+
+# 1. Container exists and is accessible
+singularity pull docker://biocontainers/fastqc:v0.11.9
+
+# 2. Check container contents
+singularity inspect docker://biocontainers/fastqc:v0.11.9
+
+# 3. Run with verbose output
+singularity exec --debug docker://biocontainers/fastqc:v0.11.9 fastqc --version
+
+# 4. Check for missing dependencies
+singularity exec docker://biocontainers/fastqc:v0.11.9 ldd /usr/local/bin/fastqc
+```
+
+**Best Practices for Container Testing:**
+
+1. **Always test containers before using in production pipelines**
+2. **Use specific version tags rather than 'latest'**
+3. **Test with real data similar to your analysis**
+4. **Document working container versions**
+5. **Create validation scripts for your container stack**
+
+#### Hands-on Exercise: Test Your Containers
+
+We've provided a ready-to-use container testing script in your workflows directory:
+
+```bash
+# Navigate to workflows directory
+cd /users/mamana/microbial-genomics-training/workflows
+
+# Run the container test script
+./container_test.sh
+```
+
+This script will test all the containers we'll use in our MTB pipeline and provide colored output showing which containers are working correctly.
+
 ### Container Integration in Nextflow
 
 #### Converting Exercise 3 to Use Containers
@@ -349,6 +542,7 @@ container 'staphb/spades:latest'             # Latest version (not recommended f
 Let's update our `qc_pipeline.nf` to use containers instead of modules:
 
 **Before (Module-based):**
+
 ```groovy
 process fastqc_raw {
     module 'fastqc/0.12.1'
@@ -370,6 +564,7 @@ process fastqc_raw {
 ```
 
 **After (Container-based):**
+
 ```groovy
 process fastqc_raw {
     container 'biocontainers/fastqc:v0.11.9'
@@ -666,6 +861,7 @@ profiles {
 #### Understanding MTB Genomics
 
 **Key Characteristics:**
+
 - **Genome size**: ~4.4 Mb
 - **GC content**: ~65.6%
 - **Genes**: ~4,000 protein-coding genes
@@ -695,6 +891,7 @@ graph TD
 #### MTB-Specific Pipeline Requirements
 
 **Essential Analysis Steps:**
+
 1. **Quality Control**: Standard FastQC + MTB-specific metrics
 2. **Assembly**: Optimized for high GC content
 3. **Annotation**: MTB-specific gene databases
@@ -908,6 +1105,7 @@ flowchart TD
 4. **examples/**: Sample data and configs
 
 **Example Documentation Structure:**
+
 ```
 mtb-analysis-pipeline/
 ├── README.md
@@ -1095,6 +1293,7 @@ flowchart LR
 ### Tomorrow: Day 8 Preview
 
 Day 8 will focus on **Comparative Genomics**:
+
 - Pan-genome analysis with your MTB pipeline outputs
 - Phylogenetic inference from core genome SNPs
 - Tree construction and visualization
@@ -1107,22 +1306,26 @@ Your production MTB pipeline from today will provide the foundation for comparat
 ## Resources
 
 ### Documentation
+
 - [Git Documentation](https://git-scm.com/doc)
 - [GitHub Guides](https://guides.github.com/)
 - [Docker Documentation](https://docs.docker.com/)
 - [Nextflow Documentation](https://www.nextflow.io/docs/latest/)
 
 ### Container Repositories
+
 - [BioContainers](https://biocontainers.pro/)
 - [StaPH-B Docker Images](https://github.com/StaPH-B/docker-builds)
 - [nf-core Containers](https://nf-co.re/tools/#containers)
 
 ### MTB-Specific Tools
+
 - [TB-Profiler](https://github.com/jodyphelan/TBProfiler)
 - [AMRFinderPlus](https://github.com/ncbi/amr)
 - [QUAST](https://github.com/ablab/quast)
 
 ### Professional Development
+
 - [nf-core Guidelines](https://nf-co.re/developers/guidelines)
 - [Bioinformatics Best Practices](https://github.com/nf-core/tools)
 - [Scientific Software Development](https://software-carpentry.org/)

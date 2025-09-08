@@ -19,16 +19,19 @@ Every section builds on the previous one, ensuring you develop solid foundations
 ## Table of Contents
 
 ### **🎯 Learning Objectives & Overview**
+
 - [Learning Objectives](#learning-objectives)
 - [What You'll Build Today](#what-youll-build-today)
 - [Prerequisites](#prerequisites)
 
 ### **🔧 Setup & Environment**
+
 - [Environment Setup](#environment-setup)
 - [Understanding Nextflow Output Organization](#understanding-nextflow-output-organization)
 - [Work Directory Configuration](#work-directory-configuration)
 
 ### **📚 Nextflow Fundamentals**
+
 - [What is Nextflow?](#what-is-nextflow)
 - [Key Concepts](#key-concepts)
 - [DSL2 Syntax](#dsl2-syntax)
@@ -36,6 +39,7 @@ Every section builds on the previous one, ensuring you develop solid foundations
 - [Processes](#processes)
 
 ### **🧪 Hands-on Exercises**
+
 - [Exercise 1: Hello World](#exercise-1-hello-world-your-first-nextflow-workflow)
 - [Exercise 2: Read Counting](#exercise-2-read-counting-with-real-data)
 - [Exercise 3: Quality Control Pipeline](#exercise-3-quality-control-pipeline-progressive-build)
@@ -44,6 +48,7 @@ Every section builds on the previous one, ensuring you develop solid foundations
   - [Step 3: Cluster Execution](#step-3-cluster-execution-scaling-up)
 
 ### **⚡ Advanced Topics**
+
 - [Channel Operations](#channel-operations)
 - [Process Configuration](#process-configuration)
 - [Error Handling & Debugging](#error-handling-debugging)
@@ -51,11 +56,13 @@ Every section builds on the previous one, ensuring you develop solid foundations
 - [Cluster Execution](#cluster-execution)
 
 ### **🔍 Monitoring & Troubleshooting**
+
 - [Pipeline Monitoring](#pipeline-monitoring)
 - [Common Issues](#common-issues)
 - [Debugging Strategies](#debugging-strategies)
 
 ### **🎓 Assessment & Next Steps**
+
 - [Knowledge Check](#knowledge-check)
 - [Additional Resources](#additional-resources)
 - [Day 7 Preview](#day-7-preview)
@@ -192,7 +199,7 @@ For Day 6, we'll focus on basic software installation and environment setup. Con
 <div style="background: #e8f5e8; padding: 15px; border-radius: 8px; margin: 15px 0;">
 <h5>📦 Loading Required Software</h5>
 
-**All tools are pre-installed and available through the module system. No installation required!**
+<b>All tools are pre-installed and available through the module system. No installation required!</b>
 
 <b>Step 1: Check if module system is available</b>
 
@@ -273,6 +280,7 @@ source /opt/lmod/8.7/lmod/lmod/init/bash
 # Then retry the module commands above
 module --version
 ```
+
 </div>
 
 ### Development Environment Setup
@@ -318,7 +326,7 @@ module list
 # Should show all 5 loaded modules
 ```
 
-**If module command is not found:**
+<b>If module command is not found:</b>
 
 ```bash
 # Initialize module system (only if needed)
@@ -328,7 +336,7 @@ source /opt/lmod/8.7/lmod/lmod/init/bash
 module --version
 ```
 
-**If modules are not available:**
+<b>If modules are not available:</b>
 
 ```bash
 # Search for modules with different names
@@ -338,7 +346,7 @@ module avail 2>&1 | grep -i java
 # Contact system administrator if modules are missing
 ```
 
-**Quick Setup Script:**
+<b>Quick Setup Script:</b>
 
 ```bash
 # Create a one-command setup (handles module initialization if needed)
@@ -362,6 +370,7 @@ chmod +x ~/setup_day6.sh
 # Use it anytime with:
 source ~/setup_day6.sh
 ```
+
 </div>
 
 #### **Workspace Organization**
@@ -486,61 +495,65 @@ done
 
 **Workflow management systems (WMS)** are specialized programming languages and frameworks designed specifically to address the challenges of complex, multi-step computational pipelines. They provide a higher-level abstraction that automatically handles the tedious and error-prone aspects of traditional shell scripting.
 
-#### How Workflow Management Systems Solve Traditional Problems:
+#### How Workflow Management Systems Solve Traditional Problems
 
 - **Automatic Parallelization**
-    - Analyze task dependencies and run independent steps simultaneously
-    - Efficiently utilize all available CPU cores and computing nodes
-    - Scale from single machines to massive HPC clusters and cloud environments
+  - Analyze task dependencies and run independent steps simultaneously
+  - Efficiently utilize all available CPU cores and computing nodes
+  - Scale from single machines to massive HPC clusters and cloud environments
 
 - **Built-in Error Recovery**
-    - Automatic retry mechanisms for failed tasks
-    - Resume functionality to restart from failure points
-    - Intelligent caching to avoid re-running successful steps
+  - Automatic retry mechanisms for failed tasks
+  - Resume functionality to restart from failure points
+  - Intelligent caching to avoid re-running successful steps
 
 - **Resource Management**
-    - Automatic CPU and memory allocation based on task requirements
-    - Integration with job schedulers ([SLURM](https://slurm.schedmd.com/documentation.html), [SGE](https://gridscheduler.sourceforge.net/))
-    - Dynamic scaling in cloud environments
+  - Automatic CPU and memory allocation based on task requirements
+  - Integration with job schedulers ([SLURM](https://slurm.schedmd.com/documentation.html), [SGE](https://gridscheduler.sourceforge.net/))
+  - Dynamic scaling in cloud environments
 
 - **Reproducibility by Design**
-    - Container integration (Docker, Singularity) for consistent environments
-    - Version tracking for all software dependencies
-    - Portable execution across different computing platforms
+  - Container integration (Docker, Singularity) for consistent environments
+  - Version tracking for all software dependencies
+  - Portable execution across different computing platforms
 
 - **Progress Monitoring**
-    - Real-time pipeline execution tracking
-    - Detailed logging and reporting
-    - Performance metrics and resource usage statistics
+  - Real-time pipeline execution tracking
+  - Detailed logging and reporting
+  - Performance metrics and resource usage statistics
 
 - **Modular Architecture**
-    - Reusable workflow components
-    - Easy parameter configuration
-    - Clean separation of logic and execution
+  - Reusable workflow components
+  - Easy parameter configuration
+  - Clean separation of logic and execution
 
 ### Comparison of Popular Workflow Languages
 
 The bioinformatics community has developed several powerful workflow management systems, each with unique strengths and design philosophies:
 
 #### 1. **[Nextflow](https://www.nextflow.io/)**
+
 - **Language Base**: [Groovy](https://groovy-lang.org/) (JVM-based)
 - **Philosophy**: Dataflow programming with reactive streams
 - **Strengths**: Excellent parallelization, cloud-native, strong container support
 - **Community**: Large bioinformatics community, [nf-core](https://nf-co.re/) ecosystem
 
 #### 2. **[Snakemake](https://snakemake.readthedocs.io/)**
+
 - **Language Base**: [Python](https://www.python.org/)
 - **Philosophy**: Rule-based workflow definition inspired by [GNU Make](https://www.gnu.org/software/make/)
 - **Strengths**: Pythonic syntax, excellent for Python developers, strong academic adoption
 - **Community**: Very active in computational biology and data science
 
 #### 3. **[Common Workflow Language (CWL)](https://www.commonwl.org/)**
+
 - **Language Base**: [YAML](https://yaml.org/)/[JSON](https://www.json.org/)
 - **Philosophy**: Vendor-neutral, standards-based approach
 - **Strengths**: Platform independence, strong metadata support, scientific reproducibility focus
 - **Community**: Broad industry and academic support across multiple domains
 
 #### 4. **[Workflow Description Language (WDL)](https://openwdl.org/)**
+
 - **Language Base**: Custom domain-specific language
 - **Philosophy**: Human-readable workflow descriptions with strong typing
 - **Strengths**: Excellent cloud integration, strong at [Broad Institute](https://www.broadinstitute.org/) and genomics centers
@@ -568,6 +581,7 @@ The bioinformatics community has developed several powerful workflow management 
 Let's see how the same basic task - running FastQC on multiple samples - would be implemented in different workflow languages:
 
 #### **Traditional Shell Script** (for comparison)
+
 ```bash
 # Manual approach - sequential processing
 for sample in sample1 sample2 sample3; do
@@ -577,6 +591,7 @@ done
 ```
 
 #### **Nextflow Implementation**
+
 ```groovy
 #!/usr/bin/env nextflow
 
@@ -610,6 +625,7 @@ workflow {
 ```
 
 #### **Snakemake Implementation**
+
 ```python
 # Snakefile
 SAMPLES = ["sample1", "sample2", "sample3"]
@@ -632,6 +648,7 @@ rule fastqc:
 ```
 
 #### **CWL Implementation**
+
 ```yaml
 # fastqc-workflow.cwl
 cwlVersion: v1.2
@@ -693,32 +710,38 @@ requirements:
 This course focuses on **Nextflow** for several compelling reasons that make it particularly well-suited for microbial genomics workflows:
 
 #### **1. Bioinformatics Community Adoption**
+
 - **[nf-core](https://nf-co.re/) ecosystem**: Over 500 community-curated pipelines specifically for bioinformatics
 - **Industry standard**: Widely adopted by pharmaceutical companies, biotech firms, and genomics centers
 - **Active development**: Strong community support with regular updates and improvements
 
 #### **2. Excellent Parallelization for Genomics**
+
 - **Automatic scaling**: Seamlessly scales from single samples to thousands of genomes
 - **Dataflow programming**: Natural fit for genomics pipelines with complex dependencies
 - **Resource optimization**: Intelligent task scheduling maximizes computational efficiency
 
 #### **3. Clinical and Production Ready**
+
 - **Robust error handling**: Critical for clinical pipelines where reliability is essential
 - **Comprehensive logging**: Detailed audit trails required for regulatory compliance
 - **Resume capability**: Minimizes computational waste in long-running genomic analyses
 
 #### **4. Multi-Platform Flexibility**
+
 - **HPC integration**: Native support for [SLURM](https://slurm.schedmd.com/documentation.html) and other job schedulers common in genomics
 - **Cloud-native**: Excellent support for [AWS](https://aws.amazon.com/), [Google Cloud](https://cloud.google.com/), and [Azure](https://azure.microsoft.com/) for scalable genomics
 - **Container support**: Seamless [Docker](https://docs.docker.com/) and [Singularity](https://docs.sylabs.io/guides/latest/user-guide/) integration for reproducible environments
 
 #### **5. Microbial Genomics Specific Advantages**
+
 - **Pathogen surveillance pipelines**: Many [nf-core](https://nf-co.re/) pipelines designed for bacterial genomics
 - **AMR analysis workflows**: Established patterns for antimicrobial resistance detection
 - **Outbreak investigation**: Scalable phylogenetic analysis capabilities
 - **Metagenomics support**: Robust handling of complex metagenomic datasets
 
 #### **6. Learning and Career Benefits**
+
 - **Industry relevance**: Skills directly transferable to genomics industry positions
 - **Growing demand**: Increasing adoption means more job opportunities
 - **Comprehensive ecosystem**: Learning [Nextflow](https://www.nextflow.io/) provides access to hundreds of ready-to-use pipelines
@@ -939,6 +962,7 @@ graph LR
 Every Nextflow workflow has three main components:
 
 #### **1. Processes** - What to do
+
 ```groovy
 process FASTQC {
     input:
@@ -955,12 +979,14 @@ process FASTQC {
 ```
 
 #### **2. Channels** - How data flows
+
 ```groovy
 // Create a channel from files (DSL2 style)
 reads_ch = Channel.fromPath("/data/Dataset_Mt_Vc/tb/raw_data/*.fastq.gz")
 ```
 
 #### **3. Workflows** - How it all connects
+
 ```groovy
 workflow {
     FASTQC(reads_ch)
@@ -980,6 +1006,7 @@ workflow {
 #### **Processes in Detail**
 
 A **process** describes a task to be run. Think of it as a recipe that tells Nextflow:
+
 - What inputs it needs
 - What outputs it produces
 - What commands to run
@@ -1279,6 +1306,7 @@ For this training, Nextflow is configured to use `/data/users/$USER/nextflow-tra
 - **Performance**: Often faster storage for intensive I/O operations
 
 The configuration is set in `nextflow.config`:
+
 ```groovy
 // Set work directory to user's data space
 workDir = "/data/users/$USER/nextflow-training/work"
@@ -1589,6 +1617,7 @@ One of the most important concepts for beginners is understanding the difference
 #### Common Directory Issues and Solutions
 
 **Problem: "I can't find my results!"**
+
 ```bash
 # Check if publishDir was used in your process
 grep -n "publishDir" *.nf
@@ -1598,6 +1627,7 @@ find /data/users/$USER/nextflow-training/work/ -name "*.html" -o -name "*.txt" -
 ```
 
 **Problem: "Pipeline failed, how do I debug?"**
+
 ```bash
 # Find failed tasks
 grep "FAILED" .nextflow.log
@@ -1611,6 +1641,7 @@ cat .command.err
 ```
 
 **Problem: "work directory is huge!"**
+
 ```bash
 # Check work directory size
 du -sh /data/users/$USER/nextflow-training/work/
@@ -1874,6 +1905,7 @@ workflow {
 **Step 2: Save and run the script**
 
 First, save the script to a file:
+
 ```bash
 # Create the file
 nano hello.nf
@@ -1881,6 +1913,7 @@ nano hello.nf
 ```
 
 Now run your first Nextflow pipeline:
+
 ```bash
 # Navigate to workflows directory
 cd workflows
@@ -2002,6 +2035,7 @@ cd ~/nextflow_workspace
     These are real sequencing data from *Mycobacterium tuberculosis* and *Vibrio cholerae* samples!
 
 **Step 2: Create a sample sheet with real data**
+
 ```bash
 # Create a sample sheet with a few TB samples
 cat > samplesheet.csv << 'EOF'
@@ -2015,6 +2049,7 @@ cat samplesheet.csv
 ```
 
 **Step 3: Update the script to use real data**
+
 ```bash
 # Save the script as count_reads.nf
 nano count_reads.nf
@@ -2022,6 +2057,7 @@ nano count_reads.nf
 ```
 
 **Step 4: Run the pipeline with real data**
+
 ```bash
 # Navigate to workflows directory
 cd workflows
@@ -2041,6 +2077,7 @@ nextflow run count_reads.nf --input samplesheet.csv
     ```
 
 **Step 5: Check your results**
+
 ```bash
 # Look at the results directory
 ls /data/users/$USER/nextflow-training/results/
@@ -2080,6 +2117,7 @@ ls -lh /data/Dataset_Mt_Vc/tb/raw_data/ERR036221_*.fastq.gz
     ```
 
 **What this pipeline does:**
+
 1. Reads sample information from a CSV file
 2. Counts reads in paired FASTQ files (in parallel!)
 3. Saves results to the `/data/users/$USER/nextflow-training/results/` directory
@@ -2167,6 +2205,7 @@ time nextflow run count_reads.nf --input samplesheet.csv -resume
 #### **Scenario 4: Local vs Cluster Execution**
 
 **Local Execution (Current):**
+
 ```bash
 # Running on local machine (default)
 nextflow run count_reads.nf --input samplesheet.csv -resume
@@ -2179,6 +2218,7 @@ echo "- Processes run sequentially if cores are limited"
 ```
 
 **Cluster Execution (Advanced):**
+
 ```bash
 # Example cluster configuration (for reference)
 cat > nextflow.config << 'EOF'
@@ -3165,6 +3205,7 @@ cat /data/users/$USER/nextflow-training/results/pipeline_trace.txt | head -10
 #### **Cluster Configuration Examples**
 
 **SLURM Configuration:**
+
 ```bash
 # Create a SLURM-specific config
 cat > slurm.config << 'EOF'
@@ -3183,8 +3224,6 @@ EOF
 # Run with custom config
 nextflow run qc_pipeline.nf -c slurm.config --input samplesheet.csv
 ```
-
-
 
 !!! tip "Key Learning Points from Exercise 3"
 
@@ -3274,6 +3313,7 @@ You've now built a **complete genomic analysis pipeline** that includes:
 This represents a **publication-ready genomic analysis workflow** that students can adapt for their own research projects!
 
 **Step 3: Run the pipeline with real data**
+
 ```bash
 # Navigate to workflows directory
 cd workflows
@@ -3325,6 +3365,7 @@ nextflow run qc_pipeline.nf --input samplesheet.csv
     ```
 
 **Step 4: Check your results**
+
 ```bash
 # Look at the results structure
 ls -la /data/users/$USER/nextflow-training/results/fastqc/
@@ -3585,6 +3626,7 @@ document.querySelectorAll('.results-btn').forEach(btn => {
 ### Before You Start - Setup Checklist
 
 **Check if Nextflow is installed:**
+
 ```bash
 nextflow -version
 ```
@@ -3608,6 +3650,7 @@ nextflow -version
     ```
 
 **Check if Docker is available:**
+
 ```bash
 docker --version
 ```
@@ -3628,6 +3671,7 @@ docker --version
     ```
 
 **Create your workspace:**
+
 ```bash
 # Create a directory for today's exercises
 mkdir nextflow-training
@@ -3834,11 +3878,13 @@ document.querySelectorAll('.exercise-checkbox').forEach(checkbox => {
 **Step 1: Check the error message**
 
 Look at the main Nextflow log:
+
 ```bash
 cat .nextflow.log
 ```
 
 Find specific errors:
+
 ```bash
 grep ERROR .nextflow.log
 ```
@@ -3863,6 +3909,7 @@ grep ERROR .nextflow.log
 **Step 2: Check the work directory**
 
 Navigate to the failed task's work directory:
+
 ```bash
 # Use the work directory path from the error message
 cd /data/users/$USER/nextflow-training/work/a1/b2c3d4e5f6...
@@ -3878,6 +3925,7 @@ cat .command.sh
     ```
 
 Check for error messages:
+
 ```bash
 cat .command.err
 ```
@@ -3888,6 +3936,7 @@ cat .command.err
     ```
 
 Check standard output:
+
 ```bash
 cat .command.out
 ```
@@ -3895,6 +3944,7 @@ cat .command.out
 **Step 3: Understanding the error**
 
 In this example:
+
 - **Exit status 127**: Command not found
 - **Error message**: "fastqc: command not found"
 - **Solution**: FastQC is not installed or not in PATH
@@ -3902,6 +3952,7 @@ In this example:
 ### "How do I know if my pipeline is working?"
 
 **Check pipeline status while running:**
+
 ```bash
 # In another terminal, monitor the pipeline
 nextflow log
@@ -3921,6 +3972,7 @@ nextflow log
     - **Process completion**: `[100%] X of X ✔`
 
 **Check your results:**
+
 ```bash
 # List output directory contents
 ls -la /data/users/$USER/nextflow-training/results/
@@ -3967,12 +4019,14 @@ find /data/users/$USER/nextflow-training/results/ -type f -name "*.html" -o -nam
 ### "How do I modify the pipeline for my data?"
 
 **Start simple:**
+
 1. Change the `params.reads` path to point to your files
 2. Make sure your file names match the pattern (e.g., `*_{R1,R2}.fastq`)
 3. Test with just 1-2 samples first
 4. Once it works, add more samples
 
 **File naming examples:**
+
 ```text
 Good:
 sample1_R1.fastq, sample1_R2.fastq
@@ -3989,7 +4043,7 @@ sample1_1.fastq, sample1_2.fastq
 
 ## Next Steps for Beginners
 
-### Once you're comfortable with basic pipelines:
+### Once you're comfortable with basic pipelines
 
 1. **Add more processes**: Try adding genome annotation with Prokka
 2. **Use parameters**: Make your pipeline configurable
@@ -3997,7 +4051,7 @@ sample1_1.fastq, sample1_2.fastq
 4. **Try nf-core**: Use community-built pipelines
 5. **Document your work**: Create clear documentation and examples
 
-### Recommended Learning Path:
+### Recommended Learning Path
 
 1. **Week 1**: Master the basic exercises above
 2. **Week 2**: Try the complete beginner pipeline
@@ -4188,6 +4242,7 @@ document.querySelectorAll('.trouble-btn').forEach(btn => {
     });
 });
 </script>
+
 ```
 
 ### The Workflow Management Solution
@@ -4427,12 +4482,14 @@ Save your pipeline script for future use and documentation.
 ## Key Concepts Summary
 
 ### Nextflow Core Principles
+
 - **Dataflow Programming**: Data flows through processes via channels
 - **Parallelization**: Automatic parallel execution of independent tasks
 - **Portability**: Same code runs on laptop, HPC, or cloud
 - **Reproducibility**: Consistent results across different environments
 
 ### Pipeline Development Best Practices
+
 - **Start simple**: Begin with basic processes and add complexity gradually
 - **Test frequently**: Run your pipeline with small datasets during development
 - **Use containers**: Ensure reproducible software environments
@@ -4440,6 +4497,7 @@ Save your pipeline script for future use and documentation.
 - **Handle errors**: Plan for failures and edge cases
 
 ### Nextflow Workflow Patterns
+
 ```text
 Input Data → Process 1 → Process 2 → Process 3 → Final Results
      ↓           ↓           ↓           ↓           ↓
@@ -4448,6 +4506,7 @@ Input Data → Process 1 → Process 2 → Process 3 → Final Results
 ```
 
 ### Configuration Best Practices
+
 - Use profiles for different execution environments
 - Parameterize your pipelines for flexibility
 - Set appropriate resource requirements
@@ -4456,6 +4515,7 @@ Input Data → Process 1 → Process 2 → Process 3 → Final Results
 ## Assessment Activities
 
 ### Individual Tasks
+
 - Successfully complete and run all three Nextflow exercises
 - Understand the structure of Nextflow work directories
 - Create and modify basic Nextflow processes
@@ -4463,6 +4523,7 @@ Input Data → Process 1 → Process 2 → Process 3 → Final Results
 - Configure pipeline parameters and execution profiles
 
 ### Group Discussion
+
 - Share pipeline design approaches and solutions
 - Discuss common challenges and troubleshooting strategies
 - Review different ways to structure Nextflow processes
@@ -4471,12 +4532,14 @@ Input Data → Process 1 → Process 2 → Process 3 → Final Results
 ## Resources
 
 ### Nextflow Resources
+
 - [Nextflow Documentation](https://www.nextflow.io/docs/latest/) - Official comprehensive documentation
 - [Nextflow Patterns](https://nextflow-io.github.io/patterns/) - Common workflow patterns and best practices
 - [nf-core pipelines](https://nf-co.re/) - Community-curated bioinformatics pipelines
 - [Nextflow Training](https://training.nextflow.io/) - Official training materials and workshops
 
 ### Community and Support
+
 - [Nextflow Slack](https://nextflow.slack.com/) - Community discussion and support
 - [nf-core Slack](https://nfcore.slack.com/) - Pipeline-specific discussions
 - [Nextflow GitHub](https://github.com/nextflow-io/nextflow) - Source code and issue tracking
@@ -4609,6 +4672,7 @@ nextflow run pipeline.nf -resume
 All workflows in this training have been **successfully tested and validated** with real TB genomic data:
 
 ### **🧪 Testing Environment**
+
 - **System**: Ubuntu 22.04 with Lmod module system
 - **Nextflow**: Version 25.04.6 (loaded via `module load nextflow/25.04.6`)
 - **Data**: Real *Mycobacterium tuberculosis* sequencing data from `/data/Dataset_Mt_Vc/tb/raw_data/`
@@ -4624,6 +4688,7 @@ All workflows in this training have been **successfully tested and validated** w
 | **qc_pipeline.nf** | ✅ PASSED | ~45s | Progressive pipeline: FastQC → Trimmomatic → SPAdes → Prokka |
 
 ### **🎯 Real-World Validation**
+
 - **Data Processing**: Successfully processed ~6.6 million read pairs
 - **File Outputs**: Generated 600MB+ of trimmed FASTQ files
 - **Quality Reports**: Created comprehensive HTML reports for quality assessment
@@ -4631,6 +4696,7 @@ All workflows in this training have been **successfully tested and validated** w
 - **Resource Usage**: Efficient parallel processing with 0.1 CPU hours total
 
 ### **🚀 Ready for Training**
+
 All workflows are production-ready and validated for the Day 6 Nextflow training session!
 
 ---
