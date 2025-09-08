@@ -187,7 +187,7 @@ kill -9 [PID]             # Terminate process
 nohup command &            # Run in background
 ```
 
-**Expected competency:** You should be comfortable with basic file operations, text processing, and process management.
+<b>Expected competency:</b> You should be comfortable with basic file operations, text processing, and process management.
 </div>
 
 ### Software Installation Overview
@@ -757,7 +757,7 @@ To understand why workflow management systems like Nextflow are revolutionary, l
 #### Traditional Shell Scripting - The Slow Way
 
 ```mermaid
-graph TD
+flowchart TD
     A1[Sample 1] --> B1[FastQC - 5 min]
     B1 --> C1[Trimming - 10 min]
     C1 --> D1[Assembly - 30 min]
@@ -794,7 +794,7 @@ graph TD
 #### Nextflow - The Fast Way
 
 ```mermaid
-graph TD
+flowchart TD
     A4[Sample 1] --> B4[FastQC - 5 min]
     A5[Sample 2] --> B5[FastQC - 5 min]
     A6[Sample 3] --> B6[FastQC - 5 min]
@@ -917,7 +917,7 @@ Nextflow is a **workflow management system** that comprises both a runtime envir
 ### Core Nextflow Features
 
 ```mermaid
-graph LR
+flowchart LR
     A[Fast Prototyping] --> B[Simple Syntax]
     C[Reproducibility] --> D[Containers & Conda]
     E[Portability] --> F[Run Anywhere]
@@ -1061,7 +1061,7 @@ Channel.fromPath("samples.csv")
 **Channel Flow Example:**
 
 ```mermaid
-graph LR
+flowchart LR
     A[Input Files] --> B[Channel]
     B --> C[Process 1]
     C --> D[Output Channel]
@@ -1130,7 +1130,7 @@ When you run a Nextflow script, here's what happens:
 6. **Collect results**: Gathers outputs in the specified locations
 
 ```mermaid
-graph TD
+flowchart TD
     A[Nextflow Script] --> B[Parse & Plan]
     B --> C[Submit Tasks]
     C --> D[Monitor Execution]
@@ -1209,7 +1209,7 @@ One of Nextflow's most powerful features is that it separates **what** your work
 #### **Executors: Where Your Workflow Runs**
 
 ```mermaid
-graph TD
+flowchart TD
     A[Your Nextflow Script] --> B{Choose Executor}
     B --> C[Local Computer]
     B --> D[SLURM Cluster]
@@ -1319,7 +1319,7 @@ This means all task execution directories will be created under `/data/users/mam
 When you run a Nextflow pipeline, several directories are automatically created:
 
 ```mermaid
-graph TD
+flowchart TD
     A[microbial-genomics-training/] --> B[workflows/]
     A --> C[data/]
     A --> D[/data/users/$USER/nextflow-training/work/]
