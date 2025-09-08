@@ -5,6 +5,11 @@ work/
 results/
 nextflow
 nxf-tmp.*
+nextflow.config
+*.nf
+# But allow workflow examples in workflows folder
+!workflows/*.nf
+!workflows/*.config
 
 # Test files
 test_*.sh
