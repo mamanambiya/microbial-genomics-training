@@ -146,7 +146,7 @@ graph TD
 
 ```bash
 # Navigate to your workflows directory
-cd /users/mamana/microbial-genomics-training/workflows
+cd /users/$USER/microbial-genomics-training/workflows
 
 # Initialize Git repository
 git init
@@ -527,7 +527,7 @@ We've provided a ready-to-use container testing script in your workflows directo
 
 ```bash
 # Navigate to workflows directory
-cd /users/mamana/microbial-genomics-training/workflows
+cd /users/$USER/microbial-genomics-training/workflows
 
 # Run the container test script
 ./container_test.sh
@@ -1184,6 +1184,60 @@ Features:
 git push origin v1.0.0
 ```
 
+### **Running Workflows from GitHub**
+
+Once your workflow is on GitHub, you and others can run it directly from the repository:
+
+#### **Running Your Published Workflow**
+
+```bash
+# Run workflow directly from GitHub
+nextflow run yourusername/mtb-analysis-pipeline \
+    --input samplesheet.csv \
+    --outdir results \
+    -profile singularity
+
+# Run specific version/release
+nextflow run yourusername/mtb-analysis-pipeline \
+    -r v1.0.0 \
+    --input samplesheet.csv \
+    --outdir results \
+    -profile singularity
+
+# Run from specific branch
+nextflow run yourusername/mtb-analysis-pipeline \
+    -r feature/amr-detection \
+    --input samplesheet.csv \
+    --outdir results \
+    -profile singularity
+```
+
+#### **Sharing Your Workflow**
+
+Your colleagues can now run your pipeline easily:
+
+```bash
+# Anyone can run your pipeline with:
+nextflow run yourusername/mtb-analysis-pipeline \
+    --input their_samples.csv \
+    --outdir their_results \
+    -profile singularity
+
+# They can also clone and modify:
+git clone https://github.com/yourusername/mtb-analysis-pipeline.git
+cd mtb-analysis-pipeline
+nextflow run . --input samples.csv --outdir results
+```
+
+#### **Benefits of GitHub-hosted Workflows**
+
+- ✅ **Version Control**: Track all changes and releases
+- ✅ **Collaboration**: Multiple developers can contribute
+- ✅ **Reproducibility**: Anyone can run the exact same version
+- ✅ **Documentation**: README, wiki, and issues for support
+- ✅ **Distribution**: Easy sharing with the community
+- ✅ **Continuous Integration**: Automated testing with GitHub Actions
+
 ---
 
 ## Hands-on Exercise: Building Your MTB Pipeline
@@ -1195,7 +1249,7 @@ git push origin v1.0.0
 #### Step 1: Initialize Version Control
 
 ```bash
-cd /users/mamana/microbial-genomics-training/workflows
+cd /users/$USER/microbial-genomics-training/workflows
 
 # Initialize Git repository
 git init
@@ -1324,24 +1378,21 @@ cd phoenix-analysis
 nextflow run cdcgov/phoenix -r v2.1.1 --help
 ```
 
-#### **Step 3: Download Required Kraken2 Database**
+#### **Step 3: Setup Kraken2 Database**
 
-PHoeNIx requires a specific Kraken2 database. We'll download the Standard-8 database:
+PHoeNIx requires a Kraken2 database. We'll use the pre-installed database and module system:
 
 ```bash
-# Create database directory
-mkdir -p databases/kraken2
+# Load the kraken2 module
+source /opt/lmod/8.7/lmod/lmod/init/bash
+module load kraken2/2.1.3
 
-# Download the Standard-8 Kraken2 database (this may take some time)
-cd databases/kraken2
-wget https://genome-idx.s3.amazonaws.com/kraken/k2_standard_8gb_20231009.tar.gz
+# Set environment variable to the pre-installed database
+export KRAKEN2_DB_PATH=/data/kraken2_db_standard
+echo "export KRAKEN2_DB_PATH=/data/kraken2_db_standard" >> ~/.bashrc
 
-# Extract the database
-tar -xzf k2_standard_8gb_20231009.tar.gz
-
-# Set environment variable
-export KRAKEN2_DB_PATH=$(pwd)
-echo "export KRAKEN2_DB_PATH=$(pwd)" >> ~/.bashrc
+# Verify the database exists
+ls -la $KRAKEN2_DB_PATH
 ```
 
 #### **Step 4: Prepare Your TB Samplesheet**
@@ -1355,9 +1406,9 @@ cd /data/users/$USER/nextflow-training/phoenix-analysis
 # Create PHoeNIx samplesheet
 cat > phoenix_samplesheet.csv << 'EOF'
 sample,fastq_1,fastq_2
-TB_sample_1,/data/Dataset_Mt_Vc/tb/raw_data/SRR1180160_1.fastq.gz,/data/Dataset_Mt_Vc/tb/raw_data/SRR1180160_2.fastq.gz
-TB_sample_2,/data/Dataset_Mt_Vc/tb/raw_data/SRR1180161_1.fastq.gz,/data/Dataset_Mt_Vc/tb/raw_data/SRR1180161_2.fastq.gz
-TB_sample_3,/data/Dataset_Mt_Vc/tb/raw_data/SRR1180162_1.fastq.gz,/data/Dataset_Mt_Vc/tb/raw_data/SRR1180162_2.fastq.gz
+TB_sample_1,/data/Dataset_Mt_Vc/tb/raw_data/ERR036221_1.fastq.gz,/data/Dataset_Mt_Vc/tb/raw_data/ERR036221_2.fastq.gz
+TB_sample_2,/data/Dataset_Mt_Vc/tb/raw_data/ERR036223_1.fastq.gz,/data/Dataset_Mt_Vc/tb/raw_data/ERR036223_2.fastq.gz
+TB_sample_3,/data/Dataset_Mt_Vc/tb/raw_data/ERR036226_1.fastq.gz,/data/Dataset_Mt_Vc/tb/raw_data/ERR036226_2.fastq.gz
 EOF
 
 echo "✅ PHoeNIx samplesheet created: phoenix_samplesheet.csv"
@@ -1368,6 +1419,11 @@ echo "✅ PHoeNIx samplesheet created: phoenix_samplesheet.csv"
 First, let's run PHoeNIx with test data to ensure everything works:
 
 ```bash
+# Load required modules
+source /opt/lmod/8.7/lmod/lmod/init/bash
+module load nextflow/25.04.6
+module load kraken2/2.1.3
+
 # Run PHoeNIx test
 nextflow run cdcgov/phoenix \
     -r v2.1.1 \
