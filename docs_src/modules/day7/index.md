@@ -40,3 +40,1089 @@ Building on Exercise 3 from Day 6, this module transforms your basic pipeline in
 - [Pipeline Documentation](#pipeline-documentation)
 - [Testing and Validation](#testing-and-validation)
 - [Deployment Strategies](#deployment-strategies)
+
+## Learning Objectives
+
+By the end of Day 7, you will be able to:
+
+- **Version Control**: Use Git and GitHub to track pipeline changes and collaborate effectively
+- **Containerization**: Understand Docker basics and integrate containers into Nextflow workflows
+- **MTB Analysis**: Develop production-ready pipelines for *Mycobacterium tuberculosis* genomics
+- **Clinical Applications**: Apply genomics workflows to real-world pathogen surveillance
+- **Professional Skills**: Document, test, and deploy bioinformatics pipelines professionally
+
+## Prerequisites
+
+- Completed Day 6 Exercise 3 (Quality Control Pipeline)
+- Basic understanding of Nextflow DSL2 syntax
+- Familiarity with command line operations
+- Access to the training cluster environment
+
+## Schedule
+
+| Time (CAT) | Topic | Duration | Trainer |
+|------------|-------|----------|---------|
+| **09:00** | *Version Control: Git and GitHub for Pipeline Development* | 45 min | Mamana Mbiyavanga |
+| **09:45** | *Containerization: Docker Fundamentals and DockerHub* | 45 min | Mamana Mbiyavanga |
+| **10:30** | **Break** | 15 min | |
+| **10:45** | *MTB Analysis Pipeline Development* | 45 min | Mamana Mbiyavanga |
+| **11:30** | *Clinical Genomics Applications and Pathogen Surveillance* | 45 min | Mamana Mbiyavanga |
+| **12:15** | *Professional Pipeline Development and Deployment* | 45 min | Mamana Mbiyavanga |
+| **13:00** | **End** | | |
+
+---
+
+## From Exercise 3 to Production Pipeline
+
+### Recap: What We Built in Exercise 3
+
+In Day 6, Exercise 3, we created a progressive quality control pipeline (`qc_pipeline.nf`) that included:
+
+```mermaid
+flowchart LR
+    A[Raw FASTQ Files] --> B[FastQC Raw]
+    B --> C[Trimmomatic]
+    C --> D[FastQC Trimmed]
+    D --> E[SPAdes Assembly]
+    E --> F[Prokka Annotation]
+    F --> G[MultiQC Report]
+
+    style A fill:#f5f5f5,stroke:#757575,stroke-width:1px,color:#000
+    style G fill:#f5f5f5,stroke:#757575,stroke-width:1px,color:#000
+    style B fill:#e8f5e8,stroke:#388e3c,stroke-width:2px,color:#000
+    style C fill:#e8f5e8,stroke:#388e3c,stroke-width:2px,color:#000
+    style D fill:#e8f5e8,stroke:#388e3c,stroke-width:2px,color:#000
+    style E fill:#e8f5e8,stroke:#388e3c,stroke-width:2px,color:#000
+    style F fill:#e8f5e8,stroke:#388e3c,stroke-width:2px,color:#000
+```
+
+### Today's Enhancement Strategy
+
+We'll transform this basic pipeline into a production-ready MTB analysis workflow by adding:
+
+1. **Version Control**: Track all changes using Git
+2. **Containerization**: Replace module loading with Docker containers
+3. **MTB-Specific Features**: Add tuberculosis-specific analysis steps
+4. **Clinical Applications**: Include AMR detection and typing
+5. **Professional Standards**: Documentation, testing, and deployment
+
+---
+
+## Version Control: Git and GitHub for Pipeline Development
+
+### Why Version Control for Bioinformatics?
+
+```mermaid
+graph TD
+    A[Pipeline Development Challenges] --> B[Multiple Versions]
+    A --> C[Collaboration Issues]
+    A --> D[Lost Changes]
+    A --> E[No Backup]
+
+    F[Git Solutions] --> G[Track All Changes]
+    F --> H[Collaborate Safely]
+    F --> I[Never Lose Work]
+    F --> J[Professional Standards]
+
+    style A fill:#ffebee,stroke:#f44336,stroke-width:2px,color:#000
+    style F fill:#e8f5e8,stroke:#4caf50,stroke-width:2px,color:#000
+```
+
+**Real-world scenarios:**
+- **Research labs**: Multiple researchers working on the same pipeline
+- **Clinical labs**: Regulatory requirements for change tracking
+- **Collaborations**: Sharing pipelines between institutions
+- **Publications**: Reproducible research requirements
+
+### Git Fundamentals for Bioinformatics
+
+#### Setting Up Git for Your Pipeline
+
+```bash
+# Navigate to your workflows directory
+cd /users/mamana/microbial-genomics-training/workflows
+
+# Initialize Git repository
+git init
+
+# Configure Git (first time only)
+git config --global user.name "Your Name"
+git config --global user.email "your.email@uct.ac.za"
+
+# Check current status
+git status
+```
+
+#### Your First Commit: Saving Exercise 3
+
+```bash
+# Add your Exercise 3 pipeline to version control
+git add qc_pipeline.nf
+git add nextflow.config
+git add samplesheet.csv
+
+# Create your first commit
+git commit -m "Initial commit: Exercise 3 QC pipeline
+
+- FastQC for raw and trimmed reads
+- Trimmomatic for quality trimming
+- SPAdes for genome assembly
+- Prokka for annotation
+- MultiQC for reporting
+- Tested with 10 TB samples"
+
+# View your commit history
+git log --oneline
+```
+
+#### Understanding Git Workflow
+
+```mermaid
+graph LR
+    A[Working Directory] --> B[Staging Area]
+    B --> C[Repository]
+
+    A -->|git add| B
+    B -->|git commit| C
+    C -->|git push| D[GitHub]
+
+    style A fill:#fff3e0,stroke:#ff9800,stroke-width:2px,color:#000
+    style B fill:#e3f2fd,stroke:#2196f3,stroke-width:2px,color:#000
+    style C fill:#e8f5e8,stroke:#4caf50,stroke-width:2px,color:#000
+    style D fill:#f3e5f5,stroke:#9c27b0,stroke-width:2px,color:#000
+```
+
+### GitHub for Pipeline Collaboration
+
+#### Creating Your Pipeline Repository
+
+1. **Go to GitHub.com** and sign in
+2. **Click "New Repository"**
+3. **Repository settings:**
+   - Name: `mtb-analysis-pipeline`
+   - Description: `Production-ready Mycobacterium tuberculosis genomics pipeline`
+   - Public/Private: Choose based on your needs
+   - Initialize with README: ✅
+
+#### Connecting Local Repository to GitHub
+
+```bash
+# Add GitHub as remote origin
+git remote add origin https://github.com/yourusername/mtb-analysis-pipeline.git
+
+# Push your local commits to GitHub
+git branch -M main
+git push -u origin main
+
+# Verify connection
+git remote -v
+```
+
+#### Professional README for Your Pipeline
+
+Create a comprehensive README.md:
+
+```markdown
+# MTB Analysis Pipeline
+
+A production-ready Nextflow pipeline for *Mycobacterium tuberculosis* genomic analysis.
+
+## Quick Start
+
+```bash
+nextflow run main.nf --input samplesheet.csv --outdir results/
+```
+
+## Features
+
+- ✅ Quality control with FastQC
+- ✅ Read trimming with Trimmomatic
+- ✅ Genome assembly with SPAdes
+- ✅ Gene annotation with Prokka
+- ✅ Comprehensive reporting with MultiQC
+- 🔄 AMR detection (coming soon)
+- 🔄 Lineage typing (coming soon)
+
+## Requirements
+
+- Nextflow ≥ 21.04.0
+- Docker or Singularity
+- 8+ GB RAM recommended
+
+## Citation
+
+If you use this pipeline, please cite: [Your Publication]
+```
+
+---
+
+## Containerization: Docker Fundamentals and DockerHub
+
+### Why Containers for Bioinformatics?
+
+**The Problem:**
+```bash
+# Traditional approach - dependency hell
+module load fastqc/0.12.1
+module load trimmomatic/0.39
+module load spades/3.15.4
+module load prokka/1.14.6
+
+# What if modules aren't available?
+# What if versions differ?
+# What if you're on a different system?
+```
+
+**The Container Solution:**
+```bash
+# Container approach - everything included
+container 'biocontainers/fastqc:v0.11.9'
+container 'staphb/trimmomatic:0.39'
+container 'staphb/spades:3.15.4'
+container 'staphb/prokka:1.14.6'
+```
+
+### Docker Fundamentals
+
+#### Understanding Docker Images
+
+```mermaid
+graph TD
+    A[DockerHub Registry] --> B[Docker Image]
+    B --> C[Docker Container]
+
+    A -->|docker pull| B
+    B -->|docker run| C
+
+    D[biocontainers/fastqc:v0.11.9] --> E[FastQC Image]
+    E --> F[Running FastQC Container]
+
+    style A fill:#e3f2fd,stroke:#2196f3,stroke-width:2px,color:#000
+    style B fill:#fff3e0,stroke:#ff9800,stroke-width:2px,color:#000
+    style C fill:#e8f5e8,stroke:#4caf50,stroke-width:2px,color:#000
+```
+
+#### Key Docker Concepts
+
+- **Image**: A template containing the software and dependencies
+- **Container**: A running instance of an image
+- **Registry**: A repository of images (like DockerHub)
+- **Tag**: Version identifier for images
+
+### DockerHub for Bioinformatics Tools
+
+#### Finding Bioinformatics Containers
+
+**Popular Bioinformatics Container Repositories:**
+
+1. **BioContainers**: `biocontainers/toolname`
+2. **StaPH-B**: `staphb/toolname` (State Public Health Bioinformatics)
+3. **Broad Institute**: `broadinstitute/toolname`
+4. **nf-core**: `nfcore/toolname`
+
+#### Searching for Tools
+
+```bash
+# Search DockerHub for bioinformatics tools
+# Visit: https://hub.docker.com/
+
+# Example searches:
+# - "biocontainers fastqc"
+# - "staphb trimmomatic"
+# - "broadinstitute gatk"
+```
+
+#### Understanding Container Tags
+
+```bash
+# Different ways to specify versions
+container 'biocontainers/fastqc:v0.11.9'     # Specific version
+container 'biocontainers/fastqc:latest'      # Latest version
+container 'staphb/spades:3.15.4'            # Specific version
+container 'staphb/spades:latest'             # Latest version (not recommended for production)
+```
+
+### Container Integration in Nextflow
+
+#### Converting Exercise 3 to Use Containers
+
+Let's update our `qc_pipeline.nf` to use containers instead of modules:
+
+**Before (Module-based):**
+```groovy
+process fastqc_raw {
+    module 'fastqc/0.12.1'
+    publishDir "${params.outdir}/fastqc_raw", mode: 'copy'
+    tag "$sample_id"
+
+    input:
+    tuple val(sample_id), path(reads)
+
+    output:
+    path "*.{html,zip}"
+
+    script:
+    """
+    echo "Running FastQC on raw reads: ${sample_id}"
+    fastqc ${reads[0]} ${reads[1]} --threads 2
+    """
+}
+```
+
+**After (Container-based):**
+```groovy
+process fastqc_raw {
+    container 'biocontainers/fastqc:v0.11.9'
+    publishDir "${params.outdir}/fastqc_raw", mode: 'copy'
+    tag "$sample_id"
+
+    input:
+    tuple val(sample_id), path(reads)
+
+    output:
+    path "*.{html,zip}"
+
+    script:
+    """
+    echo "Running FastQC on raw reads: ${sample_id}"
+    fastqc ${reads[0]} ${reads[1]} --threads 2
+    """
+}
+```
+
+#### Complete Containerized Pipeline
+
+Let's create `mtb_pipeline.nf` - our enhanced, containerized version:
+
+```groovy
+#!/usr/bin/env nextflow
+
+// Enable DSL2
+nextflow.enable.dsl = 2
+
+// Parameters
+params.input = "samplesheet.csv"
+params.outdir = "/data/users/$USER/nextflow-training/results"
+params.adapters = "/data/timmomatic_adapter_Combo.fa"
+
+// FastQC process for raw reads
+process fastqc_raw {
+    container 'biocontainers/fastqc:v0.11.9'
+    publishDir "${params.outdir}/fastqc_raw", mode: 'copy'
+    tag "$sample_id"
+
+    input:
+    tuple val(sample_id), path(reads)
+
+    output:
+    path "*.{html,zip}"
+
+    script:
+    """
+    echo "Running FastQC on raw reads: ${sample_id}"
+    fastqc ${reads[0]} ${reads[1]} --threads 2
+    """
+}
+
+// Trimmomatic for quality trimming
+process trimmomatic {
+    container 'staphb/trimmomatic:0.39'
+    publishDir "${params.outdir}/trimmed", mode: 'copy'
+    tag "$sample_id"
+
+    input:
+    tuple val(sample_id), path(reads)
+
+    output:
+    tuple val(sample_id), path("${sample_id}_*_paired.fastq.gz")
+    path "${sample_id}_*_unpaired.fastq.gz"
+
+    script:
+    """
+    echo "Running Trimmomatic on ${sample_id}"
+
+    trimmomatic PE -threads 2 \\
+        ${reads[0]} ${reads[1]} \\
+        ${sample_id}_R1_paired.fastq.gz ${sample_id}_R1_unpaired.fastq.gz \\
+        ${sample_id}_R2_paired.fastq.gz ${sample_id}_R2_unpaired.fastq.gz \\
+        ILLUMINACLIP:${params.adapters}:2:30:10 \\
+        LEADING:3 TRAILING:3 \\
+        SLIDINGWINDOW:4:15 MINLEN:36
+    """
+}
+
+// FastQC process for trimmed reads
+process fastqc_trimmed {
+    container 'biocontainers/fastqc:v0.11.9'
+    publishDir "${params.outdir}/fastqc_trimmed", mode: 'copy'
+    tag "$sample_id"
+
+    input:
+    tuple val(sample_id), path(reads)
+
+    output:
+    path "*.{html,zip}"
+
+    script:
+    """
+    echo "Running FastQC on trimmed reads: ${sample_id}"
+    fastqc ${reads[0]} ${reads[1]} --threads 2
+    """
+}
+
+// SPAdes assembly
+process spades_assembly {
+    container 'staphb/spades:3.15.4'
+    publishDir "${params.outdir}/assemblies", mode: 'copy'
+    tag "$sample_id"
+    cpus 4
+    memory '8 GB'
+
+    input:
+    tuple val(sample_id), path(reads)
+
+    output:
+    tuple val(sample_id), path("${sample_id}_assembly")
+    tuple val(sample_id), path("${sample_id}_assembly/contigs.fasta")
+
+    script:
+    """
+    echo "Running SPAdes assembly for ${sample_id}"
+
+    spades.py \\
+        --pe1-1 ${reads[0]} \\
+        --pe1-2 ${reads[1]} \\
+        --threads ${task.cpus} \\
+        --memory ${task.memory.toGiga()} \\
+        -o ${sample_id}_assembly
+    """
+}
+
+// Prokka annotation
+process prokka_annotation {
+    container 'staphb/prokka:1.14.6'
+    publishDir "${params.outdir}/annotation", mode: 'copy'
+    tag "$sample_id"
+    cpus 2
+
+    input:
+    tuple val(sample_id), path(assembly_dir)
+    tuple val(sample_id), path(contigs)
+
+    output:
+    tuple val(sample_id), path("${sample_id}_annotation")
+    tuple val(sample_id), path("${sample_id}_annotation/${sample_id}.gff")
+
+    script:
+    """
+    echo "Running Prokka annotation for ${sample_id}"
+
+    prokka \\
+        --outdir ${sample_id}_annotation \\
+        --prefix ${sample_id} \\
+        --genus Mycobacterium \\
+        --species tuberculosis \\
+        --kingdom Bacteria \\
+        --cpus ${task.cpus} \\
+        ${contigs}
+
+    echo "Annotation completed for ${sample_id}"
+    echo "Results written to: ${sample_id}_annotation/"
+    """
+}
+
+// MultiQC to summarize all results
+process multiqc {
+    container 'ewels/multiqc:v1.12'
+    publishDir "${params.outdir}", mode: 'copy'
+
+    input:
+    path "*"
+
+    output:
+    path "multiqc_report.html"
+
+    script:
+    """
+    echo "Running MultiQC to summarize all results"
+    multiqc . --filename multiqc_report.html
+    """
+}
+
+// Main workflow
+workflow {
+    // Read input samplesheet
+    read_pairs_ch = Channel
+        .fromPath(params.input)
+        .splitCsv(header: true)
+        .map { row -> [row.sample, [file(row.fastq_1), file(row.fastq_2)]] }
+
+    // Run FastQC on raw reads
+    fastqc_raw_results = fastqc_raw(read_pairs_ch)
+
+    // Run Trimmomatic
+    trimmed_results = trimmomatic(read_pairs_ch)
+
+    // Run FastQC on trimmed reads
+    fastqc_trimmed_results = fastqc_trimmed(trimmed_results)
+
+    // Run SPAdes assembly on trimmed reads
+    assembly_results = spades_assembly(trimmed_results)
+
+    // Run Prokka annotation on assembled contigs
+    annotation_results = prokka_annotation(assembly_results[0], assembly_results[1])
+
+    // Collect all FastQC results and run MultiQC
+    all_fastqc = fastqc_raw_results.mix(fastqc_trimmed_results).collect()
+    multiqc_results = multiqc(all_fastqc)
+
+    // Show final results
+    assembly_results[0].view { "Assembly completed: $it" }
+    assembly_results[1].view { "Contigs file: $it" }
+    annotation_results[0].view { "Annotation completed: $it" }
+    annotation_results[1].view { "GFF file: $it" }
+    multiqc_results.view { "MultiQC report created: $it" }
+}
+```
+
+#### Updating Nextflow Configuration for Containers
+
+Update your `nextflow.config`:
+
+```groovy
+// Nextflow configuration for MTB pipeline
+params {
+    input = "samplesheet.csv"
+    outdir = "/data/users/$USER/nextflow-training/results"
+    adapters = "/data/timmomatic_adapter_Combo.fa"
+}
+
+// Work directory configuration
+workDir = "/data/users/$USER/nextflow-training/work"
+
+// Container configuration
+docker {
+    enabled = true
+    runOptions = '-u $(id -u):$(id -g)'
+}
+
+// Process resource configuration
+process {
+    withName: 'fastqc_raw' {
+        cpus = 2
+        memory = '4 GB'
+        time = '30m'
+    }
+
+    withName: 'trimmomatic' {
+        cpus = 2
+        memory = '4 GB'
+        time = '1h'
+    }
+
+    withName: 'fastqc_trimmed' {
+        cpus = 2
+        memory = '4 GB'
+        time = '30m'
+    }
+
+    withName: 'spades_assembly' {
+        cpus = 4
+        memory = '8 GB'
+        time = '2h'
+    }
+
+    withName: 'prokka_annotation' {
+        cpus = 2
+        memory = '4 GB'
+        time = '1h'
+    }
+
+    withName: 'multiqc' {
+        cpus = 1
+        memory = '2 GB'
+        time = '15m'
+    }
+}
+
+// SLURM profile for cluster execution
+profiles {
+    slurm {
+        process {
+            executor = 'slurm'
+            queue = 'Main'
+            clusterOptions = '--account=b83'
+        }
+    }
+}
+```
+
+---
+
+## MTB Analysis Pipeline Development
+
+### Mycobacterium tuberculosis Genomics
+
+#### Understanding MTB Genomics
+
+**Key Characteristics:**
+- **Genome size**: ~4.4 Mb
+- **GC content**: ~65.6%
+- **Genes**: ~4,000 protein-coding genes
+- **Clinical relevance**: Major global pathogen, drug resistance concerns
+- **Assembly challenges**: Repetitive sequences, PE/PPE gene families
+
+```mermaid
+graph TD
+    A[MTB Genomic Features] --> B[High GC Content 65.6%]
+    A --> C[PE/PPE Gene Families]
+    A --> D[Repetitive Sequences]
+    A --> E[Drug Resistance Genes]
+
+    F[Analysis Challenges] --> G[Assembly Complexity]
+    F --> H[Annotation Difficulty]
+    F --> I[Variant Calling Issues]
+
+    J[Clinical Applications] --> K[Drug Resistance Testing]
+    J --> L[Outbreak Investigation]
+    J --> M[Lineage Typing]
+
+    style A fill:#e3f2fd,stroke:#2196f3,stroke-width:2px,color:#000
+    style F fill:#ffebee,stroke:#f44336,stroke-width:2px,color:#000
+    style J fill:#e8f5e8,stroke:#4caf50,stroke-width:2px,color:#000
+```
+
+#### MTB-Specific Pipeline Requirements
+
+**Essential Analysis Steps:**
+1. **Quality Control**: Standard FastQC + MTB-specific metrics
+2. **Assembly**: Optimized for high GC content
+3. **Annotation**: MTB-specific gene databases
+4. **AMR Detection**: Drug resistance gene identification
+5. **Lineage Typing**: Phylogenetic classification
+6. **Variant Calling**: SNP identification for outbreak analysis
+
+### Pathogen-Specific Considerations
+
+#### Enhanced MTB Pipeline Features
+
+Let's add MTB-specific processes to our pipeline:
+
+```groovy
+// QUAST assembly quality assessment
+process quast_assessment {
+    container 'staphb/quast:5.0.2'
+    publishDir "${params.outdir}/quast", mode: 'copy'
+    tag "$sample_id"
+
+    input:
+    tuple val(sample_id), path(contigs)
+
+    output:
+    path "${sample_id}_quast"
+
+    script:
+    """
+    echo "Running QUAST assessment for ${sample_id}"
+
+    quast.py \\
+        --output-dir ${sample_id}_quast \\
+        --threads 2 \\
+        --min-contig 500 \\
+        --labels ${sample_id} \\
+        ${contigs}
+    """
+}
+
+// AMR detection with AMRFinderPlus
+process amr_detection {
+    container 'staphb/amrfinderplus:3.10.23'
+    publishDir "${params.outdir}/amr", mode: 'copy'
+    tag "$sample_id"
+
+    input:
+    tuple val(sample_id), path(contigs)
+
+    output:
+    path "${sample_id}_amr.tsv"
+
+    script:
+    """
+    echo "Running AMR detection for ${sample_id}"
+
+    amrfinder \\
+        --nucleotide ${contigs} \\
+        --organism Mycobacterium \\
+        --threads 2 \\
+        --output ${sample_id}_amr.tsv
+
+    echo "AMR analysis completed for ${sample_id}"
+    """
+}
+
+// MTB lineage typing with TB-Profiler
+process lineage_typing {
+    container 'staphb/tbprofiler:4.1.1'
+    publishDir "${params.outdir}/lineage", mode: 'copy'
+    tag "$sample_id"
+
+    input:
+    tuple val(sample_id), path(reads)
+
+    output:
+    path "${sample_id}_lineage.json"
+    path "${sample_id}_lineage.txt"
+
+    script:
+    """
+    echo "Running lineage typing for ${sample_id}"
+
+    tb-profiler profile \\
+        --read1 ${reads[0]} \\
+        --read2 ${reads[1]} \\
+        --prefix ${sample_id}_lineage \\
+        --threads 2
+
+    echo "Lineage typing completed for ${sample_id}"
+    """
+}
+
+// MLST typing
+process mlst_typing {
+    container 'staphb/mlst:2.22.0'
+    publishDir "${params.outdir}/mlst", mode: 'copy'
+    tag "$sample_id"
+
+    input:
+    tuple val(sample_id), path(contigs)
+
+    output:
+    path "${sample_id}_mlst.tsv"
+
+    script:
+    """
+    echo "Running MLST typing for ${sample_id}"
+
+    mlst \\
+        --scheme mtbc \\
+        ${contigs} > ${sample_id}_mlst.tsv
+
+    echo "MLST typing completed for ${sample_id}"
+    """
+}
+```
+
+### Clinical Genomics Applications
+
+#### Complete MTB Clinical Pipeline
+
+Here's our enhanced pipeline with all MTB-specific features:
+
+```groovy
+#!/usr/bin/env nextflow
+
+// Enable DSL2
+nextflow.enable.dsl = 2
+
+// Parameters
+params.input = "samplesheet.csv"
+params.outdir = "/data/users/$USER/nextflow-training/results"
+params.adapters = "/data/timmomatic_adapter_Combo.fa"
+
+// Import processes (previous processes here...)
+
+// Enhanced workflow with MTB-specific analysis
+workflow {
+    // Read input samplesheet
+    read_pairs_ch = Channel
+        .fromPath(params.input)
+        .splitCsv(header: true)
+        .map { row -> [row.sample, [file(row.fastq_1), file(row.fastq_2)]] }
+
+    // Standard QC and assembly pipeline
+    fastqc_raw_results = fastqc_raw(read_pairs_ch)
+    trimmed_results = trimmomatic(read_pairs_ch)
+    fastqc_trimmed_results = fastqc_trimmed(trimmed_results)
+    assembly_results = spades_assembly(trimmed_results)
+    annotation_results = prokka_annotation(assembly_results[0], assembly_results[1])
+
+    // MTB-specific analyses
+    quast_results = quast_assessment(assembly_results[1])
+    amr_results = amr_detection(assembly_results[1])
+    lineage_results = lineage_typing(trimmed_results)
+    mlst_results = mlst_typing(assembly_results[1])
+
+    // Comprehensive reporting
+    all_qc = fastqc_raw_results.mix(fastqc_trimmed_results).collect()
+    multiqc_results = multiqc(all_qc)
+
+    // Output summaries
+    assembly_results[1].view { "Assembly: $it" }
+    annotation_results[1].view { "Annotation: $it" }
+    amr_results.view { "AMR results: $it" }
+    lineage_results.view { "Lineage: $it" }
+    mlst_results.view { "MLST: $it" }
+}
+```
+
+#### Clinical Interpretation Workflow
+
+```mermaid
+flowchart TD
+    A[Raw Sequencing Data] --> B[Quality Control]
+    B --> C[Genome Assembly]
+    C --> D[Quality Assessment]
+
+    D --> E[Drug Resistance Testing]
+    D --> F[Lineage Typing]
+    D --> G[MLST Typing]
+
+    E --> H[Clinical Report]
+    F --> H
+    G --> H
+
+    H --> I[Treatment Decision]
+    H --> J[Outbreak Investigation]
+    H --> K[Surveillance Database]
+
+    style A fill:#f5f5f5,stroke:#757575,stroke-width:1px,color:#000
+    style H fill:#fff3e0,stroke:#ff9800,stroke-width:2px,color:#000
+    style I fill:#e8f5e8,stroke:#4caf50,stroke-width:2px,color:#000
+    style J fill:#e3f2fd,stroke:#2196f3,stroke-width:2px,color:#000
+    style K fill:#f3e5f5,stroke:#9c27b0,stroke-width:2px,color:#000
+```
+
+---
+
+## Professional Pipeline Development
+
+### Pipeline Documentation
+
+#### Creating Professional Documentation
+
+**Essential Documentation Components:**
+
+1. **README.md**: Overview and quick start
+2. **CHANGELOG.md**: Version history
+3. **docs/**: Detailed documentation
+4. **examples/**: Sample data and configs
+
+**Example Documentation Structure:**
+```
+mtb-analysis-pipeline/
+├── README.md
+├── CHANGELOG.md
+├── main.nf
+├── nextflow.config
+├── docs/
+│   ├── usage.md
+│   ├── parameters.md
+│   ├── output.md
+│   └── troubleshooting.md
+├── examples/
+│   ├── samplesheet.csv
+│   └── test_config.config
+└── containers/
+    └── Dockerfile
+```
+
+### Testing and Validation
+
+#### Pipeline Testing Strategy
+
+```bash
+# Create test data
+mkdir -p test_data
+# Add small test datasets
+
+# Test with minimal data
+nextflow run main.nf \\
+    --input test_data/test_samplesheet.csv \\
+    --outdir test_results \\
+    -profile test
+
+# Validate outputs
+ls test_results/
+```
+
+### Deployment Strategies
+
+#### Version Control Best Practices
+
+```bash
+# Create development branch
+git checkout -b feature/amr-detection
+
+# Make changes and commit
+git add .
+git commit -m "Add AMR detection with AMRFinderPlus
+
+- Added amr_detection process
+- Updated workflow to include AMR analysis
+- Added AMRFinderPlus container
+- Updated documentation"
+
+# Push to GitHub
+git push origin feature/amr-detection
+
+# Create pull request on GitHub
+# Merge after review
+```
+
+#### Release Management
+
+```bash
+# Create release
+git tag -a v1.0.0 -m "Release v1.0.0: Production MTB pipeline
+
+Features:
+- Complete QC pipeline
+- MTB-specific assembly
+- AMR detection
+- Lineage typing
+- MLST analysis
+- Comprehensive reporting"
+
+git push origin v1.0.0
+```
+
+---
+
+## Hands-on Exercise: Building Your MTB Pipeline
+
+### Exercise: Convert Exercise 3 to Production MTB Pipeline
+
+**Objective**: Transform your Day 6 Exercise 3 pipeline into a production-ready MTB analysis workflow.
+
+#### Step 1: Initialize Version Control
+
+```bash
+cd /users/mamana/microbial-genomics-training/workflows
+
+# Initialize Git repository
+git init
+git add qc_pipeline.nf nextflow.config samplesheet.csv
+git commit -m "Initial commit: Exercise 3 baseline"
+
+# Create development branch
+git checkout -b feature/mtb-production
+```
+
+#### Step 2: Create Containerized Pipeline
+
+Create `mtb_pipeline.nf` with the containerized processes shown above.
+
+#### Step 3: Add MTB-Specific Features
+
+Add the AMR detection, lineage typing, and MLST processes.
+
+#### Step 4: Test the Pipeline
+
+```bash
+# Test with a subset of samples
+nextflow run mtb_pipeline.nf \\
+    --input samplesheet_test.csv \\
+    --outdir /data/users/$USER/nextflow-training/results_mtb
+
+# Verify outputs
+ls -la /data/users/$USER/nextflow-training/results_mtb/
+```
+
+#### Step 5: Document and Commit
+
+```bash
+# Create documentation
+echo "# MTB Analysis Pipeline" > README.md
+# Add comprehensive documentation
+
+# Commit changes
+git add .
+git commit -m "Complete MTB production pipeline
+
+- Containerized all processes
+- Added AMR detection
+- Added lineage typing
+- Added MLST analysis
+- Comprehensive documentation"
+```
+
+#### Step 6: Create GitHub Repository
+
+1. Create repository on GitHub
+2. Push your code
+3. Create releases
+4. Add documentation
+
+---
+
+## Summary and Next Steps
+
+### What We Accomplished Today
+
+✅ **Version Control**: Learned Git and GitHub for pipeline development
+✅ **Containerization**: Integrated Docker containers for reproducibility
+✅ **MTB Pipeline**: Built production-ready tuberculosis analysis workflow
+✅ **Clinical Applications**: Added AMR detection and typing capabilities
+✅ **Professional Standards**: Documentation, testing, and deployment
+
+### Your Production Pipeline Features
+
+```mermaid
+flowchart LR
+    A[Raw Data] --> B[QC Pipeline]
+    B --> C[Assembly]
+    C --> D[Annotation]
+    D --> E[AMR Detection]
+    D --> F[Lineage Typing]
+    D --> G[MLST Analysis]
+
+    E --> H[Clinical Report]
+    F --> H
+    G --> H
+
+    style A fill:#f5f5f5,stroke:#757575,stroke-width:1px,color:#000
+    style H fill:#e8f5e8,stroke:#4caf50,stroke-width:2px,color:#000
+```
+
+### Key Skills Developed
+
+- **Git workflow**: Track changes, collaborate, and manage versions
+- **Container integration**: Use Docker for reproducible environments
+- **MTB genomics**: Understand pathogen-specific analysis requirements
+- **Clinical applications**: Apply genomics to real-world healthcare problems
+- **Professional development**: Document, test, and deploy pipelines properly
+
+### Tomorrow: Day 8 Preview
+
+Day 8 will focus on **Comparative Genomics**:
+- Pan-genome analysis with your MTB pipeline outputs
+- Phylogenetic inference from core genome SNPs
+- Tree construction and visualization
+- Population genomics and outbreak investigation
+
+Your production MTB pipeline from today will provide the foundation for comparative analysis across multiple isolates!
+
+---
+
+## Resources
+
+### Documentation
+- [Git Documentation](https://git-scm.com/doc)
+- [GitHub Guides](https://guides.github.com/)
+- [Docker Documentation](https://docs.docker.com/)
+- [Nextflow Documentation](https://www.nextflow.io/docs/latest/)
+
+### Container Repositories
+- [BioContainers](https://biocontainers.pro/)
+- [StaPH-B Docker Images](https://github.com/StaPH-B/docker-builds)
+- [nf-core Containers](https://nf-co.re/tools/#containers)
+
+### MTB-Specific Tools
+- [TB-Profiler](https://github.com/jodyphelan/TBProfiler)
+- [AMRFinderPlus](https://github.com/ncbi/amr)
+- [QUAST](https://github.com/ablab/quast)
+
+### Professional Development
+- [nf-core Guidelines](https://nf-co.re/developers/guidelines)
+- [Bioinformatics Best Practices](https://github.com/nf-core/tools)
+- [Scientific Software Development](https://software-carpentry.org/)
