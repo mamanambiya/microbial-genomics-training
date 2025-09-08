@@ -6,6 +6,10 @@ results/
 nextflow
 nxf-tmp.*
 nextflow.config
+*.nf
+# But allow workflow examples in workflows folder
+!workflows/*.nf
+!workflows/*.config
 
 # Test files
 test_*.sh
@@ -14,10 +18,6 @@ test_*.sh
 *Test_Results*.md
 *Testing_Checklist.md
 simple_module_test.sh
-
-# Nextflow scripts (temporary/development)
-*.nf
-workflows/*.nf
 
 # Sample sheets
 samplesheet*.csv

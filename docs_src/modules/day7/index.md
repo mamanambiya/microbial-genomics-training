@@ -1,4 +1,4 @@
-# Day 7: Advanced Nextflow & Version Control with GitHub
+# Day 7: Advanced Nextflow, Version Control with GitHub & Real Genomics Applications
 
 <div align="center" style="padding: 60px 20px;">
 

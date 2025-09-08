@@ -64,7 +64,7 @@ theme:
 extra:
   analytics:
     provider: google
-    property: !ENV GOOGLE_ANALYTICS_KEY
+    property: G-XXXXXXXXXX
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/CIDRI-Africa
@@ -86,9 +86,7 @@ markdown_extensions:
       smart_enable: all
   - pymdownx.caret
   - pymdownx.details
-  - pymdownx.emoji:
-      emoji_generator: !!python/name:materialx.emoji.to_svg
-      emoji_index: !!python/name:materialx.emoji.twemoji
+  - pymdownx.emoji
   - pymdownx.highlight:
       anchor_linenums: true
       line_spans: __span
@@ -105,7 +103,7 @@ markdown_extensions:
       custom_fences:
         - name: mermaid
           class: mermaid
-          format: !!python/name:pymdownx.superfences.fence_code_format
+          format: pymdownx.superfences.fence_code_format
   - pymdownx.tabbed:
       alternate_style: true
   - pymdownx.tasklist:
@@ -115,9 +113,8 @@ markdown_extensions:
 plugins:
   - search:
       separator: '[\s\-,:!=\[\]()"`/]+|\.(?!\d)|&[lg]t;|(?!\b)(?=[A-Z][a-z])'
-  - minify:
-      minify_html: true
-  - glightbox
+
+
 
 nav:
   - Home: index.md
@@ -132,9 +129,9 @@ nav:
     - Day 2 - Introduction to Commandline, High Performance Computing, & Quality Control: modules/day2/index.md
     - Day 3 - Genomic Characterization: modules/day3/index.md
     - Day 4 - Genomic Characterization: modules/day4/index.md
-    - Day 5 - Nextflow Pipeline Development: modules/day5/index.md
-    - Day 6 - Nextflow Pipeline Development & Version Control with GitHub: modules/day6/index.md
-    - Day 7 - Advanced Nextflow & Version Control with GitHub: modules/day7/index.md
+    - "Day 5 - Tracking Threats: Genomic Detection of AMR, Virulence, and Plasmid Mobility": modules/day5/index.md
+    - "Day 6 - Nextflow Foundations & Core Concepts": modules/day6/index.md
+    - "Day 7 - Advanced Nextflow, Version Control with GitHub & Real Genomics Applications": modules/day7/index.md
     - Day 8 - Comparative Genomics: modules/day8/index.md
     - Day 9 - Bring your own data: modules/day9/index.md
     - Day 10 - Wrap-up session: modules/day10/index.md

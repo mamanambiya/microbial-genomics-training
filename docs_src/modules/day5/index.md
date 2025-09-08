@@ -1,8 +1,8 @@
-# Day 5: Nextflow Pipeline Development
+# Day 5: Tracking Threats: Genomic Detection of AMR, Virulence, and Plasmid Mobility
 
-**Date**: September 5, 2025  
-**Duration**: 09:00-13:00 CAT  
-**Focus**: Workflow reproducibility, Nextflow basics, pipeline development
+**Date**: September 5, 2025
+**Duration**: 09:00-13:00 CAT
+**Focus**: Genome quality and functional gene annotation fundamentals, AMR and virulence factors and plasmid detection
 
 ## Overview
 

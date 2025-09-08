@@ -97,7 +97,7 @@ The 10-day intensive training course covers fundamental to advanced topics in mi
 
 **Key Learning Outcomes**: Genome quality and functional gene annotation fundamentals, AMR and virulence factors and plasmid detection
 
-## Day 6: Nextflow Pipeline Development
+## Day 6: Nextflow Foundations & Core Concepts
 
 **Date**: September 8, 2025  
 **[→ View detailed module](../modules/day6/index.md)**
