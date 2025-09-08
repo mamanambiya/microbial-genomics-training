@@ -571,7 +571,7 @@ Let's see how the same basic task - running FastQC on multiple samples - would b
 ```bash
 # Manual approach - sequential processing
 for sample in sample1 sample2 sample3; do
-    fastqc ${sample}_R1.fastq.gz ${sample}_R2.fastq.gz -o results/
+    fastqc ${sample}_R1.fastq.gz ${sample}_R2.fastq.gz -o /data/users/$USER/nextflow-training/results/
     if [ $? -ne 0 ]; then echo "FastQC failed for $sample"; exit 1; fi
 done
 ```
@@ -585,7 +585,7 @@ nextflow.enable.dsl = 2
 // FastQC process
 process fastqc {
     container 'biocontainers/fastqc:v0.11.9'
-    publishDir 'results/', mode: 'copy'
+    publishDir '/data/users/$USER/nextflow-training/results/', mode: 'copy'
 
     input:
     tuple val(sample_id), path(reads)
@@ -616,19 +616,19 @@ SAMPLES = ["sample1", "sample2", "sample3"]
 
 rule all:
     input:
-        expand("results/{sample}_{read}_fastqc.html",
+        expand("/data/users/$USER/nextflow-training/results/{sample}_{read}_fastqc.html",
                sample=SAMPLES, read=["R1", "R2"])
 
 rule fastqc:
     input:
         "data/{sample}_{read}.fastq"
     output:
-        html="results/{sample}_{read}_fastqc.html",
-        zip="results/{sample}_{read}_fastqc.zip"
+        html="/data/users/$USER/nextflow-training/results/{sample}_{read}_fastqc.html",
+        zip="/data/users/$USER/nextflow-training/results/{sample}_{read}_fastqc.zip"
     container:
         "docker://biocontainers/fastqc:v0.11.9"
     shell:
-        "fastqc {input} -o results/"
+        "fastqc {input} -o /data/users/$USER/nextflow-training/results/"
 ```
 
 #### **CWL Implementation**
@@ -733,8 +733,6 @@ To understand why workflow management systems like Nextflow are revolutionary, l
 
 #### Traditional Shell Scripting - The Slow Way
 
-<div align="center">
-
 ```mermaid
 graph TD
     A1[Sample 1] --> B1[FastQC - 5 min]
@@ -763,8 +761,6 @@ graph TD
     style F3 fill:#ff9999
 ```
 
-</div>
-
 **Problems with traditional approach:**
 
 - **Sequential processing**: Must wait for each sample to finish completely
@@ -773,8 +769,6 @@ graph TD
 - **Scaling nightmare**: 100 samples = 100 hours!
 
 #### Nextflow - The Fast Way
-
-<div align="center">
 
 ```mermaid
 graph TD
@@ -805,8 +799,6 @@ graph TD
     style F5 fill:#99ff99
     style F6 fill:#99ff99
 ```
-
-</div>
 
 **Benefits of Nextflow approach:**
 
@@ -901,8 +893,6 @@ Nextflow is a **workflow management system** that comprises both a runtime envir
 
 ### Core Nextflow Features
 
-<div align="center">
-
 ```mermaid
 graph LR
     A[Fast Prototyping] --> B[Simple Syntax]
@@ -917,8 +907,6 @@ graph LR
     style G fill:#f3e5f5
     style I fill:#fce4ec
 ```
-
-</div>
 
 **1. Fast Prototyping**
 
@@ -1000,7 +988,7 @@ A **process** describes a task to be run. Think of it as a recipe that tells Nex
 process COUNT_READS {
     // Process directives (optional)
     tag "$sample_id"           // Label for this task
-    publishDir "results/"      // Where to save outputs
+    publishDir "/data/users/$USER/nextflow-training/results/"      // Where to save outputs
 
     input:
     tuple val(sample_id), path(reads)  // What this process needs
@@ -1045,8 +1033,6 @@ Channel.fromPath("samples.csv")
 
 **Channel Flow Example:**
 
-<div align="center">
-
 ```mermaid
 graph LR
     A[Input Files] --> B[Channel]
@@ -1067,8 +1053,6 @@ graph LR
     style A fill:#f5f5f5,stroke:#757575,stroke-width:1px,color:#000
     style F fill:#f5f5f5,stroke:#757575,stroke-width:1px,color:#000
 ```
-
-</div>
 
 <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #007bff;">
 <h5>🎨 Color Legend for Nextflow Diagrams</h5>
@@ -1118,8 +1102,6 @@ When you run a Nextflow script, here's what happens:
 5. **Handle failures**: Retries failed tasks or stops gracefully
 6. **Collect results**: Gathers outputs in the specified locations
 
-<div align="center">
-
 ```mermaid
 graph TD
     A[Nextflow Script] --> B[Parse & Plan]
@@ -1133,8 +1115,6 @@ graph TD
     style A fill:#e1f5fe
     style G fill:#c8e6c9
 ```
-
-</div>
 
 ### Your First Nextflow Script
 
@@ -1201,8 +1181,6 @@ One of Nextflow's most powerful features is that it separates **what** your work
 
 #### **Executors: Where Your Workflow Runs**
 
-<div align="center">
-
 ```mermaid
 graph TD
     A[Your Nextflow Script] --> B{Choose Executor}
@@ -1221,8 +1199,6 @@ graph TD
     style A fill:#e1f5fe
     style H fill:#c8e6c9
 ```
-
-</div>
 
 **Available Executors:**
 
@@ -1314,14 +1290,12 @@ This means all task execution directories will be created under `/data/users/mam
 
 When you run a Nextflow pipeline, several directories are automatically created:
 
-<div align="center">
-
 ```mermaid
 graph TD
     A[microbial-genomics-training/] --> B[workflows/]
     A --> C[data/]
     A --> D[/data/users/$USER/nextflow-training/work/]
-    A --> H[/data/users/$USER/nextflow-training/results/]
+    A --> E[/data/users/$USER/nextflow-training/results/]
 
     B --> F[.nextflow/]
     B --> G[.nextflow.log]
@@ -1351,8 +1325,6 @@ graph TD
     style E fill:#e8f5e8
     style F fill:#f3e5f5
 ```
-
-</div>
 
 <div id="folder-explorer" style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0;">
     <h4>📁 Interactive Folder Explorer</h4>
@@ -1686,13 +1658,13 @@ executor >  local (3)
 Hello from sample1!
 Hello from sample2!
 Hello from sample3!`,
-    'ls': 'data/  results/  scripts/  hello.nf',
+    'ls': 'data/  scripts/  hello.nf',
     'ls -la': `total 16
 drwxr-xr-x 5 user user 4096 Jan 15 09:00 .
 drwxr-xr-x 3 user user 4096 Jan 15 09:00 ..
 drwxr-xr-x 2 user user 4096 Jan 15 09:00 data
 -rw-r--r-- 1 user user  456 Jan 15 09:15 hello.nf
-drwxr-xr-x 2 user user 4096 Jan 15 09:00 results
+drwxr-xr-x 2 user user 4096 Jan 15 09:00 scripts
 drwxr-xr-x 2 user user 4096 Jan 15 09:00 scripts`,
     'pwd': '/home/user/nextflow-training',
     'mkdir test': 'Directory created: test/',
@@ -1793,8 +1765,6 @@ document.getElementById('command-input').addEventListener('keydown', function(e)
 
 Here's what a basic microbial genomics analysis looks like:
 
-<div align="center">
-
 ```mermaid
 flowchart LR
     A[Raw Sequencing Data<br/>FASTQ files] --> B[Quality Control<br/>FastQC]
@@ -1824,8 +1794,6 @@ flowchart LR
     style I fill:#fff3e0,stroke:#f57c00,stroke-width:1px,color:#000
     style J fill:#fff3e0,stroke:#f57c00,stroke-width:1px,color:#000
 ```
-
-</div>
 
 **What Each Step Does:**
 
@@ -2070,18 +2038,18 @@ nextflow run count_reads.nf --input samplesheet.csv
     Launching `count_reads.nf` [clever_volta] - revision: 5e6f7g8h
     executor >  local (2)
     [c1/d2e3f4] process > countReads (ERR036221) [100%] 2 of 2 ✔
-    Read count file: /path/to/results/ERR036221.count
-    Read count file: /path/to/results/ERR036223.count
+    Read count file: /data/users/$USER/nextflow-training/results/ERR036221.count
+    Read count file: /data/users/$USER/nextflow-training/results/ERR036223.count
     ```
 
 **Step 5: Check your results**
 ```bash
 # Look at the results directory
-ls results/
+ls /data/users/$USER/nextflow-training/results/
 
 # Check the read counts for real TB data
-cat results/ERR036221.count
-cat results/ERR036223.count
+cat /data/users/$USER/nextflow-training/results/ERR036221.count
+cat /data/users/$USER/nextflow-training/results/ERR036223.count
 
 # Compare file sizes
 ls -lh /data/Dataset_Mt_Vc/tb/raw_data/ERR036221_*.fastq.gz
@@ -2103,20 +2071,20 @@ ls -lh /data/Dataset_Mt_Vc/tb/raw_data/ERR036221_*.fastq.gz
     Total read pairs: 4188521
     ```
     ```text
-    # ls results/
+    # ls /data/users/$USER/nextflow-training/results/
     sample1.count  sample2.count
 
-    # cat results/sample1.count
+    # cat /data/users/$USER/nextflow-training/results/sample1.count
     2
 
-    # cat results/sample2.count
+    # cat /data/users/$USER/nextflow-training/results/sample2.count
     3
     ```
 
 **What this pipeline does:**
 1. Reads sample information from a CSV file
 2. Counts reads in paired FASTQ files (in parallel!)
-3. Saves results to the `results/` directory
+3. Saves results to the `/data/users/$USER/nextflow-training/results/` directory
 4. Each `.count` file contains detailed read statistics for that sample
 
 ### Exercise 2B: Real-World Scenarios (30 minutes)
@@ -2146,7 +2114,7 @@ cat samplesheet.csv
 
 ```bash
 # Clean previous results
-rm -rf results/ /data/users/$USER/nextflow-training/work/*
+rm -rf /data/users/$USER/nextflow-training/results/* /data/users/$USER/nextflow-training/work/*
 
 # Run pipeline fresh (all processes will execute)
 echo "=== Running WITHOUT -resume ==="
@@ -2303,7 +2271,7 @@ echo "=== TIMING COMPARISON EXERCISE ==="
 
 # 1. Fresh run timing
 echo "1. Measuring fresh run time..."
-rm -rf /data/users/$USER/nextflow-training/work/* results/
+rm -rf /data/users/$USER/nextflow-training/work/* /data/users/$USER/nextflow-training/results/*
 time nextflow run count_reads.nf --input samplesheet.csv > fresh_run.log 2>&1
 
 # 2. Resume run timing (no changes)
@@ -2740,15 +2708,15 @@ nextflow run qc_pipeline.nf --input samplesheet.csv
     [m4/n5o6p7] process > prokka_annotation (ERR036223) [100%] 2 of 2 ✔
     [y5/z6a7b8] process > multiqc                       [100%] 1 of 1 ✔
 
-    Assembly completed: /path/to/results/assemblies/ERR036221_assembly
-    Contigs file: /path/to/results/assemblies/ERR036221_assembly/contigs.fasta
-    Assembly completed: /path/to/results/assemblies/ERR036223_assembly
-    Contigs file: /path/to/results/assemblies/ERR036223_assembly/contigs.fasta
-    Annotation completed: /path/to/results/annotation/ERR036221_annotation
-    GFF file: /path/to/results/annotation/ERR036221_annotation/ERR036221.gff
-    Annotation completed: /path/to/results/annotation/ERR036223_annotation
-    GFF file: /path/to/results/annotation/ERR036223_annotation/ERR036223.gff
-    MultiQC report created: /path/to/results/multiqc_report.html
+    Assembly completed: /data/users/$USER/nextflow-training/results/assemblies/ERR036221_assembly
+    Contigs file: /data/users/$USER/nextflow-training/results/assemblies/ERR036221_assembly/contigs.fasta
+    Assembly completed: /data/users/$USER/nextflow-training/results/assemblies/ERR036223_assembly
+    Contigs file: /data/users/$USER/nextflow-training/results/assemblies/ERR036223_assembly/contigs.fasta
+    Annotation completed: /data/users/$USER/nextflow-training/results/annotation/ERR036221_annotation
+    GFF file: /data/users/$USER/nextflow-training/results/annotation/ERR036221_annotation/ERR036221.gff
+    Annotation completed: /data/users/$USER/nextflow-training/results/annotation/ERR036223_annotation
+    GFF file: /data/users/$USER/nextflow-training/results/annotation/ERR036223_annotation/ERR036223.gff
+    MultiQC report created: /data/users/$USER/nextflow-training/results/multiqc_report.html
     ```
 
 #### **Step 3: Running on Cluster with Configuration Files**
@@ -2875,10 +2843,10 @@ nextflow run qc_pipeline.nf -c cluster.config -profile highmem --input sampleshe
     [m4/n5o6p7] process > prokka_annotation (ERR036223) [100%] 2 of 2 ✔
     [y5/z6a7b8] process > multiqc                       [100%] 1 of 1 ✔
 
-    Assembly completed: /path/to/results_cluster/assemblies/ERR036221_assembly
-    Contigs file: /path/to/results_cluster/assemblies/ERR036221_assembly/contigs.fasta
-    Annotation completed: /path/to/results_cluster/annotation/ERR036221_annotation
-    GFF file: /path/to/results_cluster/annotation/ERR036221_annotation/ERR036221.gff
+    Assembly completed: /data/users/$USER/nextflow-training/results_cluster/assemblies/ERR036221_assembly
+    Contigs file: /data/users/$USER/nextflow-training/results_cluster/assemblies/ERR036221_assembly/contigs.fasta
+    Annotation completed: /data/users/$USER/nextflow-training/results_cluster/annotation/ERR036221_annotation
+    GFF file: /data/users/$USER/nextflow-training/results_cluster/annotation/ERR036221_annotation/ERR036221.gff
 
     Completed at: 09-Dec-2024 14:30:15
     Duration    : 45m 23s
@@ -2896,10 +2864,10 @@ squeue -u $USER
 nextflow log -f trace
 
 # View detailed execution report
-firefox results_cluster/pipeline_report.html
+firefox /data/users/$USER/nextflow-training/results_cluster/pipeline_report.html
 
 # Check timeline visualization
-firefox results_cluster/pipeline_timeline.html
+firefox /data/users/$USER/nextflow-training/results_cluster/pipeline_timeline.html
 ```
 
 **Scaling up for production analysis:**
@@ -2944,34 +2912,34 @@ watch -n 30 'squeue -u $USER | grep nextflow'
 
 ```bash
 # Check the complete results structure
-tree results/
+tree /data/users/$USER/nextflow-training/results/
 
 # Explore each output directory
 echo "=== Raw Data Quality Reports ==="
-ls -la results/fastqc_raw/
+ls -la /data/users/$USER/nextflow-training/results/fastqc_raw/
 
 echo "=== Trimmed Data Quality Reports ==="
-ls -la results/fastqc_trimmed/
+ls -la /data/users/$USER/nextflow-training/results/fastqc_trimmed/
 
 echo "=== Trimmed FASTQ Files ==="
-ls -la results/trimmed/
+ls -la /data/users/$USER/nextflow-training/results/trimmed/
 
 echo "=== Genome Assemblies ==="
-ls -la results/assemblies/
+ls -la /data/users/$USER/nextflow-training/results/assemblies/
 
 echo "=== Genome Annotations ==="
-ls -la results/annotation/
+ls -la /data/users/$USER/nextflow-training/results/annotation/
 
 echo "=== MultiQC Summary Report ==="
-ls -la results/multiqc_report.html
+ls -la /data/users/$USER/nextflow-training/results/multiqc_report.html
 
 # Check assembly statistics
 echo "=== Assembly Statistics ==="
 for sample in ERR036221 ERR036223; do
     echo "Sample: $sample"
-    if [ -f "results/assemblies/${sample}_assembly/contigs.fasta" ]; then
-        echo "  Contigs: $(grep -c '>' results/assemblies/${sample}_assembly/contigs.fasta)"
-        echo "  Total size: $(grep -v '>' results/assemblies/${sample}_assembly/contigs.fasta | wc -c) bp"
+    if [ -f "/data/users/$USER/nextflow-training/results/assemblies/${sample}_assembly/contigs.fasta" ]; then
+        echo "  Contigs: $(grep -c '>' /data/users/$USER/nextflow-training/results/assemblies/${sample}_assembly/contigs.fasta)"
+        echo "  Total size: $(grep -v '>' /data/users/$USER/nextflow-training/results/assemblies/${sample}_assembly/contigs.fasta | wc -c) bp"
     fi
 done
 
@@ -2979,10 +2947,10 @@ done
 echo "=== Annotation Statistics ==="
 for sample in ERR036221 ERR036223; do
     echo "Sample: $sample"
-    if [ -f "results/annotation/${sample}_annotation/${sample}.gff" ]; then
-        echo "  Total features: $(grep -v '^#' results/annotation/${sample}_annotation/${sample}.gff | wc -l)"
-        echo "  CDS features: $(grep -v '^#' results/annotation/${sample}_annotation/${sample}.gff | grep 'CDS' | wc -l)"
-        echo "  Gene features: $(grep -v '^#' results/annotation/${sample}_annotation/${sample}.gff | grep 'gene' | wc -l)"
+    if [ -f "/data/users/$USER/nextflow-training/results/annotation/${sample}_annotation/${sample}.gff" ]; then
+        echo "  Total features: $(grep -v '^#' /data/users/$USER/nextflow-training/results/annotation/${sample}_annotation/${sample}.gff | wc -l)"
+        echo "  CDS features: $(grep -v '^#' /data/users/$USER/nextflow-training/results/annotation/${sample}_annotation/${sample}.gff | grep 'CDS' | wc -l)"
+        echo "  Gene features: $(grep -v '^#' /data/users/$USER/nextflow-training/results/annotation/${sample}_annotation/${sample}.gff | grep 'gene' | wc -l)"
     fi
 done
 
@@ -2991,7 +2959,7 @@ echo "=== File Size Comparison ==="
 echo "Original files:"
 ls -lh /data/Dataset_Mt_Vc/tb/raw_data/ERR036221_*.fastq.gz
 echo "Trimmed files:"
-ls -lh results/trimmed/ERR036221_*_paired.fastq.gz
+ls -lh /data/users/$USER/nextflow-training/results/trimmed/ERR036221_*_paired.fastq.gz
 ```
 
 ??? success "Expected directory structure (✅ Tested and validated)"
@@ -3001,7 +2969,7 @@ ls -lh results/trimmed/ERR036221_*_paired.fastq.gz
     ├── qc_pipeline.nf                  # Full genomics pipeline
     ├── samplesheet.csv                 # Sample metadata
     ├── nextflow.config                 # Configuration file
-    ├── results/                        # Published outputs
+    ├── /data/users/$USER/nextflow-training/results/  # Published outputs
     │   ├── fastqc_raw/                 # Raw data QC (✅ tested)
     │   │   ├── ERR036221_1_fastqc.html # 707KB quality report
     │   │   ├── ERR036221_1_fastqc.zip  # 432KB data archive
@@ -3121,9 +3089,9 @@ nextflow run qc_pipeline.nf -profile lenient
 # Compare results
 echo "=== Comparing trimming strategies ==="
 echo "Strict trimming results:"
-ls -la results_strict/trimmed/
+ls -la /data/users/$USER/nextflow-training/results_strict/trimmed/
 echo "Lenient trimming results:"
-ls -la results_lenient/trimmed/
+ls -la /data/users/$USER/nextflow-training/results_lenient/trimmed/
 ```
 
 #### **Step 4: Cluster Execution (Advanced)**
@@ -3165,11 +3133,11 @@ nextflow run qc_pipeline.nf --input samplesheet.csv -profile slurm -with-trace -
 
 # Check the generated reports
 echo "=== Pipeline Reports Generated ==="
-ls -la results/pipeline_*
+ls -la /data/users/$USER/nextflow-training/results/pipeline_*
 
 # View resource usage
 echo "=== Resource Usage Summary ==="
-cat results/pipeline_trace.txt | head -10
+cat /data/users/$USER/nextflow-training/results/pipeline_trace.txt | head -10
 ```
 
 !!! info "Local vs Cluster Execution Comparison"
@@ -3331,26 +3299,26 @@ nextflow run qc_pipeline.nf --input samplesheet.csv
     [cc/b9c188] fastqc (ERR036232) [100%] 10 of 10 ✔
     [67/56bda4] fastqc (ERR10112846) [100%] 10 of 10 ✔
     [6e/b4786c] fastqc (ERR10112851) [100%] 10 of 10 ✔
-    FastQC report: /path/to/results/fastqc/ERR036221_1_fastqc.html
-    FastQC report: /path/to/results/fastqc/ERR036221_2_fastqc.html
-    FastQC report: /path/to/results/fastqc/ERR036223_1_fastqc.html
-    FastQC report: /path/to/results/fastqc/ERR036223_2_fastqc.html
-    FastQC report: /path/to/results/fastqc/ERR036226_1_fastqc.html
-    FastQC report: /path/to/results/fastqc/ERR036226_2_fastqc.html
-    FastQC report: /path/to/results/fastqc/ERR036227_1_fastqc.html
-    FastQC report: /path/to/results/fastqc/ERR036227_2_fastqc.html
-    FastQC report: /path/to/results/fastqc/ERR036232_1_fastqc.html
-    FastQC report: /path/to/results/fastqc/ERR036232_2_fastqc.html
-    FastQC report: /path/to/results/fastqc/ERR036234_1_fastqc.html
-    FastQC report: /path/to/results/fastqc/ERR036234_2_fastqc.html
-    FastQC report: /path/to/results/fastqc/ERR036249_1_fastqc.html
-    FastQC report: /path/to/results/fastqc/ERR036249_2_fastqc.html
-    FastQC report: /path/to/results/fastqc/ERR10112845_1_fastqc.html
-    FastQC report: /path/to/results/fastqc/ERR10112845_2_fastqc.html
-    FastQC report: /path/to/results/fastqc/ERR10112846_1_fastqc.html
-    FastQC report: /path/to/results/fastqc/ERR10112846_2_fastqc.html
-    FastQC report: /path/to/results/fastqc/ERR10112851_1_fastqc.html
-    FastQC report: /path/to/results/fastqc/ERR10112851_2_fastqc.html
+    FastQC report: /data/users/$USER/nextflow-training/results/fastqc/ERR036221_1_fastqc.html
+    FastQC report: /data/users/$USER/nextflow-training/results/fastqc/ERR036221_2_fastqc.html
+    FastQC report: /data/users/$USER/nextflow-training/results/fastqc/ERR036223_1_fastqc.html
+    FastQC report: /data/users/$USER/nextflow-training/results/fastqc/ERR036223_2_fastqc.html
+    FastQC report: /data/users/$USER/nextflow-training/results/fastqc/ERR036226_1_fastqc.html
+    FastQC report: /data/users/$USER/nextflow-training/results/fastqc/ERR036226_2_fastqc.html
+    FastQC report: /data/users/$USER/nextflow-training/results/fastqc/ERR036227_1_fastqc.html
+    FastQC report: /data/users/$USER/nextflow-training/results/fastqc/ERR036227_2_fastqc.html
+    FastQC report: /data/users/$USER/nextflow-training/results/fastqc/ERR036232_1_fastqc.html
+    FastQC report: /data/users/$USER/nextflow-training/results/fastqc/ERR036232_2_fastqc.html
+    FastQC report: /data/users/$USER/nextflow-training/results/fastqc/ERR036234_1_fastqc.html
+    FastQC report: /data/users/$USER/nextflow-training/results/fastqc/ERR036234_2_fastqc.html
+    FastQC report: /data/users/$USER/nextflow-training/results/fastqc/ERR036249_1_fastqc.html
+    FastQC report: /data/users/$USER/nextflow-training/results/fastqc/ERR036249_2_fastqc.html
+    FastQC report: /data/users/$USER/nextflow-training/results/fastqc/ERR10112845_1_fastqc.html
+    FastQC report: /data/users/$USER/nextflow-training/results/fastqc/ERR10112845_2_fastqc.html
+    FastQC report: /data/users/$USER/nextflow-training/results/fastqc/ERR10112846_1_fastqc.html
+    FastQC report: /data/users/$USER/nextflow-training/results/fastqc/ERR10112846_2_fastqc.html
+    FastQC report: /data/users/$USER/nextflow-training/results/fastqc/ERR10112851_1_fastqc.html
+    FastQC report: /data/users/$USER/nextflow-training/results/fastqc/ERR10112851_2_fastqc.html
 
     Completed at: 08-Sep-2025 15:54:16
     Duration    : 1m 11s
@@ -3361,18 +3329,18 @@ nextflow run qc_pipeline.nf --input samplesheet.csv
 **Step 4: Check your results**
 ```bash
 # Look at the results structure
-ls -la results/fastqc/
+ls -la /data/users/$USER/nextflow-training/results/fastqc/
 
 # Check file sizes (real data produces substantial reports)
-du -h results/fastqc/
+du -h /data/users/$USER/nextflow-training/results/fastqc/
 
 # Open an HTML report to see real quality metrics
-# firefox results/fastqc/ERR036221_1_fastqc.html &
+# firefox /data/users/$USER/nextflow-training/results/fastqc/ERR036221_1_fastqc.html &
 ```
 
 ??? success "Expected output (✅ Tested and validated)"
     ```text
-    results/
+    /data/users/$USER/nextflow-training/results/
     └── fastqc/
         ├── ERR036221_1_fastqc.html    # 707KB quality report
         ├── ERR036221_1_fastqc.zip     # 432KB data archive
@@ -3506,7 +3474,7 @@ microbial-genomics-training/
 ├── workflows/                 # Workflow directory
 │   ├── count_reads.nf        # Your script (✅ tested)
 │   ├── samplesheet.csv       # Sample metadata
-│   ├── results/              # Published outputs
+│   ├── /data/users/$USER/nextflow-training/results/  # Published outputs
 │   │   ├── ERR036221.count   # 2,452,408 read pairs
 │   │   ├── ERR036223.count   # 4,188,521 read pairs
 │   │   ├── pipeline_trace.txt     # Execution trace
@@ -3520,14 +3488,14 @@ microbial-genomics-training/
 
 <strong>What to Check:</strong>
 <ul>
-<li><strong>Results Files:</strong> <code>cat results/sample1.count</code> should show "2"</li>
-<li><strong>Results Files:</strong> <code>cat results/sample2.count</code> should show "3"</li>
+<li><strong>Results Files:</strong> <code>cat /data/users/$USER/nextflow-training/results/sample1.count</code> should show "2"</li>
+<li><strong>Results Files:</strong> <code>cat /data/users/$USER/nextflow-training/results/sample2.count</code> should show "3"</li>
 <li><strong>File Permissions:</strong> Results should be readable and in the correct location</li>
 </ul>
 
 <strong>Key Learning Points:</strong>
 <ul>
-<li><strong>publishDir:</strong> Copies important outputs to results/</li>
+<li><strong>publishDir:</strong> Copies important outputs to /data/users/$USER/nextflow-training/results/</li>
 <li><strong>Parallel Processing:</strong> Both samples processed simultaneously</li>
 <li><strong>Channel Operations:</strong> fromPath() found your FASTQ files</li>
 </ul>
@@ -3542,7 +3510,7 @@ microbial-genomics-training/
 ├── workflows/                 # Workflow directory
 │   ├── qc_pipeline.nf       # Your script (✅ tested with 10 samples)
 │   ├── samplesheet.csv       # Sample metadata (10 TB samples)
-│   ├── results/              # Published outputs
+│   ├── /data/users/$USER/nextflow-training/results/  # Published outputs
 │   │   └── fastqc/          # FastQC reports (23MB total)
 │   │       ├── ERR036221_1_fastqc.html  # 707KB quality report
 │   │       ├── ERR036221_1_fastqc.zip   # 432KB data archive
@@ -3569,7 +3537,7 @@ microbial-genomics-training/
 
 <strong>What to Check:</strong>
 <ul>
-<li><strong>HTML Reports:</strong> Open <code>results/fastqc/sample1_R1_fastqc.html</code> in browser</li>
+<li><strong>HTML Reports:</strong> Open <code>/data/users/$USER/nextflow-training/results/fastqc/sample1_R1_fastqc.html</code> in browser</li>
 <li><strong>File Count:</strong> Should have 8 files total (4 HTML + 4 ZIP)</li>
 <li><strong>Container Usage:</strong> Log should show Docker container being used</li>
 </ul>
@@ -3668,7 +3636,7 @@ mkdir nextflow-training
 cd nextflow-training
 
 # Create subdirectories (no data dir needed - using /data)
-mkdir results scripts
+mkdir scripts
 ```
 
 ??? success "Expected output"
@@ -3678,8 +3646,8 @@ mkdir results scripts
     drwxr-xr-x 5 user user 4096 Jan 15 09:00 .
     drwxr-xr-x 3 user user 4096 Jan 15 09:00 ..
     drwxr-xr-x 2 user user 4096 Jan 15 09:00 data
-    drwxr-xr-x 2 user user 4096 Jan 15 09:00 results
     drwxr-xr-x 2 user user 4096 Jan 15 09:00 scripts
+
     ```
 
 **Interactive Setup Checklist:**
@@ -3957,15 +3925,15 @@ nextflow log
 **Check your results:**
 ```bash
 # List output directory contents
-ls -la results/
+ls -la /data/users/$USER/nextflow-training/results/
 
 # Check if files were created
-find results/ -type f -name "*.html" -o -name "*.txt" -o -name "*.count"
+find /data/users/$USER/nextflow-training/results/ -type f -name "*.html" -o -name "*.txt" -o -name "*.count"
 ```
 
 ??? success "Expected successful output"
     ```text
-    # ls -la results/
+    # ls -la /data/users/$USER/nextflow-training/results/
     total 12
     drwxr-xr-x 3 user user 4096 Jan 15 10:30 .
     drwxr-xr-x 5 user user 4096 Jan 15 10:29 ..
@@ -3973,17 +3941,17 @@ find results/ -type f -name "*.html" -o -name "*.txt" -o -name "*.count"
     -rw-r--r-- 1 user user   42 Jan 15 10:30 sample1.count
     -rw-r--r-- 1 user user   38 Jan 15 10:30 sample2.count
 
-    # find results/ -type f
-    results/sample1.count
-    results/sample2.count
-    results/fastqc/sample1_R1_fastqc.html
-    results/fastqc/sample1_R2_fastqc.html
+    # find /data/users/$USER/nextflow-training/results/ -type f
+    /data/users/$USER/nextflow-training/results/sample1.count
+    /data/users/$USER/nextflow-training/results/sample2.count
+    /data/users/$USER/nextflow-training/results/fastqc/sample1_R1_fastqc.html
+    /data/users/$USER/nextflow-training/results/fastqc/sample1_R2_fastqc.html
     ```
 
 ??? warning "Warning signs - something went wrong"
     ```text
     # Empty results directory
-    ls results/
+    ls /data/users/$USER/nextflow-training/results/
     # (no output)
 
     # Error in nextflow log
@@ -4604,7 +4572,7 @@ EOF
 nextflow run qc_pipeline.nf --input samplesheet.csv
 
 # Check results
-ls -la results/fastqc/
+ls -la /data/users/$USER/nextflow-training/results/fastqc/
 ```
 
 ## Troubleshooting Guide

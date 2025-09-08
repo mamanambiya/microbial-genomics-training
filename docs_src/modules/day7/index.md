@@ -1,23 +1,42 @@
 # Day 7: Advanced Nextflow, Version Control with GitHub & Real Genomics Applications
 
-<div align="center" style="padding: 60px 20px;">
+**Date**: September 9, 2025
+**Duration**: 09:00-13:00 CAT
+**Focus**: Version control, containerization, and production-ready MTB analysis pipelines
 
-## 🍳 Cooking up something amazing...
+## Learning Philosophy: Build → Version → Containerize → Deploy → Collaborate
 
-<div style="font-size: 4em; margin: 30px 0;">👨‍🍳</div>
+Building on Exercise 3 from Day 6, this module transforms your basic pipeline into a professional, production-ready workflow:
 
-### Advanced Nextflow & Professional Development
+- **Build**: Extend your Exercise 3 pipeline with advanced features
+- **Version**: Track changes and collaborate using Git and GitHub
+- **Containerize**: Package tools using Docker for reproducibility
+- **Deploy**: Run pipelines reliably across different environments
+- **Collaborate**: Share and maintain pipelines as a team
 
-**Coming Soon:**
+## Table of Contents
 
-- Git and GitHub for pipeline version control and collaboration
-- MTB analysis pipeline development and real-world applications  
-- Genome assembly workflows and pathogen surveillance
-- Advanced Nextflow features and optimization techniques
-- Pipeline deployment strategies for HPC and cloud environments
+### **🔧 Building on Exercise 3**
+- [From Exercise 3 to Production Pipeline](#from-exercise-3-to-production-pipeline)
+- [Pipeline Enhancement Strategy](#pipeline-enhancement-strategy)
 
----
+### **📚 Version Control Fundamentals**
+- [Git Basics for Bioinformatics](#git-basics-for-bioinformatics)
+- [GitHub for Pipeline Collaboration](#github-for-pipeline-collaboration)
+- [Versioning Nextflow Workflows](#versioning-nextflow-workflows)
 
-*This comprehensive module is being carefully crafted to provide you with production-ready bioinformatics skills!*
+### **🐳 Containerization Introduction**
+- [Docker Fundamentals](#docker-fundamentals)
+- [DockerHub for Bioinformatics Tools](#dockerhub-for-bioinformatics-tools)
+- [Container Integration in Nextflow](#container-integration-in-nextflow)
 
-</div>
+### **🧬 MTB Analysis Pipeline Development**
+- [Mycobacterium tuberculosis Genomics](#mycobacterium-tuberculosis-genomics)
+- [Pathogen-Specific Considerations](#pathogen-specific-considerations)
+- [Clinical Genomics Applications](#clinical-genomics-applications)
+- [Production MTB Pipeline](#production-mtb-pipeline)
+
+### **🚀 Professional Development**
+- [Pipeline Documentation](#pipeline-documentation)
+- [Testing and Validation](#testing-and-validation)
+- [Deployment Strategies](#deployment-strategies)
