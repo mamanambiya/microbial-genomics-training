@@ -4,8 +4,7 @@
 
 This section introduces **core principles of metagenomics**. Metagenomics is the study of genetic material recovered directly from environmental or clinical samples, allowing 
 analysis of **entire microbial communities** without the need for cultivation. This section includes conceptual notes, rationale for each step, practical commands, 
-and a **mini toy dataset exercise**. Unlike genomics (WGS) which focuses on analyzing individual genomes (such as bacterial isolate), metagenomics
-studies the collective genomes or markers from microbial communities.
+and a **mini toy dataset exercise**. Unlike genomics (WGS) which focuses on analyzing individual genomes (such as bacterial isolate), metagenomics studies the collective genomes or markers from microbial communities.
 
 ### Genomics vs Metagenomics
 
@@ -17,9 +16,7 @@ studies the collective genomes or markers from microbial communities.
 | **Applications** | Species identification, genome assembly, annotation, AMR/virulence detection, plasmid/MGE analysis, outbreak tracking | Community profiling, functional potential, pathogen detection in mixed samples, ecology studies |
 | **Features** | Organism is known \& isolated before sequencing | Captures both known and unknown microbes from environment or host |
 
-
 ### Metagenomic Strategies: Shotgun vs 16S rRNA
-
 
 | Description | Shotgun Metagenomics | 16S rRNA Amplicon Gene Sequencing |
 |-------------|-------------------------------|--------------|
@@ -39,10 +36,15 @@ studies the collective genomes or markers from microbial communities.
   - Illumina (short reads): accurate, cost-effective, widely used for clinical metagenomics.
   - ONT/PacBio (long reads): useful for resolving repeats, plasmids, MGEs.
 
-We'll use a publicly available mock community dataset: ZymoBIOMICS Gut Microbiome Standard, SRA: l. You can download from SRA using `ncbi-tools` tools
+For this training we will use the data in `/data/users/user29/metagenomes/shotgun/` for shotgun metagenomics. It is important to note that, one can download shotgun metagenome sequences from NCBI-SRA using `ncbi-tools`. Install `ncbi-tools` and run
+
 ```bash
+## Fetch the data from NCBI-SRA
 # fasterq-dump SRR13827118 --progress --threads 8
 
+## Compress the files
+gzip SRR13827118*.fastq
+```
 
 ---
 
@@ -55,16 +57,20 @@ reads which may reduce false positives.
 ```bash
 # Load modules
 module load fastqc
-module multiqc
+module load multiqc
+indata="/data/users/user29/metagenomes/shotgun/"
 
-indata="/data/users/user24/metagenomes/shotgun/"
-outfastqc="/data/users/${USER}/metagenomes/shotgun/data_analysis/01_qc/"
+## Create Dir
+mkdir -p ${outfastqc} /data/users/user24/metagenomes/shotgun/scripts /data/users/user24/metagenomes/shotgun/logs
 
-mkdir -p ${outfastqc}
+# create a samplesheet.csv with three columns samplename,fastq_1,fastq_2
+python /data/users/user24/metagenomes/shotgun/scripts/samplesheet_generator.py ${indata} \
+  /data/users/${USER}/metagenomes/shotgun/samplesheet.csv
 
-# Run fastqc
-fastqc ${indata}*.fastq.gz -o ${outfastqc}
-multiqc ${outfastqc} -o ${outfastqc}
+# Run raw QC
+nextflow run /data/users/user24/metagenomes/shotgun/scripts/qc_pipeline_v1.nf \
+  --input /data/users/${USER}/metagenomes/shotgun/samplesheet.csv \
+  --outdir /data/users/${USER}/metagenomes/shotgun/results/rawfastqc
 ```
 **What to think about?**
 - Which parts of the data are flagged as potentially problematic? GC% content of the dataset.
@@ -94,7 +100,7 @@ reads (to standardize read lengths) that bias downstream analysis.
 
 
 # Load required modules/tools
-module load fastp trimmomatic
+module load trimmomatic
 
 # Define input and output dir
 indata="/data/users/user24/metagenomes/"
