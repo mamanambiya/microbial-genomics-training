@@ -16,6 +16,52 @@ This module follows a proven learning approach designed specifically for beginne
 
 Every section builds on the previous one, ensuring you develop solid foundations before moving to more complex topics.
 
+## Table of Contents
+
+### **🎯 Learning Objectives & Overview**
+- [Learning Objectives](#learning-objectives)
+- [What You'll Build Today](#what-youll-build-today)
+- [Prerequisites](#prerequisites)
+
+### **🔧 Setup & Environment**
+- [Environment Setup](#environment-setup)
+- [Understanding Nextflow Output Organization](#understanding-nextflow-output-organization)
+- [Work Directory Configuration](#work-directory-configuration)
+
+### **📚 Nextflow Fundamentals**
+- [What is Nextflow?](#what-is-nextflow)
+- [Key Concepts](#key-concepts)
+- [DSL2 Syntax](#dsl2-syntax)
+- [Channels](#channels)
+- [Processes](#processes)
+
+### **🧪 Hands-on Exercises**
+- [Exercise 1: Hello World](#exercise-1-hello-world-your-first-nextflow-workflow)
+- [Exercise 2: Read Counting](#exercise-2-read-counting-with-real-data)
+- [Exercise 3: Quality Control Pipeline](#exercise-3-quality-control-pipeline-progressive-build)
+  - [Step 1: Basic FastQC](#step-1-basic-fastqc-analysis)
+  - [Step 2: Extended Pipeline](#step-2-extended-pipeline-trimming-assembly-annotation)
+  - [Step 3: Cluster Execution](#step-3-cluster-execution-scaling-up)
+
+### **⚡ Advanced Topics**
+- [Channel Operations](#channel-operations)
+- [Process Configuration](#process-configuration)
+- [Error Handling & Debugging](#error-handling-debugging)
+- [Performance Optimization](#performance-optimization)
+- [Cluster Execution](#cluster-execution)
+
+### **🔍 Monitoring & Troubleshooting**
+- [Pipeline Monitoring](#pipeline-monitoring)
+- [Common Issues](#common-issues)
+- [Debugging Strategies](#debugging-strategies)
+
+### **🎓 Assessment & Next Steps**
+- [Knowledge Check](#knowledge-check)
+- [Additional Resources](#additional-resources)
+- [Day 7 Preview](#day-7-preview)
+
+---
+
 ## Overview
 
 Day 6 introduces participants to workflow management systems and Nextflow fundamentals. This comprehensive session covers the theoretical foundations of reproducible workflows, core Nextflow concepts, and hands-on development of basic pipelines. Participants will understand why workflow management is crucial for bioinformatics and gain practical experience with Nextflow's core components.
@@ -148,7 +194,7 @@ For Day 6, we'll focus on basic software installation and environment setup. Con
 
 **All tools are pre-installed and available through the module system. No installation required!**
 
-**Step 1: Check if module system is available**
+<b>Step 1: Check if module system is available</b>
 
 ```bash
 # Test if module command works
@@ -157,7 +203,7 @@ module --version
 # If you get "command not found", see troubleshooting below
 ```
 
-**Step 2: Check available modules**
+<b>Step 2: Check available modules</B>
 
 ```bash
 # List all available modules
@@ -169,7 +215,7 @@ module avail java
 module avail fastqc
 ```
 
-**Step 3: Load required modules**
+<b>Step 3: Load required modules</b>
 
 ```bash
 # Load Java 17 (required for Nextflow)
@@ -185,7 +231,7 @@ module load trimmomatic/0.39
 module load multiqc/1.22.3
 ```
 
-**Step 4: Verify loaded modules**
+<b>Step 4: Verify loaded modules</b>
 
 ```bash
 # Check what modules are currently loaded
@@ -197,7 +243,7 @@ java -version
 fastqc --version
 ```
 
-**Step 5: Module management**
+<b>Step 5: Module management</b>
 
 ```bash
 # Unload a specific module
@@ -238,7 +284,7 @@ Let's ensure your environment is ready for Nextflow development:
 <div style="background: #e8f5e8; padding: 15px; border-radius: 8px; margin: 15px 0;">
 <h5>✅ Environment Verification</h5>
 
-**Complete verification workflow:**
+<b>Complete verification workflow</b>:
 
 ```bash
 # Step 1: Test module system
@@ -328,11 +374,15 @@ mkdir -p /data/users/$USER/nextflow-training
 cd /data/users/$USER/nextflow-training
 
 # Create subdirectories
-mkdir -p {workflows,scripts,results,configs}
+mkdir -p {workflows,scripts,configs}
 
 # Create work directory for Nextflow task files
 mkdir -p /data/users/$USER/nextflow-training/work
 echo "Nextflow work directory: /data/users/$USER/nextflow-training/work"
+
+# Create results directory for pipeline outputs
+mkdir -p /data/users/$USER/nextflow-training/results
+echo "Results directory: /data/users/$USER/nextflow-training/results"
 
 # Copy workflows from the training repository
 cp -r /users/mamana/microbial-genomics-training/workflows/* workflows/
@@ -346,9 +396,9 @@ echo "Real genomic data available in /data/Dataset_Mt_Vc/"
 <div style="background: #fff3e0; padding: 15px; border-radius: 8px; margin: 15px 0;">
 <h5>💡 Pro Tip: Development Best Practices</h5>
 
-**Recommended setup:**
-
-- Use a dedicated directory for each project
+<b>Recommended setup:</b>
+<ul>
+<li> Use a dedicated directory for each project
 - Keep data, scripts, and results separate
 - Use meaningful file names and directory structure
 - Document your workflow with README files
@@ -1271,8 +1321,8 @@ graph TD
     A[microbial-genomics-training/] --> B[workflows/]
     A --> C[data/]
     A --> D[/data/users/$USER/nextflow-training/work/]
+    A --> H[/data/users/$USER/nextflow-training/results/]
 
-    B --> E[results/]
     B --> F[.nextflow/]
     B --> G[.nextflow.log]
     B --> H[*.nf files]
@@ -1343,7 +1393,7 @@ graph TD
             </div>
 
             <div class="folder-item" data-folder="results" style="cursor: pointer; padding: 2px 0;">
-                📁 <span style="color: #4caf50;">results/</span> <span style="color: #666;">(published outputs)</span>
+                📁 <span style="color: #4caf50;">/data/users/$USER/nextflow-training/results/</span> <span style="color: #666;">(published outputs)</span>
             </div>
             <div class="folder-content" data-content="results" style="margin-left: 20px; display: none;">
                 <div style="padding: 2px 0;">📁 fastqc_raw/ <span style="color: #666;">(raw data QC reports)</span></div>
@@ -1418,7 +1468,7 @@ const folderDescriptions = {
         <strong>💡 Debugging tip:</strong> When a task fails, check these files to understand what went wrong!`
     },
     results: {
-        title: "📁 results/ Directory",
+        title: "📁 /data/users/$USER/nextflow-training/results/ Directory",
         content: `<strong>Your final, organized outputs.</strong>
         <ul>
         <li><strong>Purpose:</strong> Contains only the files you want to keep</li>
@@ -1553,7 +1603,7 @@ One of the most important concepts for beginners is understanding the difference
     </div>
 
     <div style="flex: 1; background: #e8f5e8; padding: 15px; border-radius: 8px; border-left: 4px solid #4caf50;">
-        <h5>📊 results/ Directory</h5>
+        <h5>📊 /data/users/$USER/nextflow-training/results/ Directory</h5>
         <ul style="margin: 10px 0; padding-left: 20px;">
             <li><strong>Permanent</strong> - Your final outputs</li>
             <li><strong>Clean</strong> - Only important files</li>
@@ -1905,7 +1955,7 @@ Now let's do something useful - count reads in FASTQ files:
 
 // Parameters you can change
 params.input = "samplesheet.csv"
-params.outdir = "results"
+params.outdir = "/data/users/$USER/nextflow-training/results"
 
 // Enable DSL2
 nextflow.enable.dsl = 2
@@ -2367,7 +2417,7 @@ nextflow.enable.dsl = 2
 
 // Parameters
 params.input = "samplesheet.csv"
-params.outdir = "results"
+params.outdir = "/data/users/$USER/nextflow-training/results"
 
 // FastQC process
 process fastqc {
@@ -2439,7 +2489,7 @@ nextflow.enable.dsl = 2
 
 // Parameters
 params.input = "samplesheet.csv"
-params.outdir = "results"
+params.outdir = "/data/users/$USER/nextflow-training/results"
 params.adapters = "/data/timmomatic_adapter_Combo.fa"
 
 // FastQC on raw reads
@@ -2713,7 +2763,7 @@ cat > cluster.config << 'EOF'
 // Cluster configuration for genomic analysis pipeline
 
 params {
-    outdir = "results_cluster"
+    outdir = "/data/users/$USER/nextflow-training/results_cluster"
 }
 
 profiles {
@@ -3046,18 +3096,18 @@ time nextflow run qc_pipeline.nf --input samplesheet_extended.csv -resume
 cat > nextflow.config << 'EOF'
 params {
     input = "samplesheet.csv"
-    outdir = "results"
+    outdir = "/data/users/$USER/nextflow-training/results"
     adapters = "/data/timmomatic_adapter_Combo.fa"
 }
 
 profiles {
     strict {
-        params.outdir = "results_strict"
+        params.outdir = "/data/users/$USER/nextflow-training/results_strict"
         // Stricter trimming parameters would go here
     }
 
     lenient {
-        params.outdir = "results_lenient"
+        params.outdir = "/data/users/$USER/nextflow-training/results_lenient"
         // More lenient trimming parameters would go here
     }
 }
@@ -4499,7 +4549,7 @@ Create `qc_pipeline.nf`:
 
 // Parameters
 params.reads = "/data/Dataset_Mt_Vc/tb/raw_data/*_{1,2}.fastq.gz"
-params.outdir = "results"
+params.outdir = "/data/users/$USER/nextflow-training/results"
 
 // Main workflow
 workflow {
