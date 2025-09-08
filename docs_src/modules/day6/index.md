@@ -1,4 +1,4 @@
-# Day 6: Nextflow Pipeline Development
+# Day 6: Nextflow Foundations & Core Concepts
 
 **Date**: September 8, 2025
 **Duration**: 09:00-13:00 CAT
@@ -92,6 +92,7 @@ By the end of Day 6, you will be able to:
 - **[MultiQC](https://multiqc.info/)** - Aggregate quality control reports
 - **[Trimmomatic](http://www.usadellab.org/cms/?page=trimmomatic)** - Read trimming and filtering
 - **[SPAdes](https://cab.spbu.ru/software/spades/)** - Genome assembly (for later exercises)
+- **[Prokka](https://github.com/tseemann/prokka)** - Rapid prokaryotic genome annotation
 
 ### Development Environment
 
@@ -438,7 +439,7 @@ done
 
 - **Resource Management**
     - Automatic CPU and memory allocation based on task requirements
-    - Integration with job schedulers ([SLURM](https://slurm.schedmd.com/documentation.html), [PBS](https://www.openpbs.org/), [SGE](https://gridscheduler.sourceforge.net/))
+    - Integration with job schedulers ([SLURM](https://slurm.schedmd.com/documentation.html), [SGE](https://gridscheduler.sourceforge.net/))
     - Dynamic scaling in cloud environments
 
 - **Reproducibility by Design**
@@ -493,7 +494,7 @@ The bioinformatics community has developed several powerful workflow management 
 | **Parallelization** | Excellent (automatic) | Excellent | Good | Excellent |
 | **Container Support** | Native (Docker/Singularity) | Native | Native | Native |
 | **Cloud Integration** | Excellent (AWS, GCP, Azure) | Good | Good | Excellent |
-| **HPC Support** | Excellent ([SLURM](https://slurm.schedmd.com/documentation.html), [PBS](https://www.openpbs.org/), etc.) | Excellent | Good | Good |
+| **HPC Support** | Excellent ([SLURM](https://slurm.schedmd.com/documentation.html), etc.) | Excellent | Good | Good |
 | **Resume Capability** | Excellent | Excellent | Limited | Good |
 | **Community Size** | Large (bioinformatics) | Large (data science) | Medium | Medium |
 | **Package Ecosystem** | [nf-core](https://nf-co.re/) (500+ pipelines) | [Snakemake Wrappers](https://snakemake-wrappers.readthedocs.io/) | Limited | Limited |
@@ -518,10 +519,7 @@ done
 ```groovy
 #!/usr/bin/env nextflow
 
-// Define input channel
-Channel
-    .fromFilePairs("data/*_{R1,R2}.fastq")
-    .set { read_pairs_ch }
+nextflow.enable.dsl = 2
 
 // FastQC process
 process fastqc {
@@ -542,6 +540,10 @@ process fastqc {
 
 // Run the workflow
 workflow {
+    // Define input channel
+    read_pairs_ch = Channel.fromFilePairs("data/*_{R1,R2}.fastq")
+
+    // Run FastQC
     fastqc(read_pairs_ch)
 }
 ```
@@ -645,7 +647,7 @@ This course focuses on **Nextflow** for several compelling reasons that make it 
 - **Resume capability**: Minimizes computational waste in long-running genomic analyses
 
 #### **4. Multi-Platform Flexibility**
-- **HPC integration**: Native support for [SLURM](https://slurm.schedmd.com/documentation.html), [PBS](https://www.openpbs.org/), and other job schedulers common in genomics
+- **HPC integration**: Native support for [SLURM](https://slurm.schedmd.com/documentation.html) and other job schedulers common in genomics
 - **Cloud-native**: Excellent support for [AWS](https://aws.amazon.com/), [Google Cloud](https://cloud.google.com/), and [Azure](https://azure.microsoft.com/) for scalable genomics
 - **Container support**: Seamless [Docker](https://docs.docker.com/) and [Singularity](https://docs.sylabs.io/guides/latest/user-guide/) integration for reproducible environments
 
@@ -905,10 +907,8 @@ process FASTQC {
 
 #### **2. Channels** - How data flows
 ```groovy
-// Create a channel from files
-Channel
-    .fromPath("/data/Dataset_Mt_Vc/tb/raw_data/*.fastq.gz")
-    .set { reads_ch }
+// Create a channel from files (DSL2 style)
+reads_ch = Channel.fromPath("/data/Dataset_Mt_Vc/tb/raw_data/*.fastq.gz")
 ```
 
 #### **3. Workflows** - How it all connects
@@ -1586,18 +1586,16 @@ drwxr-xr-x 2 user user 4096 Jan 15 09:00 scripts`,
     'mkdir test': 'Directory created: test/',
     'cat hello.nf': `#!/usr/bin/env nextflow
 
-params.samples = ['sample1', 'sample2', 'sample3']
+nextflow.enable.dsl = 2
 
-Channel
-    .from(params.samples)
-    .set { samples_ch }
+params.samples = ['sample1', 'sample2', 'sample3']
 
 process sayHello {
     input:
-    val sample_name from samples_ch
+    val sample_name
 
     output:
-    stdout into results_ch
+    stdout
 
     script:
     """
@@ -1605,7 +1603,11 @@ process sayHello {
     """
 }
 
-results_ch.view()`,
+workflow {
+    samples_ch = Channel.from(params.samples)
+    sayHello(samples_ch)
+    sayHello.out.view()
+}`,
     'help': `Available commands:
 - nextflow -version: Check Nextflow version
 - nextflow run hello.nf: Run a Nextflow script
@@ -1738,11 +1740,6 @@ Let's start with the simplest possible Nextflow script to build confidence:
 // Define your samples (start with just 3)
 params.samples = ['sample1', 'sample2', 'sample3']
 
-// Create a channel (think of it as a conveyor belt for data)
-Channel
-    .from(params.samples)
-    .set { samples_ch }
-
 // Define a process (a step in your pipeline)
 process sayHello {
     // What this process does
@@ -1751,7 +1748,7 @@ process sayHello {
 
     // What it produces
     output:
-    stdout into results_ch
+    stdout
 
     // The actual command
     script:
@@ -1760,8 +1757,17 @@ process sayHello {
     """
 }
 
-// Show the results
-results_ch.view()
+// Main workflow (DSL2 style)
+workflow {
+    // Create a channel (think of it as a conveyor belt for data)
+    samples_ch = Channel.from(params.samples)
+
+    // Run the process
+    sayHello(samples_ch)
+
+    // Show the results
+    sayHello.out.view()
+}
 ```
 
 **Step 2: Save and run the script**
@@ -1812,17 +1818,8 @@ Now let's do something useful - count reads in FASTQ files:
 params.input = "samplesheet.csv"
 params.outdir = "results"
 
-// Read sample sheet and create channel
-Channel
-    .fromPath(params.input)
-    .splitCsv(header: true)
-    .map { row ->
-        def sample = row.sample
-        def fastq1 = file(row.fastq_1)
-        def fastq2 = file(row.fastq_2)
-        return [sample, fastq1, fastq2]
-    }
-    .set { samples_ch }
+// Enable DSL2
+nextflow.enable.dsl = 2
 
 // Process to count reads in paired FASTQ files
 process countReads {
@@ -1856,8 +1853,22 @@ process countReads {
     """
 }
 
-// Show results
-counts_ch.view { "Read count file: $it" }
+workflow {
+    // Read sample sheet and create channel
+    samples_ch = Channel
+        .fromPath(params.input)
+        .splitCsv(header: true)
+        .map { row ->
+            def sample = row.sample
+            def fastq1 = file(row.fastq_1)
+            def fastq2 = file(row.fastq_2)
+            return [sample, fastq1, fastq2]
+        }
+
+    // Run the process
+    countReads(samples_ch)
+    countReads.out.view()
+}
 ```
 
 **Step 1: Explore the available data**
@@ -2058,7 +2069,6 @@ process {
 profiles {
     cluster {
         process.executor = 'slurm'
-        process.queue = 'batch'
     }
 
     local {
@@ -2244,21 +2254,12 @@ First, let's start with a simple FastQC pipeline:
 ```groovy
 #!/usr/bin/env nextflow
 
+// Enable DSL2
+nextflow.enable.dsl = 2
+
 // Parameters
 params.input = "samplesheet.csv"
 params.outdir = "results"
-
-// Read sample sheet and create channel
-Channel
-    .fromPath(params.input)
-    .splitCsv(header: true)
-    .map { row ->
-        def sample = row.sample
-        def fastq1 = file(row.fastq_1)
-        def fastq2 = file(row.fastq_2)
-        return [sample, [fastq1, fastq2]]
-    }
-    .set { read_pairs_ch }
 
 // FastQC process
 process fastqc {
@@ -2272,10 +2273,10 @@ process fastqc {
     tag "$sample_id"
 
     input:
-    tuple val(sample_id), path(reads) from read_pairs_ch
+    tuple val(sample_id), path(reads)
 
     output:
-    path "*_fastqc.{zip,html}" into fastqc_ch
+    path "*_fastqc.{zip,html}"  
 
     script:
     """
@@ -2285,8 +2286,25 @@ process fastqc {
     """
 }
 
-// Show what files were created
-fastqc_ch.view { "FastQC report: $it" }
+// Main workflow
+workflow {
+    // Read sample sheet and create channel
+    read_pairs_ch = Channel
+        .fromPath(params.input)
+        .splitCsv(header: true)
+        .map { row ->
+            def sample = row.sample
+            def fastq1 = file(row.fastq_1)
+            def fastq2 = file(row.fastq_2)
+            return [sample, [fastq1, fastq2]]
+        }
+
+    // Run FastQC
+    fastqc_results = fastqc(read_pairs_ch)
+
+    // Show what files were created
+    fastqc_results.view { "FastQC report: $it" }
+}
 ```
 
 Save this as `qc_pipeline_v1.nf` and test it:
@@ -2301,30 +2319,18 @@ nextflow run qc_pipeline_v1.nf --input samplesheet.csv
 
 #### **Step 2: Complete Genomic Analysis Pipeline**
 
-Now let's build a complete genomic analysis pipeline with quality control, trimming, and genome assembly:
+Now let's build a complete genomic analysis pipeline with quality control, trimming, genome assembly, and annotation:
 
 ```groovy
 #!/usr/bin/env nextflow
+
+// Enable DSL2
+nextflow.enable.dsl = 2
 
 // Parameters
 params.input = "samplesheet.csv"
 params.outdir = "results"
 params.adapters = "/data/timmomatic_adapter_Combo.fa"
-
-// Read sample sheet and create channel
-Channel
-    .fromPath(params.input)
-    .splitCsv(header: true)
-    .map { row ->
-        def sample = row.sample
-        def fastq1 = file(row.fastq_1)
-        def fastq2 = file(row.fastq_2)
-        return [sample, [fastq1, fastq2]]
-    }
-    .set { read_pairs_ch }
-
-// Duplicate channel for parallel processing
-read_pairs_ch.into { fastqc_raw_ch; trimmomatic_ch }
 
 // FastQC on raw reads
 process fastqc_raw {
@@ -2333,10 +2339,10 @@ process fastqc_raw {
     tag "$sample_id"
 
     input:
-    tuple val(sample_id), path(reads) from fastqc_raw_ch
+    tuple val(sample_id), path(reads)
 
     output:
-    path "*_fastqc.{zip,html}" into fastqc_raw_results
+    path "*_fastqc.{zip,html}"
 
     script:
     """
@@ -2352,11 +2358,11 @@ process trimmomatic {
     tag "$sample_id"
 
     input:
-    tuple val(sample_id), path(reads) from trimmomatic_ch
+    tuple val(sample_id), path(reads)
 
     output:
-    tuple val(sample_id), path("${sample_id}_*_paired.fastq.gz") into trimmed_ch
-    path "${sample_id}_*_unpaired.fastq.gz" into unpaired_ch
+    tuple val(sample_id), path("${sample_id}_*_paired.fastq.gz")
+    path "${sample_id}_*_unpaired.fastq.gz"
 
     script:
     """
@@ -2382,10 +2388,10 @@ process fastqc_trimmed {
     tag "$sample_id"
 
     input:
-    tuple val(sample_id), path(reads) from trimmed_ch
+    tuple val(sample_id), path(reads)
 
     output:
-    path "*_fastqc.{zip,html}" into fastqc_trimmed_results
+    path "*_fastqc.{zip,html}"
 
     script:
     """
@@ -2394,8 +2400,95 @@ process fastqc_trimmed {
     """
 }
 
-// Collect all FastQC results
-fastqc_raw_results.mix(fastqc_trimmed_results).collect().set { all_fastqc_ch }
+// SPAdes genome assembly
+process spades_assembly {
+    module 'spades/4.2.0'
+    publishDir "${params.outdir}/assemblies", mode: 'copy'
+    tag "$sample_id"
+
+    // Assembly can be memory intensive - good for cluster submission
+    memory '8 GB'
+    cpus 4
+    time '2h'
+
+    input:
+    tuple val(sample_id), path(reads)
+
+    output:
+    tuple val(sample_id), path("${sample_id}_assembly")
+    path "${sample_id}_assembly/contigs.fasta"
+
+    script:
+    """
+    echo "Running SPAdes assembly for ${sample_id}"
+    echo "Input files: ${reads}"
+
+    # Run SPAdes with paired-end reads
+    spades.py \\
+        -1 ${reads[0]} \\
+        -2 ${reads[1]} \\
+        --threads ${task.cpus} \\
+        --memory \$(echo ${task.memory} | sed 's/ GB//') \\
+        --only-assembler \\
+        -o ${sample_id}_assembly
+
+    echo "Assembly completed for ${sample_id}"
+    echo "Contigs written to: ${sample_id}_assembly/contigs.fasta"
+
+    # Show basic assembly stats
+    if [ -f "${sample_id}_assembly/contigs.fasta" ]; then
+        echo "=== Assembly Statistics for ${sample_id} ==="
+        echo "Number of contigs: \$(grep -c '>' ${sample_id}_assembly/contigs.fasta)"
+        echo "Total assembly size: \$(grep -v '>' ${sample_id}_assembly/contigs.fasta | wc -c) bp"
+    fi
+    """
+}
+
+// Prokka genome annotation
+process prokka_annotation {
+    module 'prokka/1.14.6'
+    publishDir "${params.outdir}/annotation", mode: 'copy'
+    tag "$sample_id"
+
+    // Annotation requires moderate resources
+    memory '4 GB'
+    cpus 2
+    time '1h'
+
+    input:
+    tuple val(sample_id), path(assembly_dir)
+    path contigs_file
+
+    output:
+    tuple val(sample_id), path("${sample_id}_annotation")
+    path "${sample_id}_annotation/${sample_id}.gff"
+
+    script:
+    """
+    echo "Running Prokka annotation for ${sample_id}"
+    echo "Input assembly: ${contigs_file}"
+
+    # Run Prokka annotation for Mycobacterium tuberculosis
+    prokka --outdir ${sample_id}_annotation \\
+           --prefix ${sample_id} \\
+           --cpus ${task.cpus} \\
+           --genus Mycobacterium \\
+           --species tuberculosis \\
+           --kingdom Bacteria \\
+           ${contigs_file}
+
+    echo "Annotation completed for ${sample_id}"
+    echo "Results written to: ${sample_id}_annotation/"
+
+    # Show basic annotation stats
+    if [ -f "${sample_id}_annotation/${sample_id}.gff" ]; then
+        echo "=== Annotation Statistics for ${sample_id} ==="
+        echo "Total features: \$(grep -v '^#' ${sample_id}_annotation/${sample_id}.gff | wc -l)"
+        echo "CDS features: \$(grep -v '^#' ${sample_id}_annotation/${sample_id}.gff | grep 'CDS' | wc -l)"
+        echo "Gene features: \$(grep -v '^#' ${sample_id}_annotation/${sample_id}.gff | grep 'gene' | wc -l)"
+    fi
+    """
+}
 
 // MultiQC to summarize all results
 process multiqc {
@@ -2403,11 +2496,11 @@ process multiqc {
     publishDir "${params.outdir}", mode: 'copy'
 
     input:
-    path fastqc_files from all_fastqc_ch
+    path fastqc_files
 
     output:
-    path "multiqc_report.html" into multiqc_ch
-    path "multiqc_data" into multiqc_data_ch
+    path "multiqc_report.html"
+    path "multiqc_data"
 
     script:
     """
@@ -2416,17 +2509,55 @@ process multiqc {
     """
 }
 
-// Show final results
-multiqc_ch.view { "MultiQC report created: $it" }
+// Main workflow
+workflow {
+    // Read sample sheet and create channel
+    Channel
+        .fromPath(params.input)
+        .splitCsv(header: true)
+        .map { row ->
+            def sample = row.sample
+            def fastq1 = file(row.fastq_1)
+            def fastq2 = file(row.fastq_2)
+            return [sample, [fastq1, fastq2]]
+        }
+        .set { read_pairs_ch }
+
+    // Run FastQC on raw reads
+    fastqc_raw_results = fastqc_raw(read_pairs_ch)
+
+    // Run Trimmomatic
+    trimmed_results = trimmomatic(read_pairs_ch)
+
+    // Run FastQC on trimmed reads
+    fastqc_trimmed_results = fastqc_trimmed(trimmed_results)
+
+    // Run SPAdes assembly on trimmed reads
+    assembly_results = spades_assembly(trimmed_results)
+
+    // Run Prokka annotation on assembled contigs
+    annotation_results = prokka_annotation(assembly_results[0], assembly_results[1])
+
+    // Collect all FastQC results and run MultiQC
+    all_fastqc = fastqc_raw_results.mix(fastqc_trimmed_results).collect()
+    multiqc_results = multiqc(all_fastqc)
+
+    // Show final results
+    assembly_results[0].view { "Assembly completed: $it" }
+    assembly_results[1].view { "Contigs file: $it" }
+    annotation_results[0].view { "Annotation completed: $it" }
+    annotation_results[1].view { "GFF file: $it" }
+    multiqc_results.view { "MultiQC report created: $it" }
+}
 ```
 
 Save this as `qc_pipeline_v2.nf` and test it:
 
 ```bash
 # Load all required modules
-module load java/openjdk-17.0.2 nextflow/25.04.6 fastqc/0.12.1 trimmomatic/0.39 multiqc/1.22.3
+module load java/openjdk-17.0.2 nextflow/25.04.6 fastqc/0.12.1 trimmomatic/0.39 spades/4.2.0 prokka/1.14.6 multiqc/1.22.3
 
-# Run the enhanced pipeline
+# Run the complete genomic analysis pipeline
 nextflow run qc_pipeline_v2.nf --input samplesheet.csv
 ```
 
@@ -2434,43 +2565,337 @@ nextflow run qc_pipeline_v2.nf --input samplesheet.csv
     ```text
     N E X T F L O W  ~  version 25.04.6
     Launching `qc_pipeline_v2.nf` [clever_volta] - revision: 5e6f7g8h
-    executor >  local (10)
-    [a1/b2c3d4] process > fastqc_raw (ERR036221)     [100%] 2 of 2 ✔
-    [e5/f6g7h8] process > fastqc_raw (ERR036223)     [100%] 2 of 2 ✔
-    [i9/j0k1l2] process > trimmomatic (ERR036221)    [100%] 2 of 2 ✔
-    [m3/n4o5p6] process > trimmomatic (ERR036223)    [100%] 2 of 2 ✔
-    [q7/r8s9t0] process > fastqc_trimmed (ERR036221) [100%] 2 of 2 ✔
-    [u1/v2w3x4] process > fastqc_trimmed (ERR036223) [100%] 2 of 2 ✔
-    [y5/z6a7b8] process > multiqc                    [100%] 1 of 1 ✔
+    executor >  local (14)
+    [a1/b2c3d4] process > fastqc_raw (ERR036221)        [100%] 2 of 2 ✔
+    [e5/f6g7h8] process > fastqc_raw (ERR036223)        [100%] 2 of 2 ✔
+    [i9/j0k1l2] process > trimmomatic (ERR036221)       [100%] 2 of 2 ✔
+    [m3/n4o5p6] process > trimmomatic (ERR036223)       [100%] 2 of 2 ✔
+    [q7/r8s9t0] process > fastqc_trimmed (ERR036221)    [100%] 2 of 2 ✔
+    [u1/v2w3x4] process > fastqc_trimmed (ERR036223)    [100%] 2 of 2 ✔
+    [a2/b3c4d5] process > spades_assembly (ERR036221)   [100%] 2 of 2 ✔
+    [e6/f7g8h9] process > spades_assembly (ERR036223)   [100%] 2 of 2 ✔
+    [i0/j1k2l3] process > prokka_annotation (ERR036221) [100%] 2 of 2 ✔
+    [m4/n5o6p7] process > prokka_annotation (ERR036223) [100%] 2 of 2 ✔
+    [y5/z6a7b8] process > multiqc                       [100%] 1 of 1 ✔
 
+    Assembly completed: /path/to/results/assemblies/ERR036221_assembly
+    Contigs file: /path/to/results/assemblies/ERR036221_assembly/contigs.fasta
+    Assembly completed: /path/to/results/assemblies/ERR036223_assembly
+    Contigs file: /path/to/results/assemblies/ERR036223_assembly/contigs.fasta
+    Annotation completed: /path/to/results/annotation/ERR036221_annotation
+    GFF file: /path/to/results/annotation/ERR036221_annotation/ERR036221.gff
+    Annotation completed: /path/to/results/annotation/ERR036223_annotation
+    GFF file: /path/to/results/annotation/ERR036223_annotation/ERR036223.gff
     MultiQC report created: /path/to/results/multiqc_report.html
     ```
 
-#### **Step 3: Pipeline Scenarios and Comparisons**
+#### **Step 3: Running on Cluster with Configuration Files**
+
+For production runs with larger datasets, you'll want to run this pipeline on a cluster. Let's create configuration files for different cluster environments:
+
+**Create a SLURM configuration file:**
+
+```bash
+# Create cluster configuration
+cat > cluster.config << 'EOF'
+// Cluster configuration for genomic analysis pipeline
+
+params {
+    outdir = "results_cluster"
+}
+
+profiles {
+    slurm {
+        process {
+            executor = 'slurm'
+
+            // Default resources
+            cpus = 2
+            memory = '4 GB'
+            time = '2h'
+
+            // Process-specific resources for intensive tasks
+            withName: spades_assembly {
+                cpus = 8
+                memory = '16 GB'
+                time = '6h'
+            }
+
+            withName: prokka_annotation {
+                cpus = 4
+                memory = '8 GB'
+                time = '3h'
+            }
+
+            withName: trimmomatic {
+                cpus = 4
+                memory = '8 GB'
+                time = '2h'
+            }
+        }
+
+        executor {
+            queueSize = 20
+            submitRateLimit = '10 sec'
+        }
+    }
+
+    // High-memory profile for large genomes
+    highmem {
+        process {
+            executor = 'slurm'
+
+            withName: spades_assembly {
+                cpus = 16
+                memory = '64 GB'
+                time = '12h'
+            }
+
+            withName: prokka_annotation {
+                cpus = 8
+                memory = '16 GB'
+                time = '6h'
+            }
+        }
+    }
+}
+
+// Enhanced reporting for cluster runs
+trace {
+    enabled = true
+    file = "${params.outdir}/pipeline_trace.txt"
+    fields = 'task_id,hash,native_id,process,tag,name,status,exit,module,container,cpus,time,disk,memory,attempt,submit,start,complete,duration,realtime,queue,%cpu,%mem,rss,vmem,peak_rss,peak_vmem,rchar,wchar,syscr,syscw,read_bytes,write_bytes'
+}
+
+timeline {
+    enabled = true
+    file = "${params.outdir}/pipeline_timeline.html"
+}
+
+report {
+    enabled = true
+    file = "${params.outdir}/pipeline_report.html"
+}
+EOF
+```
+
+**Run the pipeline on SLURM cluster:**
+
+```bash
+# Load modules
+module load java/openjdk-17.0.2 nextflow/25.04.6 fastqc/0.12.1 trimmomatic/0.39 spades/4.2.0 prokka/1.14.6 multiqc/1.22.3
+
+# Run with SLURM profile
+nextflow run qc_pipeline_v2.nf -c cluster.config -profile slurm --input samplesheet.csv
+
+# For large genomes, use high-memory profile
+nextflow run qc_pipeline_v2.nf -c cluster.config -profile highmem --input samplesheet.csv
+```
+
+```bash
+
+```
+
+??? success "Expected cluster output"
+    ```text
+    N E X T F L O W  ~  version 25.04.6
+    Launching `qc_pipeline_v2.nf` [determined_pasteur] - revision: 8h9i0j1k
+    executor >  slurm (14)
+    [a1/b2c3d4] process > fastqc_raw (ERR036221)        [100%] 2 of 2 ✔
+    [e5/f6g7h8] process > fastqc_raw (ERR036223)        [100%] 2 of 2 ✔
+    [i9/j0k1l2] process > trimmomatic (ERR036221)       [100%] 2 of 2 ✔
+    [m3/n4o5p6] process > trimmomatic (ERR036223)       [100%] 2 of 2 ✔
+    [q7/r8s9t0] process > fastqc_trimmed (ERR036221)    [100%] 2 of 2 ✔
+    [u1/v2w3x4] process > fastqc_trimmed (ERR036223)    [100%] 2 of 2 ✔
+    [a2/b3c4d5] process > spades_assembly (ERR036221)   [100%] 2 of 2 ✔
+    [e6/f7g8h9] process > spades_assembly (ERR036223)   [100%] 2 of 2 ✔
+    [i0/j1k2l3] process > prokka_annotation (ERR036221) [100%] 2 of 2 ✔
+    [m4/n5o6p7] process > prokka_annotation (ERR036223) [100%] 2 of 2 ✔
+    [y5/z6a7b8] process > multiqc                       [100%] 1 of 1 ✔
+
+    Assembly completed: /path/to/results_cluster/assemblies/ERR036221_assembly
+    Contigs file: /path/to/results_cluster/assemblies/ERR036221_assembly/contigs.fasta
+    Annotation completed: /path/to/results_cluster/annotation/ERR036221_annotation
+    GFF file: /path/to/results_cluster/annotation/ERR036221_annotation/ERR036221.gff
+
+    Completed at: 09-Dec-2024 14:30:15
+    Duration    : 45m 23s
+    CPU hours   : 12.5
+    Succeeded   : 14
+    ```
+
+**Monitor cluster execution:**
+
+```bash
+# Check SLURM job status
+squeue -u $USER
+
+# Monitor resource usage
+nextflow log -f trace
+
+# View detailed execution report
+firefox results_cluster/pipeline_report.html
+
+# Check timeline visualization
+firefox results_cluster/pipeline_timeline.html
+```
+
+**Scaling up for production analysis:**
+
+```bash
+# Create extended sample sheet with more samples
+cat > samplesheet_extended.csv << 'EOF'
+sample,fastq_1,fastq_2
+ERR036221,/data/Dataset_Mt_Vc/tb/raw_data/ERR036221_1.fastq.gz,/data/Dataset_Mt_Vc/tb/raw_data/ERR036221_2.fastq.gz
+ERR036223,/data/Dataset_Mt_Vc/tb/raw_data/ERR036223_1.fastq.gz,/data/Dataset_Mt_Vc/tb/raw_data/ERR036223_2.fastq.gz
+ERR036226,/data/Dataset_Mt_Vc/tb/raw_data/ERR036226_1.fastq.gz,/data/Dataset_Mt_Vc/tb/raw_data/ERR036226_2.fastq.gz
+ERR036227,/data/Dataset_Mt_Vc/tb/raw_data/ERR036227_1.fastq.gz,/data/Dataset_Mt_Vc/tb/raw_data/ERR036227_2.fastq.gz
+ERR036228,/data/Dataset_Mt_Vc/tb/raw_data/ERR036228_1.fastq.gz,/data/Dataset_Mt_Vc/tb/raw_data/ERR036228_2.fastq.gz
+EOF
+
+# Run production analysis with 5 samples
+nextflow run qc_pipeline_v2.nf -c cluster.config -profile slurm --input samplesheet_extended.csv
+
+# Monitor progress
+watch -n 30 'squeue -u $USER | grep nextflow'
+```
+
+!!! tip "Cluster Best Practices"
+
+    **Resource Optimization:**
+
+    - **SPAdes assembly**: Most memory-intensive step (8-16 GB recommended)
+    - **Prokka annotation**: CPU-intensive (4-8 cores optimal)
+    - **FastQC**: Lightweight (2 cores sufficient)
+    - **Trimmomatic**: Moderate resources (4 cores, 8 GB)
+
+    **Scaling Considerations:**
+
+    - **Small datasets (1-5 samples)**: Use local execution
+    - **Medium datasets (5-20 samples)**: Use standard SLURM profile
+    - **Large datasets (20+ samples)**: Use high-memory profile
+    - **Very large genomes**: Increase SPAdes memory to 64+ GB
+
+#### **Step 4: Pipeline Scenarios and Comparisons**
 
 **Scenario A: Compare Before and After Trimming**
 
 ```bash
-# Check the results structure
+# Check the complete results structure
 tree results/
 
-# Compare raw vs trimmed FastQC reports
-echo "=== Raw Data Quality ==="
+# Explore each output directory
+echo "=== Raw Data Quality Reports ==="
 ls -la results/fastqc_raw/
 
-echo "=== Trimmed Data Quality ==="
+echo "=== Trimmed Data Quality Reports ==="
 ls -la results/fastqc_trimmed/
 
-echo "=== Trimmed Files ==="
+echo "=== Trimmed FASTQ Files ==="
 ls -la results/trimmed/
 
-# Check file sizes (trimmed files should be smaller)
+echo "=== Genome Assemblies ==="
+ls -la results/assemblies/
+
+echo "=== Genome Annotations ==="
+ls -la results/annotation/
+
+echo "=== MultiQC Summary Report ==="
+ls -la results/multiqc_report.html
+
+# Check assembly statistics
+echo "=== Assembly Statistics ==="
+for sample in ERR036221 ERR036223; do
+    echo "Sample: $sample"
+    if [ -f "results/assemblies/${sample}_assembly/contigs.fasta" ]; then
+        echo "  Contigs: $(grep -c '>' results/assemblies/${sample}_assembly/contigs.fasta)"
+        echo "  Total size: $(grep -v '>' results/assemblies/${sample}_assembly/contigs.fasta | wc -c) bp"
+    fi
+done
+
+# Check annotation statistics
+echo "=== Annotation Statistics ==="
+for sample in ERR036221 ERR036223; do
+    echo "Sample: $sample"
+    if [ -f "results/annotation/${sample}_annotation/${sample}.gff" ]; then
+        echo "  Total features: $(grep -v '^#' results/annotation/${sample}_annotation/${sample}.gff | wc -l)"
+        echo "  CDS features: $(grep -v '^#' results/annotation/${sample}_annotation/${sample}.gff | grep 'CDS' | wc -l)"
+        echo "  Gene features: $(grep -v '^#' results/annotation/${sample}_annotation/${sample}.gff | grep 'gene' | wc -l)"
+    fi
+done
+
+# File size comparison
 echo "=== File Size Comparison ==="
 echo "Original files:"
 ls -lh /data/Dataset_Mt_Vc/tb/raw_data/ERR036221_*.fastq.gz
 echo "Trimmed files:"
 ls -lh results/trimmed/ERR036221_*_paired.fastq.gz
 ```
+
+??? success "Expected directory structure"
+    ```text
+    results/
+    ├── assemblies/
+    │   ├── ERR036221_assembly/
+    │   │   ├── contigs.fasta
+    │   │   ├── scaffolds.fasta
+    │   │   ├── spades.log
+    │   │   └── assembly_graph.fastg
+    │   └── ERR036223_assembly/
+    │       ├── contigs.fasta
+    │       ├── scaffolds.fasta
+    │       ├── spades.log
+    │       └── assembly_graph.fastg
+    ├── annotation/
+    │   ├── ERR036221_annotation/
+    │   │   ├── ERR036221.faa        # Protein sequences
+    │   │   ├── ERR036221.ffn        # Gene sequences
+    │   │   ├── ERR036221.fna        # Genome sequence
+    │   │   ├── ERR036221.gff        # Gene annotations
+    │   │   ├── ERR036221.gbk        # GenBank format
+    │   │   ├── ERR036221.tbl        # Feature table
+    │   │   └── ERR036221.txt        # Statistics
+    │   └── ERR036223_annotation/
+    │       ├── ERR036223.faa
+    │       ├── ERR036223.ffn
+    │       ├── ERR036223.fna
+    │       ├── ERR036223.gff
+    │       ├── ERR036223.gbk
+    │       ├── ERR036223.tbl
+    │       └── ERR036223.txt
+    ├── fastqc_raw/
+    │   ├── ERR036221_1_fastqc.html
+    │   ├── ERR036221_1_fastqc.zip
+    │   ├── ERR036221_2_fastqc.html
+    │   ├── ERR036221_2_fastqc.zip
+    │   ├── ERR036223_1_fastqc.html
+    │   ├── ERR036223_1_fastqc.zip
+    │   ├── ERR036223_2_fastqc.html
+    │   └── ERR036223_2_fastqc.zip
+    ├── fastqc_trimmed/
+    │   ├── ERR036221_R1_paired_fastqc.html
+    │   ├── ERR036221_R1_paired_fastqc.zip
+    │   ├── ERR036221_R2_paired_fastqc.html
+    │   ├── ERR036221_R2_paired_fastqc.zip
+    │   ├── ERR036223_R1_paired_fastqc.html
+    │   ├── ERR036223_R1_paired_fastqc.zip
+    │   ├── ERR036223_R2_paired_fastqc.html
+    │   └── ERR036223_R2_paired_fastqc.zip
+    ├── trimmed/
+    │   ├── ERR036221_R1_paired.fastq.gz
+    │   ├── ERR036221_R1_unpaired.fastq.gz
+    │   ├── ERR036221_R2_paired.fastq.gz
+    │   ├── ERR036221_R2_unpaired.fastq.gz
+    │   ├── ERR036223_R1_paired.fastq.gz
+    │   ├── ERR036223_R1_unpaired.fastq.gz
+    │   ├── ERR036223_R2_paired.fastq.gz
+    │   └── ERR036223_R2_unpaired.fastq.gz
+    ├── multiqc_report.html          # Comprehensive QC summary
+    ├── multiqc_data/                # MultiQC supporting data
+    ├── pipeline_trace.txt           # Execution trace
+    ├── pipeline_timeline.html       # Timeline visualization
+    └── pipeline_report.html         # Execution report
+    ```
 
 **Scenario B: Adding More Samples with Resume**
 
@@ -2605,8 +3030,6 @@ cat results/pipeline_trace.txt | head -10
 cat > slurm.config << 'EOF'
 process {
     executor = 'slurm'
-    queue = 'batch'
-    clusterOptions = '--account=genomics_project'
 
     withName: spades_assembly {
         cpus = 16
@@ -2646,7 +3069,7 @@ nextflow run qc_pipeline.nf -c pbs.config --input samplesheet.csv
 
     **Pipeline Design Concepts:**
 
-    - **Channel Duplication**: Use `.into{}` to send data to multiple processes
+    - **Channel Reuse**: In DSL2, channels can be used multiple times directly
     - **Process Dependencies**: Trimmomatic → FastQC creates a dependency chain
     - **Result Aggregation**: MultiQC collects and summarizes all FastQC reports
     - **Parallel Processing**: Raw FastQC and Trimmomatic run simultaneously
@@ -2655,8 +3078,20 @@ nextflow run qc_pipeline.nf -c pbs.config --input samplesheet.csv
 
     - **Quality Control**: Always check data quality before and after processing
     - **Adapter Trimming**: Remove sequencing adapters and low-quality bases
+    - **Genome Assembly**: Reconstruct complete genomes from sequencing reads
+    - **Genome Annotation**: Identify genes and functional elements
     - **Comparative Analysis**: Compare raw vs processed data quality
     - **Comprehensive Reporting**: MultiQC provides publication-ready summaries
+
+    **Output Organization:**
+
+    - **fastqc_raw/**: Quality reports for original sequencing data
+    - **trimmed/**: Adapter-trimmed and quality-filtered reads
+    - **fastqc_trimmed/**: Quality reports for processed reads
+    - **assemblies/**: Genome assemblies with contigs and scaffolds
+    - **annotation/**: Gene annotations in multiple formats (GFF, GenBank, FASTA)
+    - **multiqc_report.html**: Integrated quality control summary
+    - **pipeline_*.html**: Execution monitoring and resource usage reports
 
     **Nextflow Best Practices:**
 
@@ -2664,6 +3099,7 @@ nextflow run qc_pipeline.nf -c pbs.config --input samplesheet.csv
     - **Resource Management**: Use `tag` for process identification
     - **Result Organization**: Use `publishDir` to organize outputs
     - **Configuration**: Use profiles for different analysis strategies
+    - **Scalability**: Pipeline scales from single samples to hundreds
 
     **Performance Optimization:**
     
@@ -2693,8 +3129,9 @@ You've now built a **complete genomic analysis pipeline** that includes:
 2. **Quality Trimming** (Trimmomatic)
 3. **Post-trimming QC** (FastQC on trimmed reads)
 4. **Genome Assembly** (SPAdes)
-5. **Cluster Execution** (SLURM/PBS configuration)
-6. **Resource Monitoring** (Trace, timeline, and reports)
+5. **Genome Annotation** (Prokka for *M. tuberculosis*)
+6. **Cluster Execution** (SLURM configuration)
+7. **Resource Monitoring** (Trace, timeline, and reports)
 
 **Real Results Achieved:**
 
@@ -2708,7 +3145,7 @@ You've now built a **complete genomic analysis pipeline** that includes:
 
 - ✅ **Multi-step pipeline design** with process dependencies
 - ✅ **Resource specification** for different process types
-- ✅ **Cluster configuration** for SLURM and PBS systems
+- ✅ **Cluster configuration** for SLURM systems
 - ✅ **Performance monitoring** with built-in reporting
 - ✅ **Scalable execution** from local to HPC environments
 - ✅ **Resume functionality** for efficient re-runs

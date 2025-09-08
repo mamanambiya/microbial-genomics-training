@@ -130,7 +130,7 @@ nav:
     - Day 3 - Genomic Characterization: modules/day3/index.md
     - Day 4 - Genomic Characterization: modules/day4/index.md
     - "Day 5 - Tracking Threats: Genomic Detection of AMR, Virulence, and Plasmid Mobility": modules/day5/index.md
-    - "Day 6 - Nextflow Pipeline Development": modules/day6/index.md
+    - "Day 6 - Nextflow Foundations & Core Concepts": modules/day6/index.md
     - "Day 7 - Advanced Nextflow, Version Control with GitHub & Real Genomics Applications": modules/day7/index.md
     - Day 8 - Comparative Genomics: modules/day8/index.md
     - Day 9 - Bring your own data: modules/day9/index.md
