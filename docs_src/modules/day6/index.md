@@ -1747,7 +1747,7 @@ Channel
 process sayHello {
     // What this process does
     input:
-    val sample_name from samples_ch
+    val sample_name
 
     // What it produces
     output:
@@ -1833,10 +1833,10 @@ process countReads {
     tag "$sample"
 
     input:
-    tuple val(sample), path(fastq1), path(fastq2) from samples_ch
+    tuple val(sample), path(fastq1), path(fastq2)
 
     output:
-    path "${sample}.count" into counts_ch
+    path "${sample}.count"
 
     script:
     """
