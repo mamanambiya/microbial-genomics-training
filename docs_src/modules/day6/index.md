@@ -2696,10 +2696,10 @@ workflow {
     trimmed_results = trimmomatic(read_pairs_ch)
 
     // Run FastQC on trimmed reads
-    fastqc_trimmed_results = fastqc_trimmed(trimmed_results)
+    fastqc_trimmed_results = fastqc_trimmed(trimmed_results[0])
 
     // Run SPAdes assembly on trimmed reads
-    assembly_results = spades_assembly(trimmed_results)
+    assembly_results = spades_assembly(trimmed_results[0])
 
     // Run Prokka annotation on assembled contigs
     annotation_results = prokka_annotation(assembly_results[0], assembly_results[1])
@@ -2715,6 +2715,7 @@ workflow {
     annotation_results[1].view { "GFF file: $it" }
     multiqc_results.view { "MultiQC report created: $it" }
 }
+
 ```
 
 Now let's extend our `qc_pipeline.nf` file to include the complete genomic analysis pipeline. **Replace the contents** of your existing `qc_pipeline.nf` with this expanded version:
