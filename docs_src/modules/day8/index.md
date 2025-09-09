@@ -1,559 +1,462 @@
-# Day 8: Comparative Genomics
+# Metagenomics in Clinical & Public Health
 
-**Date**: September 10, 2025  
-**Duration**: 09:00-13:00 CAT  
-**Focus**: Pan-genome analysis, phylogenetic inference, tree construction and visualization
+## 1. Overview
 
-## Overview
+This section introduces **core principles of metagenomics**. Metagenomics is the study of genetic material recovered directly from environmental or clinical samples, allowing 
+analysis of **entire microbial communities** without the need for cultivation. This section includes conceptual notes, rationale for each step, practical commands, 
+and a **mini toy dataset exercise**. Unlike genomics (WGS) which focuses on analyzing individual genomes (such as bacterial isolate), metagenomics studies the collective genomes or markers from microbial communities.
 
-Day 8 focuses on comparative genomics approaches for understanding microbial diversity and evolutionary relationships. We'll explore pangenome analysis to understand core and accessory gene content, and phylogenomic methods to infer evolutionary relationships from genomic data, including SNP-based phylogeny and tree visualization techniques.
+### Genomics vs Metagenomics
 
-## Learning Objectives
 
-By the end of Day 8, you will be able to:
+| Description | Whole Genome Sequencing (WGS) | Metagenomics |
+|-------------|-------------------------------|--------------|
+| **Umbrella term** | Microbial Genomics | Microbial Profiling |
+| **Scope** | Sequencing of the entire genome of a single isolate (pure culture) | Sequences all genetic material in mixed community (without culturing)|
+| **Applications** | Species identification, genome assembly, annotation, AMR/virulence detection, plasmid/MGE analysis, outbreak tracking | Community profiling, functional potential, pathogen detection in mixed samples, ecology studies |
+| **Features** | Organism is known \& isolated before sequencing | Captures both known and unknown microbes from environment or host |
 
-- Understand pangenome concepts and perform core/accessory genome analysis
-- Identify conserved and variable genomic regions across strains
-- Construct phylogenetic trees from core genome SNPs
-- Visualize and interpret phylogenomic relationships
-- Apply comparative genomics to understand pathogen evolution
-- Use tools like Roary, Panaroo, and IQ-TREE for comparative analysis
+### Metagenomic Strategies: Shotgun vs 16S rRNA
 
-## Schedule
-
-| Time (CAT) | Topic | Links | Trainer |
-|------------|-------|-------|---------|
-| **09:00** | *Pangenomics* | | Arash Iranzadeh |
-| **10:30** | *Phylogenomics: Inferring evolutionary relationships from core SNPs* | | Arash Iranzadeh |
-| **11:30** | **Break** | | |
-| **12:00** | *Phylogenomics: Tree construction and visualisation* | | Arash Iranzadeh |
-
-## Key Topics
-
- - Core vs accessory genome concepts
-- Gene presence/absence analysis
-- Population structure assessment
-- Functional annotation of variable regions
-
-### 2. Phylogenetic Analysis
-- Maximum likelihood methods
-- Bootstrap support assessment
-- Root placement and outgroup selection
-- Molecular clock analysis
-
-### 3. SNP-based Analysis
-- Core genome SNP calling
-- Recombination detection and removal
-- Distance matrix construction
-- Transmission cluster identification
-
-### 4. Outbreak Investigation
-- Epidemiological data integration
-- Transmission network inference
-- Source attribution methods
-- Temporal analysis of spread
-- 
-### 1. Advanced Pipeline Architecture
-- Multi-sample processing strategies
-- Conditional execution and branching
-- Pipeline modularity and reusability
-- Configuration management across environments
-
-### 2. Testing and Validation
-- Unit testing for individual processes
-- Integration testing for complete workflows
-- Continuous integration setup
-- Regression testing strategies
-
-### 3. Performance Optimization
-- Resource allocation strategies
-- Parallelization patterns
-- Caching and resume functionality
-- Profile-based optimization
-
-### 4. Production Deployment
-- Environment-specific configurations
-- Error handling and retry strategies
-- Logging and monitoring
-- Version control and release management
-
-## Advanced Tools
-
-### Testing Frameworks
-- **nf-test** - Modern testing framework for Nextflow
-- **pytest-workflow** - Python-based workflow testing
-- **Nextflow Tower** - Pipeline monitoring and management
-
-### Development Tools
-- **nf-core lint** - Code quality checking
-- **pre-commit hooks** - Automated code validation
-- **GitHub Actions** - Continuous integration
-- **Nextflow plugins** - Extended functionality
-
-## Hands-on Exercises
-
-### Exercise 1: Multi-Sample Pipeline (75 minutes)
-Develop a comprehensive pipeline that processes multiple samples in parallel.
-
-```nextflow
-#!/usr/bin/env nextflow
-
-nextflow.enable.dsl=2
-
-// Parameter definitions with validation
-params.input_dir = null
-params.outdir = "results"
-params.reference = null
-params.min_quality = 20
-params.threads = 4
-
-// Input validation
-if (!params.input_dir) {
-    error "Please provide input directory with --input_dir"
-}
-if (!params.reference) {
-    error "Please provide reference genome with --reference"
-}
-
-// Include modules from separate files
-include { FASTQC } from './modules/fastqc.nf'
-include { TRIMMOMATIC } from './modules/trimmomatic.nf'
-include { BWA_MEM } from './modules/bwa.nf'
-include { VARIANT_CALLING } from './modules/variants.nf'
-include { MULTIQC } from './modules/multiqc.nf'
-
-workflow VARIANT_ANALYSIS {
-    take:
-    reads_ch
-    reference
-    
-    main:
-    // Quality control
-    FASTQC(reads_ch)
-    
-    // Read trimming
-    TRIMMOMATIC(reads_ch)
-    
-    // Alignment
-    BWA_MEM(TRIMMOMATIC.out.trimmed, reference)
-    
-    // Variant calling
-    VARIANT_CALLING(BWA_MEM.out.bam, reference)
-    
-    // Aggregate QC
-    qc_files = FASTQC.out.html.mix(TRIMMOMATIC.out.log).collect()
-    MULTIQC(qc_files)
-    
-    emit:
-    variants = VARIANT_CALLING.out.vcf
-    reports = MULTIQC.out.html
-}
-
-// Main workflow
-workflow {
-    // Create channel from input directory
-    reads_ch = Channel
-        .fromFilePairs("${params.input_dir}/*_R{1,2}_001.fastq.gz")
-        .ifEmpty { error "No input files found in ${params.input_dir}" }
-    
-    // Load reference
-    reference_ch = Channel.fromPath(params.reference, checkIfExists: true)
-    
-    // Run analysis
-    VARIANT_ANALYSIS(reads_ch, reference_ch)
-    
-    // Output summary
-    VARIANT_ANALYSIS.out.variants.view { "Variants called for: ${it[0]}" }
-}
-
-workflow.onComplete {
-    log.info """
-    Pipeline completed at: ${workflow.complete}
-    Duration: ${workflow.duration}
-    Success: ${workflow.success}
-    Results: ${params.outdir}
-    """.stripIndent()
-}
-```
-
-### Exercise 2: Pipeline Testing (60 minutes)
-Implement comprehensive testing for the variant calling pipeline.
-
-```yaml
-# .github/workflows/test.yml
-name: Pipeline Testing
-
-on:
-  push:
-    branches: [main, develop]
-  pull_request:
-    branches: [main]
-
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        nextflow: ['23.04.0', 'latest']
-    
-    steps:
-    - uses: actions/checkout@v4
-    
-    - name: Setup Nextflow
-      uses: nf-core/setup-nextflow@v1
-      with:
-        version: ${{ matrix.nextflow }}
-    
-    - name: Setup Test Data
-      run: |
-        mkdir test_data
-        wget -O test_data/sample_R1.fastq.gz https://example.com/test_R1.fastq.gz
-        wget -O test_data/sample_R2.fastq.gz https://example.com/test_R2.fastq.gz
-        wget -O test_data/reference.fasta https://example.com/reference.fasta
-    
-    - name: Run Pipeline Tests
-      run: |
-        nextflow run main.nf \
-          --input_dir test_data \
-          --reference test_data/reference.fasta \
-          --outdir test_results \
-          -profile test,docker
-    
-    - name: Validate Outputs
-      run: |
-        # Check if expected output files exist
-        test -f test_results/variants/*.vcf
-        test -f test_results/multiqc/multiqc_report.html
-        
-        # Validate variant file format
-        bcftools view test_results/variants/*.vcf | head -20
-```
-
-### Exercise 3: Performance Optimization (45 minutes)
-Optimize pipeline performance through profiling and resource tuning.
-
-```nextflow
-// Performance optimized configuration
-process {
-    // Default resources
-    cpus = 2
-    memory = 4.GB
-    time = '1.hour'
-    
-    // Process-specific optimization
-    withName: BWA_MEM {
-        cpus = { 8 * task.attempt }
-        memory = { 16.GB * task.attempt }
-        time = { 4.hour * task.attempt }
-        errorStrategy = 'retry'
-        maxRetries = 3
-    }
-    
-    withName: VARIANT_CALLING {
-        cpus = 4
-        memory = { 8.GB + (2.GB * task.attempt) }
-        time = { 2.hour * task.attempt }
-        
-        // Use faster local storage when available
-        scratch = '/tmp'
-    }
-    
-    withName: FASTQC {
-        // Lightweight process can use minimal resources
-        cpus = 1
-        memory = 2.GB
-        time = 30.min
-    }
-}
-
-// Profile-specific optimizations
-profiles {
-    standard {
-        process.executor = 'local'
-        process.cpus = 2
-        process.memory = '4 GB'
-    }
-    
-    hpc {
-        process.executor = 'slurm'
-        process.queue = 'compute'
-        process.clusterOptions = '--account=genomics --qos=normal'
-        
-        // Optimize for cluster environment
-        process {
-            withName: BWA_MEM {
-                cpus = 16
-                memory = 32.GB
-                time = 2.hour
-            }
-        }
-    }
-    
-    cloud {
-        process.executor = 'awsbatch'
-        aws.batch.cliPath = '/home/ec2-user/miniconda/bin/aws'
-        aws.region = 'us-west-2'
-        
-        // Cloud-specific optimizations
-        process {
-            withName: '.*' {
-                container = 'your-ecr-repo/pipeline:latest'
-            }
-        }
-    }
-}
-```
-
-## Advanced Concepts
-
-### Error Handling Strategies
-
-```nextflow
-process ROBUST_ASSEMBLY {
-    errorStrategy 'retry'
-    maxRetries 3
-    
-    // Dynamic resource allocation
-    memory { 8.GB * task.attempt }
-    cpus { 4 * task.attempt }
-    
-    input:
-    tuple val(sample_id), path(reads)
-    
-    output:
-    tuple val(sample_id), path("${sample_id}_assembly.fasta"), emit: assembly
-    tuple val(sample_id), path("${sample_id}_assembly.log"), emit: log
-    
-    script:
-    """
-    # Log system information for debugging
-    echo "Hostname: \$(hostname)" > ${sample_id}_assembly.log
-    echo "Memory: ${task.memory}" >> ${sample_id}_assembly.log
-    echo "CPUs: ${task.cpus}" >> ${sample_id}_assembly.log
-    echo "Attempt: ${task.attempt}" >> ${sample_id}_assembly.log
-    
-    # Run assembly with error checking
-    spades.py --careful -1 ${reads[0]} -2 ${reads[1]} \
-        -o spades_out --threads ${task.cpus} --memory ${task.memory.toGiga()} \
-        2>&1 | tee -a ${sample_id}_assembly.log
-    
-    if [ ! -f spades_out/scaffolds.fasta ]; then
-        echo "ERROR: Assembly failed" >> ${sample_id}_assembly.log
-        exit 1
-    fi
-    
-    cp spades_out/scaffolds.fasta ${sample_id}_assembly.fasta
-    """
-}
-```
-
-### Conditional Workflows
-
-```nextflow
-workflow ADAPTIVE_ANALYSIS {
-    take:
-    samples
-    
-    main:
-    // Initial QC
-    FASTQC(samples)
-    
-    // Conditional trimming based on quality
-    samples
-        .join(FASTQC.out.stats)
-        .branch { sample_id, reads, qc_stats ->
-            high_quality: qc_stats.mean_quality > 30
-            needs_trimming: qc_stats.mean_quality <= 30
-        }
-        .set { qc_branched }
-    
-    // Process high quality samples directly
-    high_qual_samples = qc_branched.high_quality.map { sample_id, reads, stats -> [sample_id, reads] }
-    
-    // Trim lower quality samples
-    TRIMMOMATIC(qc_branched.needs_trimming.map { sample_id, reads, stats -> [sample_id, reads] })
-    
-    // Combine processed samples
-    all_samples = high_qual_samples.mix(TRIMMOMATIC.out.trimmed)
-    
-    // Continue with assembly
-    SPADES(all_samples)
-    
-    emit:
-    assemblies = SPADES.out.assembly
-}
-```
-
-## Best Practices
-
-### 1. Code Organization
-- Use modules for reusable processes
-- Implement clear naming conventions
-- Document complex logic
-- Version control all configurations
-
-### 2. Resource Management
-```groovy
-// Dynamic resource allocation
-process {
-    withLabel: 'high_memory' {
-        memory = { 32.GB * task.attempt }
-        errorStrategy = 'retry'
-        maxRetries = 2
-    }
-    
-    withLabel: 'cpu_intensive' {
-        cpus = { Math.min(16, task.attempt * 4) }
-        time = { 4.hour * task.attempt }
-    }
-}
-```
-
-### 3. Monitoring and Debugging
-```nextflow
-// Enable comprehensive reporting
-trace {
-    enabled = true
-    file = "${params.outdir}/trace.txt"
-    fields = 'task_id,hash,native_id,process,tag,name,status,exit,module,container,cpus,time,disk,memory,attempt,submit,start,complete,duration,realtime,queue,%cpu,%mem,rss,vmem,peak_rss,peak_vmem,rchar,wchar,syscr,syscw,read_bytes,write_bytes,vol_ctxt,inv_ctxt'
-}
-
-report {
-    enabled = true
-    file = "${params.outdir}/report.html"
-}
-
-timeline {
-    enabled = true
-    file = "${params.outdir}/timeline.html"
-}
-
-dag {
-    enabled = true
-    file = "${params.outdir}/dag.html"
-}
-```
-
-## Assessment Activities
-
-### Individual Projects
-- Optimize existing pipeline for specific use case
-- Implement comprehensive error handling
-- Create test suite for pipeline validation
-- Deploy pipeline to different computing environment
-
-### Group Collaboration
-- Code review session for pipeline improvements
-- Troubleshooting complex pipeline failures
-- Sharing optimization strategies
-- Planning production deployment
-
-## Common Challenges
-
-### Memory Management
-```nextflow
-// Handle large datasets efficiently
-process LARGE_DATA_PROCESSING {
-    memory { task.attempt < 3 ? 16.GB : 32.GB }
-    time { 2.hour * task.attempt }
-    errorStrategy 'retry'
-    maxRetries 3
-    
-    // Use streaming where possible
-    script:
-    """
-    # Process data in chunks to manage memory
-    split -l 1000000 ${large_input} chunk_
-    
-    for chunk in chunk_*; do
-        process_chunk.py \$chunk >> results.txt
-        rm \$chunk  # Clean up as we go
-    done
-    """
-}
-```
-
-### Workflow Resume Issues
-```bash
-# Best practices for resumable workflows
-nextflow run pipeline.nf -resume -with-report report.html
-
-# Clean resume when needed
-nextflow clean -f
-rm -rf work/
-```
-
-### Container Compatibility
-```nextflow
-process {
-    withName: PROBLEMATIC_TOOL {
-        container = 'custom/fixed-tool:v2.0'
-        containerOptions = '--user root --privileged'
-    }
-}
-```
-
-## Production Deployment
-
-### Environment Setup
-```yaml
-# production.config
-process {
-    executor = 'slurm'
-    queue = 'production'
-    
-    // Production-level resource allocation
-    cpus = 16
-    memory = '64 GB'
-    time = '12 hours'
-    
-    // Enhanced error handling
-    errorStrategy = 'terminate'  // Fail fast in production
-    maxRetries = 1
-}
-
-// Enable comprehensive logging
-trace.enabled = true
-report.enabled = true
-timeline.enabled = true
-```
-
-### Monitoring Setup
-```bash
-# Set up pipeline monitoring
-nextflow run pipeline.nf -with-tower -profile production
-
-# Custom monitoring hooks
-nextflow run pipeline.nf \
-  --hook-url https://monitoring.example.com/webhook \
-  --notify-on-completion \
-  --notify-on-failure
-```
-
-## Resources
-
-### Documentation
-- [Nextflow Patterns](https://nextflow-io.github.io/patterns/)
-- [nf-core Developer Guide](https://nf-co.re/developers/)
-- [Nextflow Tower Documentation](https://help.tower.nf/)
-
-### Testing Tools
-- [nf-test](https://nf-test.com/)
-- [pytest-workflow](https://pytest-workflow.readthedocs.io/)
-- [Nextflow CI/CD Examples](https://github.com/nextflow-io/nextflow/tree/master/.github/workflows)
-
-### Performance Optimization
-- [Nextflow Performance Tips](https://nextflow.io/docs/latest/tracing.html)
-- [Resource Requirements Guide](https://nf-co.re/docs/usage/configuration)
-
-## Looking Ahead
-
-**Day 9 Preview**: Bring Your Own Data session including:
-- Applying learned skills to participant datasets
-- Troubleshooting real-world challenges
-- Customizing pipelines for specific needs
-- Preparing for independent analysis
+| Description | Shotgun Metagenomics | 16S rRNA Amplicon Gene Sequencing |
+|-------------|-------------------------------|--------------|
+| **Definition** | Random sequencing of **All DNA** in a sample | **Targeted amplicon sequencing** of the 16 S rRNA gene |
+| **Resolution** | Species- and strain-level, **functional genes** (AMR, metabolism, plasmids, MGEs) | Genus-level (sometimes species-level), **no direct functional** information |
+| **Merits** | Comprehensive (taxonomy + function), **detects viruses and fungi** |  Limited to taxonomic resolution, can't detect fungi/viruses, lacks functional insights, **good for bacterial** surveys |
+| **Demerits** | More expensive, higher computational load | Cost-effective, standardized |
 
 ---
 
-**Key Learning Outcome**: Advanced Nextflow development enables creation of production-ready, scalable bioinformatics pipelines that can handle complex datasets across diverse computing environments while maintaining reproducibility and reliability.
+## 2. Workflow: From Sequencing to Interpretation
+
+### Step 1. Study Design & Sequencing
+
+- **Why**: Sequencing depth, read length, and platform choice directly influence resolution of taxa, detection of low-abundance organisms, and assembly quality.
+- **Example**:
+  - Illumina (short reads): accurate, cost-effective, widely used for clinical metagenomics.
+  - ONT/PacBio (long reads): useful for resolving repeats, plasmids, MGEs.
+
+For this training we will use the data in `/data/users/user29/metagenomes/shotgun/` for shotgun metagenomics. It is important to note that, one can download shotgun metagenome sequences from NCBI-SRA using `ncbi-tools`. Install `ncbi-tools` and run
+
+```bash
+## Fetch the data from NCBI-SRA
+# fasterq-dump SRR13827118 --progress --threads 8
+
+## Compress the files
+gzip SRR13827118*.fastq
+```
+
+---
+
+## Shotgun metagenomics
+
+### Step 2. Quality Control
+
+- **Why**: To reduce the effects of sequencing errors, remove adapters, and low-quality 
+reads which may reduce false positives.
+- **Tools**: `fastqc`, `multiqc`
+
+```bash
+# Load modules
+module load fastqc
+module load multiqc
+indata="/data/users/user29/metagenomes/shotgun/"
+
+## Create Dir
+mkdir -p ${outfastqc} /data/users/user24/metagenomes/shotgun/scripts /data/users/user24/metagenomes/shotgun/logs
+
+# create a samplesheet.csv with three columns samplename,fastq_1,fastq_2
+python /data/users/user24/metagenomes/shotgun/scripts/samplesheet_generator.py ${indata} \
+  /data/users/${USER}/metagenomes/shotgun/samplesheet.csv
+
+# Run raw QC
+nextflow run /data/users/user24/metagenomes/shotgun/scripts/qc_pipeline_v1.nf \
+  --input /data/users/${USER}/metagenomes/shotgun/samplesheet.csv \
+  --outdir /data/users/${USER}/metagenomes/shotgun/results/rawfastqc
+```
+
+**What to think about?**
+- Which parts of the data are flagged as potentially problematic? GC% content of the dataset.
+NB: We are dealing with mixed community and organisms, so its difficult to  have a perfect normal distribution around the average.
+As such we consider this as normal given the biology of the system.
+- Does the sequencing length matches the libraries used? If sequences are shorter than expected, are adapters
+ a concern?
+- Are adapters and/or barcodes removed?
+  - Look at the Per base sequence content to diagnose this.
+- Is there unexpected sequence duplication?
+  - This can occur when low-input library preparations are used.
+- Are over-represented k-mers present?
+  - This can be a sign of adapter and barcode contamination.
+
+
+---
+
+### Step 3. Trimming & Filtering
+
+- **Why**: Removes adapters (which can cause false alignments \& false taxonomic assignments), low-quality bases (increase error rates), and very short 
+reads (to standardize read lengths) that bias downstream analysis.
+- **Tool**: `fastp`, `trimmomatic`, `BBMap`, `sickle`, `cutadapt`, etc.
+
+
+```bash
+#!/bin/bash
+
+# Load required modules/tools
+module load trimmomatic
+
+# Define input and output dir
+indata="/data/users/user24/metagenomes/"
+wkdir="/data/users/${USER}/metagenomics/shotgun/"
+outtrimmomatic=${wkdir}"/data_analysis/02_trimmomatic"
+
+mkdir -p ${outtrimmomatic}
+
+# Trimming with Trimmomatic
+for file in `ls ${data}*1.fastq.gz`
+do
+  sample=$(basename ${file} _1.fastq.gz)
+  trimmomatic PE -threads 8 \
+      ${indata}${sample}_R1.fastq.gz {indata}${sample}_R2.fastq.gz \
+      ${outtrimmomatic}${sample}_R1.fastq.gz ${outtrimmomatic}${sample}_R1_unpaired.fastq.gz \
+      ${outtrimmomatic}${sample}_R2.fastq.gz ${outtrimmomatic}${sample}_R2_unpaired.fastq.gz \
+      ILLUMINACLIP:adapters.fa:2:30:10 \
+      LEADING:3 TRAILING:3 \
+      SLIDINGWINDOW:4:20 \
+      MINLEN:50
+done
+echo "Trimming with Trimmomatic completed"
+```
+Parameter |	Type |	Description
+----------|------|-----------------------------
+PE |	positional |	Specifies whether we are analysing single- or paired-end reads
+-threads 2 |	keyword |	Specifies the number of threads to use when processing
+-phred33 |	keyword |	Specifies the fastq encoding used
+${indata}${sample}_R1.fastq.gz {indata}${sample}_R2.fastq.gz |	positional 	| The paired forward and reverse reads to trim
+ILLUMINACLIP:adapters.fa:2:30:10 |	positional |	Adapter trimming allowing for 2 seed mismatch, palindrome clip score threshold of 30, and simple clip score threshold of 10
+SLIDINGWINDOW:4:20 	| positional 	|Quality filtering command. Analyse each sequence in a 4 base pair sliding window and then truncate if the average quality drops below Q20
+MINLEN:50 	| positional |	Length filtering command. Discard sequences that are shorter than 80 base pairs after trimming
+
+> **Note:** The trimming parameters in `trimmomatic` are processed in the order they are specified. For instance, 
+
+---
+
+```bash
+for file in `ls ${data}*1.fastq.gz`
+do
+  sample=$(basename ${file} _1.fastq.gz)
+  trimmomatic PE -threads 8 \
+        ${indata}${sample}_R1.fastq.gz {indata}${sample}_R2.fastq.gz \
+        ${outtrimmomatic}${sample}_R1.fastq.gz ${outtrimmomatic}${sample}_R1_unpaired.fastq.gz \
+        ${outtrimmomatic}${sample}_R2.fastq.gz ${outtrimmomatic}${sample}_R2_unpaired.fastq.gz \
+        ILLUMINACLIP:adapters.fa:2:30:10 \
+        LEADING:3 TRAILING:3 \
+        MINLEN:50 \
+        SLIDINGWINDOW:4:20 
+done
+```
+means we remove sequences shorter than 50 bps and then qualiyty trim, thus if a sequence is trimmed to a length shorter than 50bps after trimming, the `MINLEN` filtering does not execute a second time.
+
+```bash
+# Delete unnecessary files
+rm -rf ${outtrimmomatic}*${sample}*_unpaired.fastq.gz
+
+# Quality checking
+module load fastqc multiqc
+fastqc ${outtrimmomatic}* -o ${outtrimmomatic}
+multiqc  ${outtrimmomatic} -o  ${outtrimmomatic}
+```
+
+
+---
+
+
+### Step 4. Deduplication & Host DNA Removal
+
+- **Why**:
+- Often metagenomes are obtained from host-associated microbial communities. As a result, they contain significant amount of host DNA which may interfere with microbial analysis
+  and create privacy concerns.
+- Specifically any studies invloving human subjects or samples derived from Taonga species.
+- Although several approaches are used for this, the most popular is to map reads to a reference genome (includin human genome). That is remove all reads that map to the reference of the dataset.
+  
+- **Tools**: `clumpify` (dedup), `bowtie2` or `bwa mem` (host removal).
+
+```bash
+#!/bin/bash
+set -e  # Exit on error
+
+# Define dirs
+genome_dir="/data/users/user24/refs/human_reference/"
+
+## Remove human contamination using BWA and SAMtools
+## Create dir
+mkdir -p ${genome_dir}
+# Download the Human refence genome
+cd ${genome_dir}
+
+# Configuration
+GENOME_VERSION="GRCh38"
+BASE_URL="https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/001/405/GCA_000001405.15_GRCh38"
+
+echo "=== Downloading Human Reference Genome (${GENOME_VERSION}) ==="
+
+# Option 1: Download complete genome assembly (recommended for most applications)
+echo "Downloading complete genome assembly..."
+wget -c "${BASE_URL}/GCA_000001405.15_GRCh38_genomic.fna.gz" \
+     -O "GRCh38_genomic.fna.gz"
+# Decompress
+echo "Decompressing genome file..."
+gunzip -f GRCh38_genomic.fna.gz
+
+# Option 2: Download chromosome-only version (excludes contigs/scaffolds)
+echo "Downloading chromosome-only version..."
+wget -c "https://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.fa.gz" \
+     -O "hg38_chromosomes_only.fa.gz"
+
+gunzip -f hg38_chromosomes_only.fa.gz
+```
+
+```bash
+#!/bin/bash
+
+# Load modules
+module load bwa
+module load bowtie2
+
+echo "=== Building BWA Index ==="
+# Build BWA index for alignment (required for host removal, one time set-up)
+bwa index GRCh38_genomic.fna
+
+echo "=== Verifying Download ==="
+# Check file integrity
+echo "Genome file size:"
+ls -lh *.fna
+
+echo "Number of sequences:"
+grep -c ">" GRCh38_genomic.fna
+
+echo "First few sequence headers:"
+grep ">" GRCh38_genomic.fna | head -10
+
+echo "=== Download Complete ==="
+echo "Reference genome files are ready in: $(pwd)"
+echo "Main genome file: GRCh38_genomic.fna"
+echo "Chromosome-only file: hg38_chromosomes_only.fa"
+echo ""
+echo "Files generated:"
+echo "- GRCh38_genomic.fna (main reference)"
+echo "- GRCh38_genomic.fna.amb, .ann, .bwt, .pac, .sa (BWA index)"
+echo "- GRCh38_genomic.fna.fai (samtools index)"
+
+# Align reads to human genome
+for file in `ls ${indata}*1.fastq.gz`
+do
+  sample=$(basename ${file} _1.fastq.gz)
+  bowtie2 -x ${refs}human_index -1 {sample}${data}_trimmed_R1.fastq.gz -2 sample_trimmed_R2.fastq.gz \
+    --un-conc sample_host_removed.fastq.gz -S /dev/null
+
+
+  bwa mem -t 8 human_reference.fasta \
+      trimmed_R1_paired.fastq.gz trimmed_R2_paired.fastq.gz \
+      | samtools view -b -f 4 - > unmapped_reads.bam
+  
+  # Convert unmapped reads back to FASTQ
+  samtools fastq -1 dehosted_R1.fastq.gz -2 dehosted_R2.fastq.gz unmapped_reads.bam
+
+echo "Host removal completed"
+```
+
+---
+
+### Step 5. Taxonomic Profiling (Read-Based)
+
+- **Why**: Directly assigns taxonomy without assembly, faster and less computationally intensive.
+- **Tools**: Kraken2 + Bracken, MetaPhlAn
+
+```bash
+kraken2 --db kraken2_db --paired sample_host_removed.1.fq.gz sample_host_removed.2.fq.gz \
+  --output kraken2_output.txt --report kraken2_report.txt
+bracken -d kraken2_db -i kraken2_report.txt -o bracken_species.txt -r 150 -l S
+```
+
+---
+
+### Step 6. Functional Profiling (Read-Based)
+
+- **Why**: Identifies pathways/genes present without needing assembly.
+- **Tool**: HUMAnN
+
+```bash
+humann --input sample_host_removed.fastq.gz --output humann_out/
+```
+
+---
+
+### Step 7. Assembly-Based Profiling
+
+- **Why**: Reconstructs contigs/MAGs b enables strain-level analysis, discovery of new genes, plasmids, MGEs.
+- **Tools**: **MEGAHIT** or **metaSPAdes**
+
+#### MEGAHIT
+
+```bash
+megahit -1 sample_host_removed.1.fq.gz -2 sample_host_removed.2.fq.gz -o megahit_out/
+```
+
+#### metaSPAdes
+
+```bash
+spades.py --meta -1 sample_host_removed.1.fq.gz -2 sample_host_removed.2.fq.gz -o metaspades_out/
+```
+
+**MEGAHIT vs metaSPAdes:**
+
+- **MEGAHIT Advantages:**
+  - Extremely fast, lower memory usage.
+  - Scales better for very large datasets (e.g., population metagenomes).
+- **MEGAHIT Disadvantages:**
+  - May produce slightly shorter contigs than metaSPAdes.
+- **metaSPAdes Advantages:**
+  - Produces higher-quality, longer assemblies (useful for MAG recovery).
+- **metaSPAdes Disadvantages:**
+  - Requires more RAM and CPU time.
+
+---
+
+### Step 8. Mapping & Binning
+
+- **Why**: Group contigs into MAGs, quantify abundances.
+- **Tools**: `bowtie2`, `samtools`, `MetaBAT2`
+
+```bash
+bowtie2 -x megahit_out/final.contigs.fa -1 sample_host_removed.1.fq.gz -2 sample_host_removed.2.fq.gz | samtools sort -o aln.bam
+metabat2 -i megahit_out/final.contigs.fa -a depth.txt -o bins_dir/bin
+```
+
+---
+
+### Step 9. MAG Quality Control
+
+- **Why**: Ensures completeness & contamination are acceptable.
+- **Tool**: CheckM
+
+```bash
+checkm lineage_wf bins_dir/ checkm_out/
+```
+
+---
+
+### Step 10. Annotation & Specialized Analyses
+
+- **Why**: Identify AMR, virulence, plasmids, metabolic capacity.
+- **Tools**: Prokka, Bakta, AMRFinderPlus, ABRicate, DRAM
+
+#### Where DRAM fits in:
+
+- **Swap in DRAM** in place of Prokka/Bakta for **functional annotation of MAGs**.
+- DRAM produces detailed metabolic profiles, pathway reconstruction, and microbial ecology insights.
+
+```bash
+DRAM.py annotate -i bins_dir/ -o dram_out/ --threads 16
+```
+
+---
+
+### Step 11. Abundance Estimation & Visualization
+
+- **Why**: Quantifies taxa/genes b links to clinical or epidemiological metadata.
+- **Tools**: CoverM, Krona, R for plots.
+
+```bash
+coverm contig --bam-files aln.bam --reference megahit_out/final.contigs.fa --methods tpm > coverm_tpm.tsv
+```
+
+---
+
+### Step 12. Reporting & Reproducibility
+
+- **Why**: Essential for public health applications.
+- Use **Nextflow + Singularity/Conda** for reproducible pipelines.
+- Summarize results in Excel or RMarkdown reports.
+
+---
+
+### Nextflow pipelines
+
+#### nfcore/mag Pipeline <https://nf-co.re/mag/4.0.0>
+
+- Use an [nf-core/mag](https://nf-co.re/mag/4.0.0/) pipeline for assembly, binning and annotation of metagenomes, [github repository](https://github.com/nf-core/mag/tree/4.0.0).
+- This pipeline works for short- and/or long-reads.
+- ✅**Key Features:**
+  - **Preprocessing:**
+     - Short reads: fastp, Bowtie2, FastQC
+     - Long reads: Porechop, NanoLyse, Filtlong, NanoPlot
+  - **Assembly:**
+     - Short reads: MEGAHIT, SPAdes
+     - Hybrid: hybridSPAdes
+  - **Binning:**
+     - Tools: MetaBAT2, MaxBin2, CONCOCT, DAS Tool
+     - Quality checks: BUSCO, CheckM, GUNC
+ - **Taxonomic Classification:**
+    - Tools: GTDB-Tk, CAT/BAT
+    - Co-assembly and co-abundance:
+    - Supports sample grouping for co-assembly and binning
+- 📦 **Reproducibility:**
+- Uses Nextflow DSL2, Docker/Singularity containers
+- Fully portable across HPC, cloud, and local systems
+- Includes test datasets and CI testing
+- It requires a sample sheet in `csv`  format with five columns: sample,group,short_reads_1,short_reads_2,long_reads
+- Assuming all your raw reads (short- and long-reads) are in the same folder, run the python script:
+
+```bash
+proj="/data/users/${USER}/metagenomes/shotgun/"
+# Create required directories
+mkdir -p ${proj}scripts ${proj}logs
+# Get the script to create samplesheet
+cp /data/users/user24/metagenomes/shotgun/scripts/generate_mag_samplesheet.py /data/users/${USER}/metagenomes/shotgun/scripts/
+
+# Create samplesheet for running mag
+python3 /data/users/${USER}/metagenomes/shotgun/scripts/generate_mag_samplesheet.py /data/users/user29/metagenomes/shotgun/ mag-samplesheet.csv
+# Create submission script
+nano data/users/${USER}/metagenomes/shotgun/scripts/mag-nf_submit.sh
+
+#!/bin/bash
+#SBATCH --job-name='mag'
+#SBATCH --time=24:00:00
+#SBATCH --mem=128g
+#SBATCH --ntasks=16
+#SBATCH --output=/data/users/user24/metagenomes/shotgun/logs/nfcore-mag-stdout.log
+#SBATCH --error=/data/users/user24/metagenomes/shotgun/logs/nfcore-mag-stderr.log
+#SBATCH --mail-user=ephie.geza@uct.ac.za
+
+proj="/data/users/user24/metagenomes/shotgun/"
+
+module load nextflow/25.04.6
+#### Unload JAVA 18 as it doesn't work and load JAVA 17
+module unload java/openjdk-18.0.2
+module load java/openjdk-17.0.2
+####Unset conflicting environment variables (optional but recommended)
+unset JAVA_CMD
+unset JAVA_HOME
+
+#### Run pipeline
+nextflow run ${proj}mag \
+      --input ${proj}mag-samplesheet.csv \
+      --outdir ${proj}nfcore-mag \
+      -w ${work}work/nfcore-mag \
+      -profile singularity \
+      -resume --skip_gtdbtk
+
+## Save and submit
+```
+
+### [nf-core/funcscan](https://nf-co.re/funcscan/2.1.0/)
+
+Using contigs to screen for functional and natural gene sequences
+
+### Viralgenie [nf-core/viralmetagenome](https://nf-co.re/viralmetagenome/0.1.2/)
+
+### [nf-core/taxprofiler](https://nf-co.re/taxprofiler/1.2.4/)
+## Targeted Metagenomics 
+
+### [nf-core/ampliseq](https://nf-co.re/ampliseq/2.14.0/)
+

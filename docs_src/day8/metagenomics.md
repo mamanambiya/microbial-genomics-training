@@ -48,6 +48,8 @@ gzip SRR13827118*.fastq
 
 ---
 
+## Shotgun metagenomics
+
 ### Step 2. Quality Control
 
 - **Why**: To reduce the effects of sequencing errors, remove adapters, and low-quality 
@@ -72,6 +74,7 @@ nextflow run /data/users/user24/metagenomes/shotgun/scripts/qc_pipeline_v1.nf \
   --input /data/users/${USER}/metagenomes/shotgun/samplesheet.csv \
   --outdir /data/users/${USER}/metagenomes/shotgun/results/rawfastqc
 ```
+
 **What to think about?**
 - Which parts of the data are flagged as potentially problematic? GC% content of the dataset.
 NB: We are dealing with mixed community and organisms, so its difficult to  have a perfect normal distribution around the average.
@@ -98,7 +101,6 @@ reads (to standardize read lengths) that bias downstream analysis.
 ```bash
 #!/bin/bash
 
-
 # Load required modules/tools
 module load trimmomatic
 
@@ -124,6 +126,15 @@ do
 done
 echo "Trimming with Trimmomatic completed"
 ```
+Parameter |	Type |	Description
+----------|------|-----------------------------
+PE |	positional |	Specifies whether we are analysing single- or paired-end reads
+-threads 2 |	keyword |	Specifies the number of threads to use when processing
+-phred33 |	keyword |	Specifies the fastq encoding used
+${indata}${sample}_R1.fastq.gz {indata}${sample}_R2.fastq.gz |	positional 	| The paired forward and reverse reads to trim
+ILLUMINACLIP:adapters.fa:2:30:10 |	positional |	Adapter trimming allowing for 2 seed mismatch, palindrome clip score threshold of 30, and simple clip score threshold of 10
+SLIDINGWINDOW:4:20 	| positional 	|Quality filtering command. Analyse each sequence in a 4 base pair sliding window and then truncate if the average quality drops below Q20
+MINLEN:50 	| positional |	Length filtering command. Discard sequences that are shorter than 80 base pairs after trimming
 
 > **Note:** The trimming parameters in `trimmomatic` are processed in the order they are specified. For instance, 
 
@@ -144,18 +155,6 @@ do
 done
 ```
 means we remove sequences shorter than 50 bps and then qualiyty trim, thus if a sequence is trimmed to a length shorter than 50bps after trimming, the `MINLEN` filtering does not execute a second time.
-Parameter |	Type |	Description
-----------|------|-----------------------------
-PE |	positional |	Specifies whether we are analysing single- or paired-end reads
--threads 2 |	keyword |	Specifies the number of threads to use when processing
--phred33 |	keyword |	Specifies the fastq encoding used
-mock_R1.adapter_decay.fastq.gz / mock_R2.adapter_decay.fastq.gz |	positional 	| The paired forward and reverse reads to trim
-mock_R1.qc.fastq.gz |	positional 	|The file to write forward reads which passed quality trimming, if their reverse partner also passed
-mock_s1.qc.fastq.gz |	positional |	The file to write forward reads which passed quality trimming, if their reverse partner failed (orphan reads)
-mock_R2.qc.fastq.gz / mock_s2.qc.fastq.gz |	positional 	| The reverse-sequence equivalent of above
-ILLUMINACLIP:NexteraPE-PE.fa:1:25:7 |	positional |	Adapter trimming allowing for 1 seed mismatch, palindrome clip score threshold of 25, and simple clip score threshold of 7
-SLIDINGWINDOW:4:30 	| positional 	|Quality filtering command. Analyse each sequence in a 4 base pair sliding window and then truncate if the average quality drops below Q30
-MINLEN:50 	| positional |	Length filtering command. Discard sequences that are shorter than 80 base pairs after trimming
 
 ```bash
 # Delete unnecessary files
@@ -380,4 +379,84 @@ coverm contig --bam-files aln.bam --reference megahit_out/final.contigs.fa --met
 - Summarize results in Excel or RMarkdown reports.
 
 ---
+
+### Nextflow pipelines
+
+#### nfcore/mag Pipeline <https://nf-co.re/mag/4.0.0>
+
+- Use an [nf-core/mag](https://nf-co.re/mag/4.0.0/) pipeline for assembly, binning and annotation of metagenomes, [github repository](https://github.com/nf-core/mag/tree/4.0.0).
+- This pipeline works for short- and/or long-reads.
+- ✅**Key Features:**
+  - **Preprocessing:**
+     - Short reads: fastp, Bowtie2, FastQC
+     - Long reads: Porechop, NanoLyse, Filtlong, NanoPlot
+  - **Assembly:**
+     - Short reads: MEGAHIT, SPAdes
+     - Hybrid: hybridSPAdes
+  - **Binning:**
+     - Tools: MetaBAT2, MaxBin2, CONCOCT, DAS Tool
+     - Quality checks: BUSCO, CheckM, GUNC
+ - **Taxonomic Classification:**
+    - Tools: GTDB-Tk, CAT/BAT
+    - Co-assembly and co-abundance:
+    - Supports sample grouping for co-assembly and binning
+- 📦 **Reproducibility:**
+- Uses Nextflow DSL2, Docker/Singularity containers
+- Fully portable across HPC, cloud, and local systems
+- Includes test datasets and CI testing
+- It requires a sample sheet in `csv`  format with five columns: sample,group,short_reads_1,short_reads_2,long_reads
+- Assuming all your raw reads (short- and long-reads) are in the same folder, run the python script:
+
+```bash
+proj="/data/users/${USER}/metagenomes/shotgun/"
+# Create required directories
+mkdir -p ${proj}scripts ${proj}logs
+# Get the script to create samplesheet
+cp /data/users/user24/metagenomes/shotgun/scripts/generate_mag_samplesheet.py /data/users/${USER}/metagenomes/shotgun/scripts/
+
+# Create samplesheet for running mag
+python3 /data/users/${USER}/metagenomes/shotgun/scripts/generate_mag_samplesheet.py /data/users/user29/metagenomes/shotgun/ mag-samplesheet.csv
+# Create submission script
+nano data/users/${USER}/metagenomes/shotgun/scripts/mag-nf_submit.sh
+
+#!/bin/bash
+#SBATCH --job-name='mag'
+#SBATCH --time=24:00:00
+#SBATCH --mem=128g
+#SBATCH --ntasks=16
+#SBATCH --output=/data/users/user24/metagenomes/shotgun/logs/nfcore-mag-stdout.log
+#SBATCH --error=/data/users/user24/metagenomes/shotgun/logs/nfcore-mag-stderr.log
+#SBATCH --mail-user=ephie.geza@uct.ac.za
+
+proj="/data/users/user24/metagenomes/shotgun/"
+
+module load nextflow/25.04.6
+#### Unload JAVA 18 as it doesn't work and load JAVA 17
+module unload java/openjdk-18.0.2
+module load java/openjdk-17.0.2
+####Unset conflicting environment variables (optional but recommended)
+unset JAVA_CMD
+unset JAVA_HOME
+
+#### Run pipeline
+nextflow run ${proj}mag \
+      --input ${proj}mag-samplesheet.csv \
+      --outdir ${proj}nfcore-mag \
+      -w ${work}work/nfcore-mag \
+      -profile singularity \
+      -resume --skip_gtdbtk
+
+## Save and submit
+```
+
+### [nf-core/funcscan](https://nf-co.re/funcscan/2.1.0/)
+
+Using contigs to screen for functional and natural gene sequences
+
+### Viralgenie [nf-core/viralmetagenome](https://nf-co.re/viralmetagenome/0.1.2/)
+
+### [nf-core/taxprofiler](https://nf-co.re/taxprofiler/1.2.4/)
+## Targeted Metagenomics 
+
+### [nf-core/ampliseq](https://nf-co.re/ampliseq/2.14.0/)
 
