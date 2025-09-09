@@ -140,4 +140,20 @@ workflow {
     // Run FastQC on raw reads
     fastqc_raw_results = fastqc_raw(read_pairs_ch)
     fastqc_raw_results.view { "Raw FastQC: $it" }
+
+    // Run Trimmomatic for quality trimming
+    (trimmed_paired, trimmed_unpaired) = trimmomatic(read_pairs_ch)
+    trimmed_paired.view { "Trimmed paired reads: $it" }
+
+    // Run FastQC on trimmed reads
+    fastqc_trimmed_results = fastqc_trimmed(trimmed_paired)
+    fastqc_trimmed_results.view { "Trimmed FastQC: $it" }
+
+    // Run SPAdes assembly
+    (assembly_contigs, assembly_dir) = spades_assembly(trimmed_paired)
+    assembly_contigs.view { "Assembly contigs: $it" }
+
+    // Run Prokka annotation
+    annotations = prokka_annotation(assembly_contigs)
+    annotations.view { "Annotation: $it" }
 }

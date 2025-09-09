@@ -394,7 +394,7 @@ mkdir -p /data/users/$USER/nextflow-training/results
 echo "Results directory: /data/users/$USER/nextflow-training/results"
 
 # Copy workflows from the training repository
-cp -r /users/mamana/microbial-genomics-training/workflows/* workflows/
+cp -r /users/$USER/microbial-genomics-training/workflows/* workflows/
 echo "Workflows copied to: /data/users/$USER/nextflow-training/workflows/"
 
 # Check available real data
@@ -1312,7 +1312,7 @@ The configuration is set in `nextflow.config`:
 workDir = "/data/users/$USER/nextflow-training/work"
 ```
 
-This means all task execution directories will be created under `/data/users/mamana/nextflow-training/work/` (or your username).
+This means all task execution directories will be created under `/data/users/$USER/nextflow-training/work/` (or your username).
 
 #### Nextflow Directory Structure
 

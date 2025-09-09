@@ -1091,6 +1091,195 @@ flowchart TD
 
 ---
 
+## Test Exercise 4: Setting Up PHoeNIx with Your TB Data
+
+### Real-World Production Pipeline: CDC's PHoeNIx
+
+Now let's work with a real production pipeline used by the CDC for pathogen genomics analysis. PHoeNIx (Pathogen Genomics Pipeline for Healthcare-associated and Antimicrobial Resistant Pathogens) is a comprehensive Nextflow pipeline that includes all the analyses we've been learning about and more.
+
+#### Module System Setup
+
+Before we start, let's properly initialize the module system for loading Nextflow and other tools:
+
+```bash
+# Initialize the module system (remember this command!)
+source /opt/lmod/8.7/lmod/lmod/init/bash
+
+# Load required modules
+module load nextflow/25.04.6
+module load kraken2/2.1.3
+
+# Verify modules are loaded
+module list
+nextflow -version
+kraken2 --version
+```
+
+#### Setting Up PHoeNIx Pipeline
+
+**Step 1: Clone and Setup PHoeNIx**
+
+```bash
+# Navigate to your working directory
+cd /data/users/$USER/nextflow-training
+
+# Clone the PHoeNIx pipeline
+nextflow pull cdcgov/phoenix
+
+# Check what was downloaded
+ls -la ~/.nextflow/assets/cdcgov/phoenix/
+```
+
+**Step 2: Download Required Databases**
+
+PHoeNIx requires several databases. Let's set up the essential ones:
+
+```bash
+# Create database directory
+mkdir -p /data/users/$USER/nextflow-training/databases
+
+# Download Kraken2 standard database (this is large - ~50GB)
+# For training, we'll use a smaller database or the module system
+echo "Using Kraken2 module database: /data/kraken2_db/"
+ls -la /data/kraken2_db/
+
+# Check if the module provides the database
+echo "Kraken2 database location: $KRAKEN2_DB_PATH"
+```
+
+**Step 3: Prepare Sample Sheet for PHoeNIx**
+
+PHoeNIx uses a specific samplesheet format. Let's create one for our TB data:
+
+```bash
+# Create PHoeNIx samplesheet
+cat > phoenix_samplesheet.csv << 'EOF'
+sample,fastq_1,fastq_2
+Test_Sample,/data/Dataset_Mt_Vc/tb/raw_data/ERR036221_1.fastq.gz,/data/Dataset_Mt_Vc/tb/raw_data/ERR036221_2.fastq.gz
+EOF
+
+echo "PHoeNIx samplesheet created:"
+cat phoenix_samplesheet.csv
+```
+
+**Step 4: Run PHoeNIx Pipeline**
+
+```bash
+# Run PHoeNIx with our TB data
+nextflow run cdcgov/phoenix \
+    --input phoenix_samplesheet.csv \
+    --outdir /data/users/$USER/nextflow-training/phoenix_results \
+    --kraken2_db /data/kraken2_db/ \
+    -profile singularity \
+    -resume
+
+# Monitor the run
+tail -f .nextflow.log
+```
+
+#### Running from GitHub (After Pushing Your Workflow)
+
+Once you've developed and pushed your own workflow to GitHub, you can run it directly:
+
+**Step 1: Push Your Workflow to GitHub**
+
+```bash
+# Initialize git repository (if not already done)
+cd /users/$USER/microbial-genomics-training/workflows
+git init
+git add .
+git commit -m "Add microbial genomics training workflows"
+
+# Add your GitHub repository as remote
+git remote add origin https://github.com/$USER/microbial-genomics-training.git
+git push -u origin main
+```
+
+**Step 2: Run Workflow from GitHub**
+
+```bash
+# Run your workflow directly from GitHub
+nextflow run $USER/microbial-genomics-training \
+    --input samplesheet.csv \
+    --outdir /data/users/$USER/nextflow-training/results \
+    -profile singularity
+
+# Or run a specific workflow file
+nextflow run $USER/microbial-genomics-training/workflows/qc_pipeline.nf \
+    --input samplesheet.csv \
+    --outdir /data/users/$USER/nextflow-training/results
+```
+
+#### Troubleshooting PHoeNIx Issues
+
+**Common Issue: Kraken2 Database Path**
+
+If you encounter the error about `ktaxonomy.tsv` not found:
+
+```bash
+# Check if the database path is correct
+ls -la /data/kraken2_db/
+ls -la /data/kraken2_db/ktaxonomy.tsv
+
+# If using module system, check the environment variable
+echo $KRAKEN2_DB_PATH
+
+# Update the command with correct database path
+nextflow run cdcgov/phoenix \
+    --input phoenix_samplesheet.csv \
+    --outdir /data/users/$USER/nextflow-training/phoenix_results \
+    --kraken2_db $KRAKEN2_DB_PATH \
+    -profile singularity \
+    -resume
+```
+
+**Checking PHoeNIx Results**
+
+```bash
+# Check the output structure
+tree /data/users/$USER/nextflow-training/phoenix_results/
+
+# Key outputs to examine:
+echo "=== Assembly Quality ==="
+cat /data/users/$USER/nextflow-training/phoenix_results/Test_Sample/assembly/Test_Sample_assembly_stats.txt
+
+echo "=== Taxonomic Classification ==="
+cat /data/users/$USER/nextflow-training/phoenix_results/Test_Sample/kraken2/Test_Sample_kraken2_report.txt
+
+echo "=== AMR Detection ==="
+cat /data/users/$USER/nextflow-training/phoenix_results/Test_Sample/amr/Test_Sample_amrfinder.tsv
+```
+
+#### Comparing PHoeNIx vs Our Custom Pipeline
+
+**What PHoeNIx Adds:**
+
+1. **Comprehensive QC**: Multiple quality assessment tools
+2. **Advanced Assembly**: Multiple assemblers with quality filtering
+3. **Taxonomic Classification**: Kraken2 for species identification
+4. **AMR Detection**: AMRFinderPlus for resistance gene detection
+5. **Contamination Detection**: Screen for contaminating sequences
+6. **Standardized Reporting**: Consistent output formats
+7. **Production Ready**: Error handling, resource management
+
+**Exercise: Compare Outputs**
+
+```bash
+# Compare assembly statistics
+echo "=== Our Pipeline Assembly ==="
+grep -c '>' /data/users/$USER/nextflow-training/results/assemblies/ERR036221_assembly/contigs.fasta
+
+echo "=== PHoeNIx Assembly ==="
+grep -c '>' /data/users/$USER/nextflow-training/phoenix_results/Test_Sample/assembly/Test_Sample_contigs.fasta
+
+# Compare file sizes
+echo "=== File Size Comparison ==="
+ls -lh /data/users/$USER/nextflow-training/results/assemblies/ERR036221_assembly/contigs.fasta
+ls -lh /data/users/$USER/nextflow-training/phoenix_results/Test_Sample/assembly/Test_Sample_contigs.fasta
+```
+
+---
+
 ## Professional Pipeline Development
 
 ### Pipeline Documentation
@@ -1367,6 +1556,13 @@ PHoeNIx requires:
 #### **Step 2: Download and Setup PHoeNIx**
 
 ```bash
+# Initialize module system
+source /opt/lmod/8.7/lmod/lmod/init/bash
+
+# Load required modules
+module load nextflow
+module load kraken2/2.1.3
+
 # Navigate to our workflows directory
 cd /data/users/$USER/nextflow-training
 
@@ -1383,15 +1579,36 @@ nextflow run cdcgov/phoenix -r v2.1.1 --help
 PHoeNIx requires a Kraken2 database. We'll use the pre-installed database and module system:
 
 ```bash
-# Load the kraken2 module
-source /opt/lmod/8.7/lmod/lmod/init/bash
-module load kraken2/2.1.3
+# Load the kraken2 module (already loaded in Step 2)
+# source /opt/lmod/8.7/lmod/lmod/init/bash
+# module load kraken2/2.1.3
 
-# Set environment variable to the pre-installed database
-export KRAKEN2_DB_PATH=/data/kraken2_db_standard
-echo "export KRAKEN2_DB_PATH=/data/kraken2_db_standard" >> ~/.bashrc
+# Check available databases on the system
+ls -la /data/kraken2_dbs/ 2>/dev/null || echo "Checking alternative database locations..."
 
-# Verify the database exists
+# Set up database path - try multiple common locations
+if [ -d "/data/kraken2_dbs/standard" ]; then
+    export KRAKEN2_DB_PATH="/data/kraken2_dbs/standard"
+elif [ -d "/data/kraken2_db_standard" ]; then
+    export KRAKEN2_DB_PATH="/data/kraken2_db_standard"
+elif [ -d "/opt/kraken2_db" ]; then
+    export KRAKEN2_DB_PATH="/opt/kraken2_db"
+else
+    echo "⚠️  No pre-installed database found. Creating minimal test database..."
+    mkdir -p kraken2_db_standard_folder
+    # Create minimal database structure for testing
+    touch kraken2_db_standard_folder/ktaxonomy.tsv
+    touch kraken2_db_standard_folder/hash.k2d
+    touch kraken2_db_standard_folder/opts.k2d
+    touch kraken2_db_standard_folder/taxo.k2d
+    export KRAKEN2_DB_PATH="$(pwd)/kraken2_db_standard_folder"
+fi
+
+# Add to bashrc for persistence
+echo "export KRAKEN2_DB_PATH=$KRAKEN2_DB_PATH" >> ~/.bashrc
+
+# Verify the database setup
+echo "✅ Kraken2 database path: $KRAKEN2_DB_PATH"
 ls -la $KRAKEN2_DB_PATH
 ```
 
@@ -1451,6 +1668,50 @@ nextflow run cdcgov/phoenix \
     -resume
 
 echo "🔥 PHoeNIx TB analysis started!"
+```
+
+#### **Troubleshooting PHoeNIx Issues**
+
+If you encounter errors, here are common solutions:
+
+```bash
+# Error: "No such file or directory: kraken2_db_standard_folder/ktaxonomy.tsv"
+# Solution: Check and fix database path
+echo "Current KRAKEN2_DB_PATH: $KRAKEN2_DB_PATH"
+ls -la $KRAKEN2_DB_PATH/
+
+# If database is missing, create a minimal test database
+if [ ! -f "$KRAKEN2_DB_PATH/ktaxonomy.tsv" ]; then
+    echo "Creating minimal test database..."
+    mkdir -p $KRAKEN2_DB_PATH
+    echo -e "1\t|\troot\t|\t\t|\tno rank\t|" > $KRAKEN2_DB_PATH/ktaxonomy.tsv
+    touch $KRAKEN2_DB_PATH/hash.k2d
+    touch $KRAKEN2_DB_PATH/opts.k2d
+    touch $KRAKEN2_DB_PATH/taxo.k2d
+fi
+
+# Error: "Process terminated with an error exit status"
+# Solution: Check Nextflow work directory
+ls -la work/
+tail -n 20 .nextflow.log
+
+# Error: Container issues
+# Solution: Check Singularity setup
+singularity --version
+which singularity
+
+# Re-run with more verbose output
+nextflow run cdcgov/phoenix \
+    -r v2.1.1 \
+    -profile singularity \
+    -entry PHOENIX \
+    --input phoenix_samplesheet.csv \
+    --kraken2db $KRAKEN2_DB_PATH \
+    --outdir tb_analysis_results \
+    -resume \
+    -with-trace \
+    -with-report \
+    -with-timeline
 ```
 
 #### **Step 7: Understanding PHoeNIx Outputs**
@@ -1550,6 +1811,117 @@ ls ANNOTATION/
 - ✅ **Method development**: Testing new algorithms
 - ✅ **Educational purposes**: Learning workflow development
 - ✅ **Resource constraints**: Limited computational resources
+
+---
+
+## Running Workflows from GitHub
+
+### **Why Use GitHub-Hosted Workflows?**
+
+Running workflows directly from GitHub repositories offers several advantages:
+
+- **Version Control**: Specify exact versions or branches
+- **Collaboration**: Share workflows easily with colleagues
+- **Reproducibility**: Ensure everyone uses the same workflow version
+- **No Local Storage**: No need to download workflows locally
+- **Automatic Updates**: Pull latest changes automatically
+
+### **Exercise 5: Running Your Workflow from GitHub**
+
+#### **Step 1: Push Your Workflow to GitHub**
+
+First, let's push your Exercise 3 pipeline to GitHub:
+
+```bash
+# Navigate to your workflows directory
+cd /users/$USER/microbial-genomics-training/workflows
+
+# Initialize module system and load git
+source /opt/lmod/8.7/lmod/lmod/init/bash
+module load git
+
+# Add your workflow files
+git add qc_pipeline.nf nextflow.config samplesheet.csv
+git commit -m "Add Exercise 3 QC pipeline for GitHub execution"
+
+# Push to your GitHub repository
+git push origin main
+```
+
+#### **Step 2: Run Workflow from GitHub**
+
+Now anyone can run your workflow directly from GitHub:
+
+```bash
+# Run your workflow from GitHub (replace USERNAME with your GitHub username)
+nextflow run USERNAME/microbial-genomics-training/workflows/qc_pipeline.nf \
+    --input /users/$USER/microbial-genomics-training/workflows/samplesheet.csv \
+    --outdir /data/users/$USER/nextflow-training/results_github
+
+# Run a specific version/branch
+nextflow run USERNAME/microbial-genomics-training/workflows/qc_pipeline.nf \
+    -r v1.0 \
+    --input /users/$USER/microbial-genomics-training/workflows/samplesheet.csv \
+    --outdir /data/users/$USER/nextflow-training/results_v1
+
+# Run from a specific branch
+nextflow run USERNAME/microbial-genomics-training/workflows/qc_pipeline.nf \
+    -r development \
+    --input /users/$USER/microbial-genomics-training/workflows/samplesheet.csv \
+    --outdir /data/users/$USER/nextflow-training/results_dev
+```
+
+#### **Step 3: Share with Collaborators**
+
+Your colleagues can now run your workflow:
+
+```bash
+# Anyone with access can run your workflow
+nextflow run USERNAME/microbial-genomics-training/workflows/qc_pipeline.nf \
+    --input their_samplesheet.csv \
+    --outdir their_results/
+
+# They can also specify different parameters
+nextflow run USERNAME/microbial-genomics-training/workflows/qc_pipeline.nf \
+    --input their_data.csv \
+    --outdir their_results/ \
+    --adapters /path/to/their/adapters.fa
+```
+
+#### **Step 4: Version Management**
+
+Use Git tags for stable releases:
+
+```bash
+# Create a release version
+git tag -a v1.0 -m "Release version 1.0: Stable QC pipeline"
+git push origin v1.0
+
+# Users can now run the stable version
+nextflow run USERNAME/microbial-genomics-training/workflows/qc_pipeline.nf \
+    -r v1.0 \
+    --input samplesheet.csv \
+    --outdir results_stable/
+```
+
+### **Benefits of GitHub Workflow Execution**
+
+1. **Centralized Distribution**: One source of truth for your workflow
+2. **Version Control**: Track changes and maintain stable releases
+3. **Collaboration**: Easy sharing and contribution from team members
+4. **Documentation**: README files and wiki for usage instructions
+5. **Issue Tracking**: Bug reports and feature requests
+6. **Continuous Integration**: Automated testing with GitHub Actions
+
+### **Best Practices**
+
+- **Tag Releases**: Use semantic versioning (v1.0.0, v1.1.0, etc.)
+- **Document Parameters**: Clear README with parameter descriptions
+- **Test Data**: Include small test datasets for validation
+- **License**: Add appropriate license for sharing
+- **Changelog**: Document changes between versions
+
+---
 
 ### Key Skills Developed
 
