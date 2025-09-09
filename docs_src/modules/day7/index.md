@@ -146,7 +146,7 @@ graph TD
 
 ```bash
 # Navigate to your workflows directory
-cd /users/mamana/microbial-genomics-training/workflows
+cd /users/$USER/microbial-genomics-training/workflows
 
 # Initialize Git repository
 git init
@@ -527,7 +527,7 @@ We've provided a ready-to-use container testing script in your workflows directo
 
 ```bash
 # Navigate to workflows directory
-cd /users/mamana/microbial-genomics-training/workflows
+cd /users/$USER/microbial-genomics-training/workflows
 
 # Run the container test script
 ./container_test.sh
@@ -1184,6 +1184,60 @@ Features:
 git push origin v1.0.0
 ```
 
+### **Running Workflows from GitHub**
+
+Once your workflow is on GitHub, you and others can run it directly from the repository:
+
+#### **Running Your Published Workflow**
+
+```bash
+# Run workflow directly from GitHub
+nextflow run yourusername/mtb-analysis-pipeline \
+    --input samplesheet.csv \
+    --outdir results \
+    -profile singularity
+
+# Run specific version/release
+nextflow run yourusername/mtb-analysis-pipeline \
+    -r v1.0.0 \
+    --input samplesheet.csv \
+    --outdir results \
+    -profile singularity
+
+# Run from specific branch
+nextflow run yourusername/mtb-analysis-pipeline \
+    -r feature/amr-detection \
+    --input samplesheet.csv \
+    --outdir results \
+    -profile singularity
+```
+
+#### **Sharing Your Workflow**
+
+Your colleagues can now run your pipeline easily:
+
+```bash
+# Anyone can run your pipeline with:
+nextflow run yourusername/mtb-analysis-pipeline \
+    --input their_samples.csv \
+    --outdir their_results \
+    -profile singularity
+
+# They can also clone and modify:
+git clone https://github.com/yourusername/mtb-analysis-pipeline.git
+cd mtb-analysis-pipeline
+nextflow run . --input samples.csv --outdir results
+```
+
+#### **Benefits of GitHub-hosted Workflows**
+
+- ✅ **Version Control**: Track all changes and releases
+- ✅ **Collaboration**: Multiple developers can contribute
+- ✅ **Reproducibility**: Anyone can run the exact same version
+- ✅ **Documentation**: README, wiki, and issues for support
+- ✅ **Distribution**: Easy sharing with the community
+- ✅ **Continuous Integration**: Automated testing with GitHub Actions
+
 ---
 
 ## Hands-on Exercise: Building Your MTB Pipeline
@@ -1195,7 +1249,7 @@ git push origin v1.0.0
 #### Step 1: Initialize Version Control
 
 ```bash
-cd /users/mamana/microbial-genomics-training/workflows
+cd /users/$USER/microbial-genomics-training/workflows
 
 # Initialize Git repository
 git init
@@ -1257,11 +1311,11 @@ git commit -m "Complete MTB production pipeline
 
 ### What We Accomplished Today
 
-✅ **Version Control**: Learned Git and GitHub for pipeline development
-✅ **Containerization**: Integrated Docker containers for reproducibility
-✅ **MTB Pipeline**: Built production-ready tuberculosis analysis workflow
-✅ **Clinical Applications**: Added AMR detection and typing capabilities
-✅ **Professional Standards**: Documentation, testing, and deployment
+- ✅ **Version Control**: Learned Git and GitHub for pipeline development
+- ✅ **Containerization**: Integrated Docker containers for reproducibility
+- ✅ **MTB Pipeline**: Built production-ready tuberculosis analysis workflow
+- ✅ **Clinical Applications**: Added AMR detection and typing capabilities
+- ✅ **Professional Standards**: Documentation, testing, and deployment
 
 ### Your Production Pipeline Features
 
@@ -1281,6 +1335,221 @@ flowchart LR
     style A fill:#f5f5f5,stroke:#757575,stroke-width:1px,color:#000
     style H fill:#e8f5e8,stroke:#4caf50,stroke-width:2px,color:#000
 ```
+
+---
+
+## **🔥 Real-World Pipeline: PHoeNIx (CDC)**
+
+### **Introduction to PHoeNIx**
+
+PHoeNIx (Platform-agnostic Healthcare-associated and antimicrobial resistant pathogen analysis) is a production-ready Nextflow pipeline developed by the **Centers for Disease Control and Prevention (CDC)**. It's specifically designed for analyzing healthcare-associated and antimicrobial resistant pathogens, making it perfect for our MTB analysis.
+
+**Why PHoeNIx for MTB Analysis?**
+
+- 🏛️ **CDC-developed**: Trusted, authoritative source for pathogen analysis
+- 🎯 **Healthcare focus**: Designed for clinical and public health applications
+- 🔬 **AMR detection**: Built-in antimicrobial resistance analysis
+- 📊 **Comprehensive reports**: Clinical-grade output reports
+- 🐳 **Containerized**: Uses Docker/Singularity for reproducibility
+- 🚀 **Production-ready**: Used in real public health laboratories
+
+### **Exercise 4: Setting Up PHoeNIx with Your TB Data**
+
+#### **Step 1: Understanding PHoeNIx Requirements**
+
+PHoeNIx requires:
+
+- Nextflow (≥21.10.3) ✅ *Already installed*
+- Docker or Singularity ✅ *Already available*
+- Kraken2 database (we'll download this)
+- Paired-end FASTQ files ✅ *We have TB data*
+
+#### **Step 2: Download and Setup PHoeNIx**
+
+```bash
+# Navigate to our workflows directory
+cd /data/users/$USER/nextflow-training
+
+# Create PHoeNIx workspace
+mkdir phoenix-analysis
+cd phoenix-analysis
+
+# Test PHoeNIx installation (this downloads the pipeline)
+nextflow run cdcgov/phoenix -r v2.1.1 --help
+```
+
+#### **Step 3: Setup Kraken2 Database**
+
+PHoeNIx requires a Kraken2 database. We'll use the pre-installed database and module system:
+
+```bash
+# Load the kraken2 module
+source /opt/lmod/8.7/lmod/lmod/init/bash
+module load kraken2/2.1.3
+
+# Set environment variable to the pre-installed database
+export KRAKEN2_DB_PATH=/data/kraken2_db_standard
+echo "export KRAKEN2_DB_PATH=/data/kraken2_db_standard" >> ~/.bashrc
+
+# Verify the database exists
+ls -la $KRAKEN2_DB_PATH
+```
+
+#### **Step 4: Prepare Your TB Samplesheet**
+
+PHoeNIx uses a specific samplesheet format. Let's create one for our TB data:
+
+```bash
+# Navigate back to phoenix analysis directory
+cd /data/users/$USER/nextflow-training/phoenix-analysis
+
+# Create PHoeNIx samplesheet
+cat > phoenix_samplesheet.csv << 'EOF'
+sample,fastq_1,fastq_2
+TB_sample_1,/data/Dataset_Mt_Vc/tb/raw_data/ERR036221_1.fastq.gz,/data/Dataset_Mt_Vc/tb/raw_data/ERR036221_2.fastq.gz
+TB_sample_2,/data/Dataset_Mt_Vc/tb/raw_data/ERR036223_1.fastq.gz,/data/Dataset_Mt_Vc/tb/raw_data/ERR036223_2.fastq.gz
+TB_sample_3,/data/Dataset_Mt_Vc/tb/raw_data/ERR036226_1.fastq.gz,/data/Dataset_Mt_Vc/tb/raw_data/ERR036226_2.fastq.gz
+EOF
+
+echo "✅ PHoeNIx samplesheet created: phoenix_samplesheet.csv"
+```
+
+#### **Step 5: Run PHoeNIx Test**
+
+First, let's run PHoeNIx with test data to ensure everything works:
+
+```bash
+# Load required modules
+source /opt/lmod/8.7/lmod/lmod/init/bash
+module load nextflow/25.04.6
+module load kraken2/2.1.3
+
+# Run PHoeNIx test
+nextflow run cdcgov/phoenix \
+    -r v2.1.1 \
+    -profile singularity,test \
+    -entry PHOENIX \
+    --kraken2db $KRAKEN2_DB_PATH \
+    --outdir test_results
+
+echo "✅ PHoeNIx test completed successfully!"
+```
+
+#### **Step 6: Run PHoeNIx with Your TB Data**
+
+Now let's analyze our TB samples:
+
+```bash
+# Run PHoeNIx with TB data
+nextflow run cdcgov/phoenix \
+    -r v2.1.1 \
+    -profile singularity \
+    -entry PHOENIX \
+    --input phoenix_samplesheet.csv \
+    --kraken2db $KRAKEN2_DB_PATH \
+    --outdir tb_analysis_results \
+    -resume
+
+echo "🔥 PHoeNIx TB analysis started!"
+```
+
+#### **Step 7: Understanding PHoeNIx Outputs**
+
+While the analysis runs, let's explore what PHoeNIx produces:
+
+```bash
+# PHoeNIx creates comprehensive outputs:
+tree tb_analysis_results/ -L 2
+
+# Key output directories:
+# ├── ASSEMBLY/          # Genome assemblies
+# ├── ANNOTATION/        # Gene annotations
+# ├── AMR/              # Antimicrobial resistance results
+# ├── MLST/             # Multi-locus sequence typing
+# ├── QC/               # Quality control metrics
+# ├── REPORTS/          # Summary reports
+# └── TAXA/             # Species identification
+```
+
+### **Exercise 5: Analyzing PHoeNIx Results**
+
+#### **Exploring the Results Structure**
+
+```bash
+# Navigate to results
+cd tb_analysis_results
+
+# Check the main summary report
+ls REPORTS/
+
+# View quality control results
+head QC/Phoenix_Summary.tsv
+
+# Check AMR results
+ls AMR/
+head AMR/*_amrfinder_all.tsv
+
+# View assembly statistics
+ls ASSEMBLY/
+head ASSEMBLY/*_assembly_stats.txt
+```
+
+#### **Understanding Clinical Outputs**
+
+PHoeNIx provides clinical-grade outputs:
+
+1. **Species Identification**: Confirms *Mycobacterium tuberculosis*
+2. **AMR Profile**: Drug resistance genes and mutations
+3. **Assembly Quality**: Coverage, N50, contamination levels
+4. **MLST Typing**: Sequence type classification
+5. **Summary Report**: Comprehensive overview
+
+#### **Comparing with Your Exercise 3 Pipeline**
+
+Let's compare PHoeNIx results with our custom pipeline:
+
+```bash
+# Compare assembly statistics
+echo "=== Exercise 3 Results ==="
+head /data/users/$USER/nextflow-training/results/assemblies/*_contigs.fa
+
+echo "=== PHoeNIx Results ==="
+head ASSEMBLY/*_contigs.fa
+
+# Compare annotation results
+echo "=== Exercise 3 Prokka ==="
+ls /data/users/$USER/nextflow-training/results/annotation/
+
+echo "=== PHoeNIx Annotation ==="
+ls ANNOTATION/
+```
+
+### **Key Learning Points**
+
+#### **Production Pipeline Advantages**
+
+1. **Standardization**: Consistent analysis across laboratories
+2. **Validation**: Extensively tested and validated
+3. **Clinical Focus**: Designed for healthcare applications
+4. **Comprehensive**: Includes all necessary analyses
+5. **Reporting**: Professional-grade output reports
+6. **Maintenance**: Actively maintained and updated
+
+#### **When to Use Production Pipelines**
+
+- ✅ **Clinical diagnostics**: Patient sample analysis
+- ✅ **Public health surveillance**: Outbreak investigations
+- ✅ **Regulatory compliance**: FDA/CDC requirements
+- ✅ **Multi-site studies**: Standardized protocols
+- ✅ **High-throughput**: Large sample volumes
+
+#### **When to Build Custom Pipelines**
+
+- ✅ **Research questions**: Novel analysis approaches
+- ✅ **Specialized organisms**: Non-standard pathogens
+- ✅ **Method development**: Testing new algorithms
+- ✅ **Educational purposes**: Learning workflow development
+- ✅ **Resource constraints**: Limited computational resources
 
 ### Key Skills Developed
 
