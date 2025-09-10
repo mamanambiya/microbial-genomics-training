@@ -144,12 +144,10 @@ The 10-day intensive training course covers fundamental to advanced topics in mi
 
 | Time (CAT) | Topic | Links | Trainer |
 |------------|-------|-------|---------|
-| **09:00** | *Metagenomic sequencing* | | Ephifania Geza |
-| **09:30** | *Quality control in metagenomic data* | | Ephifania Geza |
-| **10:30** | *Microbiome profiling and diversity metrics (R or QIIME2)* | | Ephifania Geza |
+| **09:00** | *Nextflow* | | Mamana |
 | **11:30** | **Break** | | |
-| **12:00** | *Microbiome profiling and diversity metrics (R or QIIME2)* | | Ephifania Geza |
-| **13:00** | Role of plasmids, integrons, and transposons in AMR spread | | Ephifania Geza |
+| **12:00** | *Metagenomics profiling* | [Notes](../day8/metagenomics.md| Ephifania Geza |
+
 
 **Key Learning Outcomes**: Metagenomic sequencing principles, microbiome analysis, diversity metrics
 
