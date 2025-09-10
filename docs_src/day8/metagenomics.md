@@ -18,8 +18,9 @@ and a **mini toy dataset exercise**. Unlike genomics (WGS) which focuses on anal
 
 ### Metagenomic Strategies: Shotgun vs 16S rRNA
 
+
 | Description | Shotgun Metagenomics | 16S rRNA Amplicon Gene Sequencing |
-|-------------|-------------------------------|--------------|
+|-------------|-------------------------------|--------------------------|
 | **Definition** | Random sequencing of **All DNA** in a sample | **Targeted amplicon sequencing** of the 16 S rRNA gene |
 | **Resolution** | Species- and strain-level, **functional genes** (AMR, metabolism, plasmids, MGEs) | Genus-level (sometimes species-level), **no direct functional** information |
 | **Merits** | Comprehensive (taxonomy + function), **detects viruses and fungi** |  Limited to taxonomic resolution, can't detect fungi/viruses, lacks functional insights, **good for bacterial** surveys |
