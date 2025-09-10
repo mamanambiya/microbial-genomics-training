@@ -12,8 +12,8 @@ and a **mini toy dataset exercise**. Unlike genomics (WGS) which focuses on anal
 | Description | Whole Genome Sequencing (WGS) | Metagenomics |
 |-------------|-------------------------------|--------------|
 | **Umbrella term** | Microbial Genomics | Microbial Profiling |
-| **Scope** | Sequencing of the entire genome of a single isolate (pure culture) | Sequences all genetic material in mixed community (without culturing)|
-| **Applications** | Species identification, genome assembly, annotation, AMR/virulence detection, plasmid/MGE analysis, outbreak tracking | Community profiling, functional potential, pathogen detection in mixed samples, ecology studies |
+| **Scope** | Sequencing of the entire genome of a **single isolate** (pure culture) | Sequences **all genetic material** in mixed community (without culturing)|
+| **Applications** | Comparative genomics, AMR/virulence genes/MGE, outbreak tracking | Community profiling, functional potential, pathogen detection in mixed samples, ecology studies (diversity studies) |
 | **Features** | Organism is known \& isolated before sequencing | Captures both known and unknown microbes from environment or host |
 
 ### Metagenomic Strategies: Shotgun vs 16S rRNA
@@ -31,49 +31,18 @@ and a **mini toy dataset exercise**. Unlike genomics (WGS) which focuses on anal
 
 ### Step 1. Study Design & Sequencing
 
-- **Why**: Sequencing depth, read length, and platform choice directly influence resolution of taxa, detection of low-abundance organisms, and assembly quality.
+- **Why**: Sequencing depth, read length, and platform choice directly influence resolution of taxa, detection of low-abundance organisms, and assembly quality. For example, if you aim to do strain-level tracking of low abundance organisms, increase depth or perform targeted enrichment.
 - **Example**:
   - Illumina (short reads): accurate, cost-effective, widely used for clinical metagenomics.
   - ONT/PacBio (long reads): useful for resolving repeats, plasmids, MGEs.
 
-For this training we will use the data in `/data/users/user29/metagenomes/shotgun/` for shotgun metagenomics. It is important to note that, one can download shotgun metagenome sequences from NCBI-SRA using `ncbi-tools`. Install `ncbi-tools` and run
-
-```bash
-## Fetch the data from NCBI-SRA
-# fasterq-dump SRR13827118 --progress --threads 8
-
-## Compress the files
-gzip SRR13827118*.fastq
-```
-
 ---
-
-## Shotgun metagenomics
 
 ### Step 2. Quality Control
 
 - **Why**: To reduce the effects of sequencing errors, remove adapters, and low-quality 
 reads which may reduce false positives.
 - **Tools**: `fastqc`, `multiqc`
-
-```bash
-# Load modules
-module load fastqc
-module load multiqc
-indata="/data/users/user29/metagenomes/shotgun/"
-
-## Create Dir
-mkdir -p ${outfastqc} /data/users/user24/metagenomes/shotgun/scripts /data/users/user24/metagenomes/shotgun/logs
-
-# create a samplesheet.csv with three columns samplename,fastq_1,fastq_2
-python /data/users/user24/metagenomes/shotgun/scripts/samplesheet_generator.py ${indata} \
-  /data/users/${USER}/metagenomes/shotgun/samplesheet.csv
-
-# Run raw QC
-nextflow run /data/users/user24/metagenomes/shotgun/scripts/qc_pipeline_v1.nf \
-  --input /data/users/${USER}/metagenomes/shotgun/samplesheet.csv \
-  --outdir /data/users/${USER}/metagenomes/shotgun/results/rawfastqc
-```
 
 **What to think about?**
 - Which parts of the data are flagged as potentially problematic? GC% content of the dataset.
@@ -178,7 +147,7 @@ multiqc  ${outtrimmomatic} -o  ${outtrimmomatic}
 - Specifically any studies invloving human subjects or samples derived from Taonga species.
 - Although several approaches are used for this, the most popular is to map reads to a reference genome (includin human genome). That is remove all reads that map to the reference of the dataset.
   
-- **Tools**: `clumpify` (dedup), `bowtie2` or `bwa mem` (host removal).
+- **Tools**: `clumpify` (dedup), `BBMap` (bbmap.sh),  `bowtie2` or `bwa mem` (host removal).
 
 ```bash
 #!/bin/bash
@@ -270,7 +239,9 @@ echo "Host removal completed"
 ### Step 5. Taxonomic Profiling (Read-Based)
 
 - **Why**: Directly assigns taxonomy without assembly, faster and less computationally intensive.
-- **Tools**: Kraken2 + Bracken, MetaPhlAn
+- Research question: Who is in this sample?
+- **Tools**: Kraken2 + Bracken (abundance estimation), MetaPhlAn/ MetaSpades + Mapping + MetaBAT2 (or CONCOT/MaxBin2, DAS Tool) + checkM + GTDB-tk + ANI (species-level contamination)
+- Reconstruct rRNA using `PhyloFlash - EMIRGE` (by leveraging the expansive catalogue of 16S rRNA genes available in databases such as SILVA in order to subset reads and then reconstruct the full-length gene).
 
 ```bash
 kraken2 --db kraken2_db --paired sample_host_removed.1.fq.gz sample_host_removed.2.fq.gz \
@@ -302,7 +273,6 @@ humann --input sample_host_removed.fastq.gz --output humann_out/
 megahit -1 sample_host_removed.1.fq.gz -2 sample_host_removed.2.fq.gz -o megahit_out/
 ```
 
-#### metaSPAdes
 
 ```bash
 spades.py --meta -1 sample_host_removed.1.fq.gz -2 sample_host_removed.2.fq.gz -o metaspades_out/
@@ -325,7 +295,7 @@ spades.py --meta -1 sample_host_removed.1.fq.gz -2 sample_host_removed.2.fq.gz -
 ### Step 8. Mapping & Binning
 
 - **Why**: Group contigs into MAGs, quantify abundances.
-- **Tools**: `bowtie2`, `samtools`, `MetaBAT2`
+- **Tools**: `bowtie2`, `samtools`, `MetaBAT2` / `CONCOT` / `MaxBin2`, `DAS Tool`
 
 ```bash
 bowtie2 -x megahit_out/final.contigs.fa -1 sample_host_removed.1.fq.gz -2 sample_host_removed.2.fq.gz | samtools sort -o aln.bam
@@ -349,10 +319,7 @@ checkm lineage_wf bins_dir/ checkm_out/
 
 - **Why**: Identify AMR, virulence, plasmids, metabolic capacity.
 - **Tools**: Prokka, Bakta, AMRFinderPlus, ABRicate, DRAM
-
-#### Where DRAM fits in:
-
-- **Swap in DRAM** in place of Prokka/Bakta for **functional annotation of MAGs**.
+- Use **DRAM** in place of Prokka/Bakta for **functional annotation of MAGs**.
 - DRAM produces detailed metabolic profiles, pathway reconstruction, and microbial ecology insights.
 
 ```bash
@@ -363,7 +330,7 @@ DRAM.py annotate -i bins_dir/ -o dram_out/ --threads 16
 
 ### Step 11. Abundance Estimation & Visualization
 
-- **Why**: Quantifies taxa/genes b links to clinical or epidemiological metadata.
+- **Why**: Quantifies taxa/genes  links to clinical or epidemiological metadata.
 - **Tools**: CoverM, Krona, R for plots.
 
 ```bash
@@ -380,8 +347,99 @@ coverm contig --bam-files aln.bam --reference megahit_out/final.contigs.fa --met
 
 ---
 
-### Nextflow pipelines
 
+## Shotgun metagenomics
+
+For this training we will use the data in `/data/users/user29/metagenomes/shotgun/` for shotgun metagenomics. It is important to note that, one can download shotgun metagenome sequences from NCBI-SRA using `ncbi-tools`. Install `ncbi-tools` and run
+
+```bash
+## Fetch the data from NCBI-SRA
+# fasterq-dump SRR13827118 --progress --threads 8
+
+## Compress the files
+gzip SRR13827118*.fastq
+```
+
+---
+
+```bash
+# Load modules
+module load fastqc
+module load multiqc
+
+# Data directory
+#indata="/data/users/user29/metagenomes/shotgun/"
+indata="/data/users/"
+
+## Create Dir
+mkdir -p /data/users/$USER/metagenomes/shotgun/scripts /data/users/$USER/metagenomes/shotgun/logs
+
+# create a samplesheet.csv with three columns samplename,fastq_1,fastq_2
+python /data/users/user24/metagenomes/shotgun/scripts/samplesheet_generator.py ${indata} \
+  /data/users/${USER}/metagenomes/shotgun/samplesheet.csv
+
+# Run raw QC
+nextflow run /data/users/$USER/metagenomes/shotgun/scripts/qc_pipeline_v.nf \
+  --input /data/users/${USER}/metagenomes/shotgun/samplesheet.csv \
+  --outdir /data/users/${USER}/metagenomes/shotgun/results/rawfastqc
+```
+
+### Quality assessment
+```bash
+module load bbmap
+# Generate statistics for filtered SPAdes assembly
+stats.sh in=spades_assembly/spades.fna
+```
+
+```bash
+# Assuming your contigs have .fa as suffix
+CONTIG_DIR=""
+OUT_DIR=""
+mkdir ${OUT_DIR}
+for contig in ${CONTIG_DIR}*.fa
+module load bowtie2 samtools metabat2
+do
+    SAMPLE=$(basename ${contig} .fa)
+    R1=${rawdata}/${SAMPLE}_R1_001.fastq.gz
+    R2=${rawdata}/${SAMPLE}_R2_001.fastq.gz
+
+    echo "=== Processing ${SAMPLE} ==="
+
+    CONTIGS=${CONTIG_DIR}${SAMPLE}".fa"
+    mkdir -p ${OUT_DIR}/${SAMPLE}/"align"
+
+    ## Step 2: Bowtie2 index
+    #echo "Building Bowtie2 index..."
+    bowtie2-build ${CONTIGS} ${OUT_DIR}/${SAMPLE}/align/${SAMPLE}
+
+    ## Step 3: Align reads
+    #echo "Aligning reads..."
+    bowtie2 -x ${OUT_DIR}/${SAMPLE}/align/${SAMPLE} -1 "$R1" -2 "$R2" \
+      -S ${OUT_DIR}/${SAMPLE}/align/${SAMPLE}.sam -p $THREADS
+
+    samtools view -Sb ${OUT_DIR}/${SAMPLE}/align/${SAMPLE}.sam | \
+      samtools sort -o ${OUT_DIR}/${SAMPLE}/align/${SAMPLE}.bam
+
+    samtools index ${OUT_DIR}/${SAMPLE}/align/${SAMPLE}.bam
+
+    ## Step 4: Depth file
+    #echo "Computing depth..."
+    jgi_summarize_bam_contig_depths --outputDepth ${OUT_DIR}/${SAMPLE}/${SAMPLE}_depth.txt \
+      ${OUT_DIR}/${SAMPLE}/align/${SAMPLE}.bam
+
+    ## Step 5: Binning
+    mkdir -p ${OUT_DIR}/${SAMPLE}/bins
+
+    #echo "Binning with MetaBAT2..."
+    metabat2 -i ${CONTIGS} -a ${OUT_DIR}/${SAMPLE}/${SAMPLE}_depth.txt \
+      -o ${OUT_DIR}/${SAMPLE}/bins/${SAMPLE}_bin -t $THREADS
+done
+```
+
+### Bacteriophage analysis
+
+- Useful [protol](https://www.protocols.io/view/viral-sequence-identification-sop-with-virsorter2-5qpvoyqebg4o/v3?step=3) that requires `virsorter2`, `checkV` and `DRAMv`
+  
 #### nfcore/mag Pipeline <https://nf-co.re/mag/4.0.0>
 
 - Use an [nf-core/mag](https://nf-co.re/mag/4.0.0/) pipeline for assembly, binning and annotation of metagenomes, [github repository](https://github.com/nf-core/mag/tree/4.0.0).
