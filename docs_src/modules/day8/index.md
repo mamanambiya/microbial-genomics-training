@@ -368,7 +368,8 @@ module load fastqc
 module load multiqc
 
 # Data directory
-indata="/data/users/user29/metagenomes/shotgun/"
+#indata="/data/users/user29/metagenomes/shotgun/"
+indata="/data/users/"
 
 ## Create Dir
 mkdir -p /data/users/$USER/metagenomes/shotgun/scripts /data/users/$USER/metagenomes/shotgun/logs
@@ -378,7 +379,7 @@ python /data/users/user24/metagenomes/shotgun/scripts/samplesheet_generator.py $
   /data/users/${USER}/metagenomes/shotgun/samplesheet.csv
 
 # Run raw QC
-nextflow run /data/users/$USER/metagenomes/shotgun/scripts/qc_pipeline_v1.nf \
+nextflow run /data/users/$USER/metagenomes/shotgun/scripts/qc_pipeline_v.nf \
   --input /data/users/${USER}/metagenomes/shotgun/samplesheet.csv \
   --outdir /data/users/${USER}/metagenomes/shotgun/results/rawfastqc
 ```
@@ -396,7 +397,7 @@ CONTIG_DIR=""
 OUT_DIR=""
 mkdir ${OUT_DIR}
 for contig in ${CONTIG_DIR}*.fa
-module load bowtie2
+module load bowtie2 samtools metabat2
 do
     SAMPLE=$(basename ${contig} .fa)
     R1=${rawdata}/${SAMPLE}_R1_001.fastq.gz
@@ -414,24 +415,24 @@ do
     ## Step 3: Align reads
     #echo "Aligning reads..."
     bowtie2 -x ${OUT_DIR}/${SAMPLE}/align/${SAMPLE} -1 "$R1" -2 "$R2" \
-    #  -S ${OUT_DIR}/${SAMPLE}/align/${SAMPLE}.sam -p $THREADS
+      -S ${OUT_DIR}/${SAMPLE}/align/${SAMPLE}.sam -p $THREADS
 
-    #samtools view -Sb ${OUT_DIR}/${SAMPLE}/align/${SAMPLE}.sam | \
-    #  samtools sort -o ${OUT_DIR}/${SAMPLE}/align/${SAMPLE}.bam
+    samtools view -Sb ${OUT_DIR}/${SAMPLE}/align/${SAMPLE}.sam | \
+      samtools sort -o ${OUT_DIR}/${SAMPLE}/align/${SAMPLE}.bam
 
-    #samtools index ${OUT_DIR}/${SAMPLE}/align/${SAMPLE}.bam
+    samtools index ${OUT_DIR}/${SAMPLE}/align/${SAMPLE}.bam
 
     ## Step 4: Depth file
     #echo "Computing depth..."
-    #jgi_summarize_bam_contig_depths --outputDepth ${OUT_DIR}/${SAMPLE}/${SAMPLE}_depth.txt \
-    #  ${OUT_DIR}/${SAMPLE}/align/${SAMPLE}.bam
+    jgi_summarize_bam_contig_depths --outputDepth ${OUT_DIR}/${SAMPLE}/${SAMPLE}_depth.txt \
+      ${OUT_DIR}/${SAMPLE}/align/${SAMPLE}.bam
 
     ## Step 5: Binning
-    #mkdir -p ${OUT_DIR}/${SAMPLE}/bins
+    mkdir -p ${OUT_DIR}/${SAMPLE}/bins
 
     #echo "Binning with MetaBAT2..."
-    #metabat2 -i ${CONTIGS} -a ${OUT_DIR}/${SAMPLE}/${SAMPLE}_depth.txt \
-    #  -o ${OUT_DIR}/${SAMPLE}/bins/${SAMPLE}_bin -t $THREADS
+    metabat2 -i ${CONTIGS} -a ${OUT_DIR}/${SAMPLE}/${SAMPLE}_depth.txt \
+      -o ${OUT_DIR}/${SAMPLE}/bins/${SAMPLE}_bin -t $THREADS
 done
 ```
 
