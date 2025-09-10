@@ -127,8 +127,9 @@ do
 done
 echo "Trimming with Trimmomatic completed"
 ```
+
 Parameter |	Type |	Description
-----------|------|-----------------------------
+----------|------|--------------------------
 PE |	positional |	Specifies whether we are analysing single- or paired-end reads
 -threads 2 |	keyword |	Specifies the number of threads to use when processing
 -phred33 |	keyword |	Specifies the fastq encoding used
