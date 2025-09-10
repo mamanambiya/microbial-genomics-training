@@ -1123,28 +1123,29 @@ kraken2 --version
 # Navigate to your working directory
 cd /data/users/$USER/nextflow-training
 
-# Clone the PHoeNIx pipeline
-nextflow pull cdcgov/phoenix
+# Create Phoenix analysis directory
+mkdir -p phoenix-analysis
+cd phoenix-analysis
 
-# Check what was downloaded
-ls -la ~/.nextflow/assets/cdcgov/phoenix/
+# Clone the PHoeNIx pipeline directly
+git clone https://github.com/CDCgov/phoenix.git
+cd phoenix
+
+# Check the Phoenix help to understand entry workflows
+nextflow run main.nf --help
 ```
 
-**Step 2: Download Required Databases**
+**Step 2: Setup Required Databases**
 
-PHoeNIx requires several databases. Let's set up the essential ones:
+PHoeNIx requires several databases. The system has a pre-installed Kraken2 database:
 
 ```bash
-# Create database directory
-mkdir -p /data/users/$USER/nextflow-training/databases
+# Check available Kraken2 database
+ls -la /data/kraken2_db_standard/
 
-# Download Kraken2 standard database (this is large - ~50GB)
-# For training, we'll use a smaller database or the module system
-echo "Using Kraken2 module database: /data/kraken2_db/"
-ls -la /data/kraken2_db/
-
-# Check if the module provides the database
-echo "Kraken2 database location: $KRAKEN2_DB_PATH"
+# Note: The standard database requires >256GB RAM for production use
+# For training environments, ensure adequate memory allocation
+echo "Kraken2 database location: /data/kraken2_db_standard/"
 ```
 
 **Step 3: Prepare Sample Sheet for PHoeNIx**
@@ -1162,16 +1163,50 @@ echo "PHoeNIx samplesheet created:"
 cat phoenix_samplesheet.csv
 ```
 
-**Step 4: Run PHoeNIx Pipeline**
+**Step 4: Configure Resources for Production Use**
+
+PHoeNIx requires significant computational resources, especially for Kraken2 taxonomic classification:
 
 ```bash
-# Run PHoeNIx with our TB data
-nextflow run cdcgov/phoenix \
-    --input phoenix_samplesheet.csv \
-    --outdir /data/users/$USER/nextflow-training/phoenix_results \
-    --kraken2_db /data/kraken2_db/ \
-    -profile singularity \
-    -resume
+# Create cluster configuration for SLURM
+cat > ../cluster.config << 'EOF'
+process {
+    executor = 'slurm'
+    queue = 'batch'
+
+    // PHoeNIx-specific resource allocations - 256GB memory for large Kraken2 database
+    withName: 'PHOENIX:PHOENIX_EXTERNAL:KRAKEN2_TRIMD:KRAKEN2_TRIMD' {
+        cpus = 10
+        memory = '256 GB'
+        time = '8h'
+    }
+
+    withName: 'PHOENIX:PHOENIX_EXTERNAL:KRAKEN2_WTASMBLD:KRAKEN2_WTASMBLD' {
+        cpus = 10
+        memory = '256 GB'
+        time = '8h'
+    }
+}
+
+singularity {
+    enabled = true
+    autoMounts = true
+    cacheDir = '/data/users/singularity_cache'
+}
+EOF
+```
+
+**Step 5: Run PHoeNIx Pipeline**
+
+```bash
+# Run PHoeNIx with correct entry workflow and configuration
+nextflow run main.nf \
+    -entry PHOENIX \
+    --input ../phoenix_samplesheet.csv \
+    --kraken2db /data/kraken2_db_standard \
+    --outdir tb_analysis_results \
+    -c ../cluster.config \
+    -profile singularity,slurm
 
 # Monitor the run
 tail -f .nextflow.log
@@ -1249,6 +1284,17 @@ cat /data/users/$USER/nextflow-training/phoenix_results/Test_Sample/kraken2/Test
 echo "=== AMR Detection ==="
 cat /data/users/$USER/nextflow-training/phoenix_results/Test_Sample/amr/Test_Sample_amrfinder.tsv
 ```
+
+#### Key PHoeNIx Features Demonstrated
+
+Our successful PHoeNIx run demonstrates several important production pipeline features:
+
+1. **Resource Management**: Proper memory allocation (256GB) for large databases
+2. **Entry Workflows**: Using `-entry PHOENIX` for specific analysis types
+3. **Resume Capability**: `-resume` flag to continue from cached successful tasks
+4. **Comprehensive Analysis**: Assembly, annotation, taxonomy, AMR, virulence
+5. **Standardized Output**: Consistent directory structure and file formats
+6. **Production Ready**: Error handling, resource optimization, SLURM integration
 
 #### Comparing PHoeNIx vs Our Custom Pipeline
 
@@ -1553,15 +1599,34 @@ PHoeNIx requires:
 - Kraken2 database (we'll download this)
 - Paired-end FASTQ files ✅ *We have TB data*
 
-#### **Step 2: Download and Setup PHoeNIx**
+#### **Step 2: Clone and Setup PHoeNIx**
 
 ```bash
 # Initialize module system
 source /opt/lmod/8.7/lmod/lmod/init/bash
 
 # Load required modules
-module load nextflow
+module load nextflow/25.04.6
 module load kraken2/2.1.3
+
+# Set up Singularity directories in user data space
+export SINGULARITY_CACHEDIR=/data/users/$USER/singularity_cache
+export SINGULARITY_TMPDIR=/data/users/$USER/temp
+export SINGULARITY_LOCALCACHEDIR=/data/users/$USER/singularity_cache
+
+# Create the directories
+mkdir -p $SINGULARITY_CACHEDIR
+mkdir -p $SINGULARITY_TMPDIR
+mkdir -p $SINGULARITY_LOCALCACHEDIR
+
+echo "✅ Singularity cache directory: $SINGULARITY_CACHEDIR"
+echo "✅ Singularity temp directory: $SINGULARITY_TMPDIR"
+echo "✅ Singularity local cache directory: $SINGULARITY_LOCALCACHEDIR"
+
+# Add to bashrc for persistence
+echo "export SINGULARITY_CACHEDIR=/data/users/$USER/singularity_cache" >> ~/.bashrc
+echo "export SINGULARITY_TMPDIR=/data/users/$USER/temp" >> ~/.bashrc
+echo "export SINGULARITY_LOCALCACHEDIR=/data/users/$USER/singularity_cache" >> ~/.bashrc
 
 # Navigate to our workflows directory
 cd /data/users/$USER/nextflow-training
@@ -1570,47 +1635,90 @@ cd /data/users/$USER/nextflow-training
 mkdir phoenix-analysis
 cd phoenix-analysis
 
-# Test PHoeNIx installation (this downloads the pipeline)
-nextflow run cdcgov/phoenix -r v2.1.1 --help
+# Clone the PHoeNIx repository
+git clone https://github.com/CDCgov/phoenix.git
+cd phoenix
+
+# Check the pipeline structure
+ls -la
+cat README.md | head -20
 ```
 
 #### **Step 3: Setup Kraken2 Database**
 
-PHoeNIx requires a Kraken2 database. We'll use the pre-installed database and module system:
+PHoeNIx requires a Kraken2 database for taxonomic classification. The system has a pre-installed standard database that we'll configure:
 
 ```bash
 # Load the kraken2 module (already loaded in Step 2)
 # source /opt/lmod/8.7/lmod/lmod/init/bash
 # module load kraken2/2.1.3
 
-# Check available databases on the system
-ls -la /data/kraken2_dbs/ 2>/dev/null || echo "Checking alternative database locations..."
+# Set up the standard Kraken2 database path
+# The system has a pre-installed standard database at this location
+export KRAKEN2_DB_PATH=/data/kraken2_db_standard/
 
-# Set up database path - try multiple common locations
-if [ -d "/data/kraken2_dbs/standard" ]; then
-    export KRAKEN2_DB_PATH="/data/kraken2_dbs/standard"
-elif [ -d "/data/kraken2_db_standard" ]; then
-    export KRAKEN2_DB_PATH="/data/kraken2_db_standard"
-elif [ -d "/opt/kraken2_db" ]; then
-    export KRAKEN2_DB_PATH="/opt/kraken2_db"
+# Verify the database exists and contains required files
+echo "🔍 Checking Kraken2 database at: $KRAKEN2_DB_PATH"
+ls -la $KRAKEN2_DB_PATH
+
+# Check for essential database files
+echo "📋 Verifying database files:"
+if [ -f "$KRAKEN2_DB_PATH/ktaxonomy.tsv" ]; then
+    echo "✅ ktaxonomy.tsv found"
 else
-    echo "⚠️  No pre-installed database found. Creating minimal test database..."
-    mkdir -p kraken2_db_standard_folder
-    # Create minimal database structure for testing
-    touch kraken2_db_standard_folder/ktaxonomy.tsv
-    touch kraken2_db_standard_folder/hash.k2d
-    touch kraken2_db_standard_folder/opts.k2d
-    touch kraken2_db_standard_folder/taxo.k2d
-    export KRAKEN2_DB_PATH="$(pwd)/kraken2_db_standard_folder"
+    echo "❌ ktaxonomy.tsv missing"
 fi
 
-# Add to bashrc for persistence
-echo "export KRAKEN2_DB_PATH=$KRAKEN2_DB_PATH" >> ~/.bashrc
+if [ -f "$KRAKEN2_DB_PATH/hash.k2d" ]; then
+    echo "✅ hash.k2d found"
+else
+    echo "❌ hash.k2d missing"
+fi
 
-# Verify the database setup
-echo "✅ Kraken2 database path: $KRAKEN2_DB_PATH"
-ls -la $KRAKEN2_DB_PATH
+if [ -f "$KRAKEN2_DB_PATH/opts.k2d" ]; then
+    echo "✅ opts.k2d found"
+else
+    echo "❌ opts.k2d missing"
+fi
+
+if [ -f "$KRAKEN2_DB_PATH/taxo.k2d" ]; then
+    echo "✅ taxo.k2d found"
+else
+    echo "❌ taxo.k2d missing"
+fi
+
+# Add to bashrc for persistence across sessions
+echo "export KRAKEN2_DB_PATH=/data/kraken2_db_standard/" >> ~/.bashrc
+
+# Display database information
+echo "📊 Database information:"
+echo "   Path: $KRAKEN2_DB_PATH"
+echo "   Size: $(du -sh $KRAKEN2_DB_PATH 2>/dev/null | cut -f1 || echo 'Unknown')"
+echo "   Files: $(ls -1 $KRAKEN2_DB_PATH | wc -l) files"
+
+# Test the database with kraken2 (optional)
+echo "🧪 Testing database with kraken2..."
+kraken2 --db $KRAKEN2_DB_PATH --help > /dev/null 2>&1 && echo "✅ Database is accessible" || echo "⚠️  Database test failed"
+
+echo "✅ Kraken2 database configured successfully!"
 ```
+
+**About the Kraken2 Standard Database:**
+
+The standard Kraken2 database (`/data/kraken2_db_standard/`) contains:
+
+- **Taxonomic data**: Complete NCBI taxonomy for species identification
+- **Reference genomes**: Bacterial, archaeal, and viral genomes
+- **Size**: Approximately 50-100 GB (compressed)
+- **Coverage**: Comprehensive microbial genome collection
+- **Purpose**: Accurate taxonomic classification of sequencing reads
+
+**Database Files Explained:**
+
+- `ktaxonomy.tsv`: Taxonomic hierarchy and names
+- `hash.k2d`: K-mer hash table for sequence matching
+- `opts.k2d`: Database options and parameters
+- `taxo.k2d`: Taxonomic assignment data
 
 #### **Step 4: Prepare Your TB Samplesheet**
 
@@ -1631,43 +1739,153 @@ EOF
 echo "✅ PHoeNIx samplesheet created: phoenix_samplesheet.csv"
 ```
 
-#### **Step 5: Run PHoeNIx Test**
+#### **Step 5: Create Cluster Configuration**
 
-First, let's run PHoeNIx with test data to ensure everything works:
+We'll create a cluster configuration file for SLURM execution with proper Singularity settings. Note that a basic `cluster.config` was introduced in Day 6 Exercise 3 - we'll enhance it here for PHoeNIx:
 
 ```bash
+# Create cluster configuration file
+cat > cluster.config << EOF
+// Cluster configuration for PHoeNIx
+process {
+    executor = 'slurm'
+    queue = 'Main'
+    clusterOptions = '--account=b83'
+
+    // Resource requirements for different processes
+    withLabel: 'process_low' {
+        cpus = 2
+        memory = '4 GB'
+        time = '2h'
+    }
+
+    withLabel: 'process_medium' {
+        cpus = 4
+        memory = '8 GB'
+        time = '4h'
+    }
+
+    withLabel: 'process_high' {
+        cpus = 8
+        memory = '16 GB'
+        time = '8h'
+    }
+}
+
+// Singularity configuration - containers stored in user data space
+singularity {
+    enabled = true
+    autoMounts = true
+    cacheDir = '/data/users/$USER/singularity_cache'
+    libraryDir = '/data/users/$USER/singularity_cache'
+    tmpDir = '/data/users/$USER/temp'
+}
+
+// Environment variables for Singularity
+env {
+    SINGULARITY_CACHEDIR = '/data/users/$USER/singularity_cache'
+    SINGULARITY_TMPDIR = '/data/users/$USER/temp'
+    SINGULARITY_LOCALCACHEDIR = '/data/users/$USER/singularity_cache'
+}
+EOF
+
+echo "✅ Cluster configuration created: cluster.config"
+```
+
+#### **Step 5b: Create Environment Setup Script**
+
+Create a reusable script to set up the Singularity environment:
+
+```bash
+# Create environment setup script
+cat > setup_singularity_env.sh << 'EOF'
+#!/bin/bash
+# Singularity environment setup for PHoeNIx
+
+# Set up Singularity directories in user data space
+export SINGULARITY_CACHEDIR=/data/users/$USER/singularity_cache
+export SINGULARITY_TMPDIR=/data/users/$USER/temp
+export SINGULARITY_LOCALCACHEDIR=/data/users/$USER/singularity_cache
+
+# Create directories if they don't exist
+mkdir -p $SINGULARITY_CACHEDIR
+mkdir -p $SINGULARITY_TMPDIR
+mkdir -p $SINGULARITY_LOCALCACHEDIR
+
 # Load required modules
 source /opt/lmod/8.7/lmod/lmod/init/bash
 module load nextflow/25.04.6
 module load kraken2/2.1.3
 
-# Run PHoeNIx test
-nextflow run cdcgov/phoenix \
-    -r v2.1.1 \
-    -profile singularity,test \
-    -entry PHOENIX \
-    --kraken2db $KRAKEN2_DB_PATH \
-    --outdir test_results
+echo "✅ Singularity environment configured:"
+echo "   Cache: $SINGULARITY_CACHEDIR"
+echo "   Temp:  $SINGULARITY_TMPDIR"
+echo "   Local: $SINGULARITY_LOCALCACHEDIR"
+echo "✅ Modules loaded: nextflow, kraken2"
+EOF
 
-echo "✅ PHoeNIx test completed successfully!"
+chmod +x setup_singularity_env.sh
+echo "✅ Environment setup script created: setup_singularity_env.sh"
+
+# Test the script
+./setup_singularity_env.sh
 ```
 
-#### **Step 6: Run PHoeNIx with Your TB Data**
+#### **Step 6: Run PHoeNIx Test**
 
-Now let's analyze our TB samples:
+First, let's run PHoeNIx with test data to ensure everything works:
 
 ```bash
-# Run PHoeNIx with TB data
-nextflow run cdcgov/phoenix \
-    -r v2.1.1 \
-    -profile singularity \
+# Load required modules (if not already loaded)
+source /opt/lmod/8.7/lmod/lmod/init/bash
+module load nextflow/25.04.6
+module load kraken2/2.1.3
+
+# Set up Singularity directories (if not already set)
+export SINGULARITY_CACHEDIR=/data/users/$USER/singularity_cache
+export SINGULARITY_TMPDIR=/data/users/$USER/temp
+export SINGULARITY_LOCALCACHEDIR=/data/users/$USER/singularity_cache
+
+# Ensure directories exist
+mkdir -p $SINGULARITY_CACHEDIR
+mkdir -p $SINGULARITY_TMPDIR
+mkdir -p $SINGULARITY_LOCALCACHEDIR
+
+# Run PHoeNIx test using the cloned repository
+nextflow run main.nf \
+    -profile singularity,test,slurm \ls
+    
+    -entry PHOENIX \
+    --kraken2db $KRAKEN2_DB_PATH \
+    --outdir test_results \
+    -c cluster.config
+
+echo "✅ PHoeNIx test completed successfully!"
+echo "✅ Singularity containers cached in: $SINGULARITY_CACHEDIR"
+```
+
+#### **Step 7: Run PHoeNIx with Your TB Data**
+
+Now let's analyze our TB samples using the cloned repository:
+
+```bash
+# Ensure Singularity environment is set up
+export SINGULARITY_CACHEDIR=/data/users/$USER/singularity_cache
+export SINGULARITY_TMPDIR=/data/users/$USER/temp
+export SINGULARITY_LOCALCACHEDIR=/data/users/$USER/singularity_cache
+
+# Run PHoeNIx with TB data using the local repository
+nextflow run main.nf \
+    -profile singularity,slurm \
     -entry PHOENIX \
     --input phoenix_samplesheet.csv \
     --kraken2db $KRAKEN2_DB_PATH \
     --outdir tb_analysis_results \
+    -c cluster.config \
     -resume
 
 echo "🔥 PHoeNIx TB analysis started!"
+echo "📦 All containers will be cached in: $SINGULARITY_CACHEDIR"
 ```
 
 #### **Troubleshooting PHoeNIx Issues**
@@ -1700,21 +1918,21 @@ tail -n 20 .nextflow.log
 singularity --version
 which singularity
 
-# Re-run with more verbose output
-nextflow run cdcgov/phoenix \
-    -r v2.1.1 \
-    -profile singularity \
+# Re-run with more verbose output using local repository
+nextflow run main.nf \
+    -profile singularity,slurm \
     -entry PHOENIX \
     --input phoenix_samplesheet.csv \
     --kraken2db $KRAKEN2_DB_PATH \
     --outdir tb_analysis_results \
+    -c cluster.config \
     -resume \
     -with-trace \
     -with-report \
     -with-timeline
 ```
 
-#### **Step 7: Understanding PHoeNIx Outputs**
+#### **Step 8: Understanding PHoeNIx Outputs**
 
 While the analysis runs, let's explore what PHoeNIx produces:
 
@@ -1730,6 +1948,25 @@ tree tb_analysis_results/ -L 2
 # ├── QC/               # Quality control metrics
 # ├── REPORTS/          # Summary reports
 # └── TAXA/             # Species identification
+```
+
+#### **Alternative: Running PHoeNIx from Remote Repository**
+
+If you prefer not to clone the repository locally, you can still run PHoeNIx directly from GitHub:
+
+```bash
+# Run PHoeNIx directly from GitHub repository
+nextflow run cdcgov/phoenix \
+    -r v2.1.1 \
+    -profile singularity,slurm \
+    -entry PHOENIX \
+    --input phoenix_samplesheet.csv \
+    --kraken2db $KRAKEN2_DB_PATH \
+    --outdir tb_analysis_results \
+    -resume
+
+# This approach downloads the pipeline automatically but doesn't give you
+# local access to modify configuration files
 ```
 
 ### **Exercise 5: Analyzing PHoeNIx Results**
